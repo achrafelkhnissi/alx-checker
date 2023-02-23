@@ -14,6 +14,9 @@
 #include <string>		// std::string
 #include <cstring>		// strcmp
 #include <sys/stat.h>	// stat
+#include <algorithm>	// std::transform
+#include <cstdlib>		// EXIT_SUCCESS
+
 
 #include "Print.hpp"
 
@@ -43,6 +46,10 @@ namespace alx {
 		void check() const;
 
 		bool directoryExists(const std::string& path) const;
+
+		void checkDependencies() const;
+		void installDependencies() const;
+		void installSvn() const;
 
 	};
 

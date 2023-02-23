@@ -15,5 +15,7 @@ int main(int ac, char** av)
 
 	alx::Checker checker;
 
+	checker.checkDependencies();
+
 	return EXIT_SUCCESS;
 }

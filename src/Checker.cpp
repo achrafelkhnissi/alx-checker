@@ -89,4 +89,35 @@ namespace alx {
 		}
 	}
 
+	void Checker::checkDependencies() const {
+
+		int status = system("command -v svn &> /dev/null");
+		if (status != 0) {
+			installSvn();
+			return;
+		} else {
+			_cout.print("svn is installed.", GREEN);
+		}
+	}
+
+	void Checker::installSvn() const {
+
+		std::cout << "Error: svn is not installed. Do you want to install it? [y/n]";
+
+		std::string answer;
+		std::getline(std::cin, answer);
+		std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
+
+		if (answer != "y" && answer != "yes") {
+			std::cout << "OK. Bye!" << std::endl;
+			exit(EXIT_SUCCESS);
+		}
+
+		int status = system("sudo apt-get install subversion");
+		if (status != 0) {
+			_cout.print("Error: svn is not installed.", RED);
+			exit(EXIT_FAILURE);
+		}
+	}
+
 }
