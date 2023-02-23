@@ -60,7 +60,7 @@ namespace alx {
 	 * @param text: text to print
 	 */
 	void Print::error(const std::string &text) const {
-		std::err << RED << text << END << std::endl;
+		std::cerr << RED << text << END << std::endl;
 	}
 
 	/**
