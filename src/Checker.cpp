@@ -14,8 +14,8 @@ namespace alx {
 		_projectPath = fs::current_path();
 		_project = _projectPath.filename();
 
-		_cout.print("Project: " + _project.string(), GREEN);
-		_cout.print("Path: " + _projectPath.string(), GREEN);
+//		_cout.print("Project: " + _project.string(), GREEN);
+//		_cout.print("Path: " + _projectPath.string(), GREEN);
 	}
 
 	Checker::~Checker() {
@@ -75,6 +75,18 @@ namespace alx {
 		}
 
 		return;
+	}
+
+
+	bool Checker::directoryExists(const std::string& path) const {
+		struct stat info;
+		if (stat(path.c_str(), &info) != 0) {
+			return false;
+		} else if (info.st_mode & S_IFDIR) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

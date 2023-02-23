@@ -9,10 +9,11 @@
 #ifndef ALX_CHECKER_CHECKER_HPP
 #define ALX_CHECKER_CHECKER_HPP
 
-#include <iostream>
-#include <filesystem>
-#include <string>
-#include <cstring>
+#include <iostream>		// std::cout, std::cerr
+#include <filesystem>	// std::filesystem
+#include <string>		// std::string
+#include <cstring>		// strcmp
+#include <sys/stat.h>	// stat
 
 #include "Print.hpp"
 
@@ -40,6 +41,8 @@ namespace alx {
 		void usage() const;
 		void checkArgs(int argc, char *argv[]);
 		void check() const;
+
+		bool directoryExists(const std::string& path) const;
 
 	};
 
