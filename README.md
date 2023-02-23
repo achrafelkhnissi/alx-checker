@@ -1,6 +1,14 @@
-# alx-low_level_programming_checkers
+<p align="center">  
+<img src ="https://assets.imaginablefutures.com/media/images/ALX_Logo.max-200x150.png">
+</p>
+
+<h1 align="center">
+	alx-low_level_programming_checkers
+</h1>
 
 This repository is a collection of checkers for low-level programming projects.
+
+---
 
 ## Checkers
 - [0x00-hello_world](./0x00-checker)
@@ -8,6 +16,8 @@ This repository is a collection of checkers for low-level programming projects.
 - [0x02-functions_nested_loops](./0x02-checker)
 - [0x03-debugging](./0x03-checker)
 - [0x04-more_functions_nested_loops](./0x04-checker)
+
+---
 
 ## Usage
 - Clone the repository: `git clone https://github.com/achrafelkhnissi/low-level-programming-checkers.git`
