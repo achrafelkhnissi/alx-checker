@@ -96,6 +96,21 @@ function install_git() {
   fi
 }
 
+function install_svn() {
+
+  printf "do you want to install it? [y/n]: "
+  read -r input
+  answer=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+
+  answer=${answer:0:1}
+  echo "answer: $answer"
+  if [ "$answer" = "y" ]; then
+    print_info "installing svn"
+    sudo apt-get install subversion
+  fi
+
+}
+
 function exit_with_error() {
   print_error "$1"
   exit 1
@@ -143,7 +158,10 @@ sudo cp alx-checker /usr/bin || \
   exit_with_error "Failed to copy the script to /usr/local/bin"
 
 
-
-
+# Check if svn is installed
+if ! command -v svn $> /dev/null; then
+  print_warning "svn is not installed"
+  install_svn # install svn
+fi
 
 
