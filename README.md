@@ -6,7 +6,10 @@
 	alx-low_level_programming_checkers
 </h1>
 
-This repository is a collection of checkers for low-level programming projects.
+
+
+This repository is a collection of checkers created for the ALX Low-Level Programming course projects. The checkers are designed to automate the checking process and ensure that the projects meet the requirements of the course. The checkers cover various aspects of the projects, such as coding style, syntax, and expected output. The repository is a useful tool for ALX students to ensure that their projects are up to the standard required by the course.
+
 
 ---
 
