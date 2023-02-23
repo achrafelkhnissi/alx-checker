@@ -8,11 +8,11 @@ RM			= rm -rf
 
 OBJDIR = build
 
-FILES		= $(addprefix src/, main Checker)
+FILES		= $(addprefix src/, main Checker Print)
 
 SRC			= $(FILES:=.cpp)
 OBJ			= $(addprefix $(OBJDIR)/, $(FILES:=.o))
-HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, Checker.hpp)
+HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, Checker.hpp Print.hpp)
 INCLUDES	= -I inc
 
 
