@@ -13,10 +13,6 @@ namespace alx {
 	Checker::Checker() : _cout() {
 		_projectPath = fs::current_path();
 		_project = _projectPath.filename();
-
-//		_cout.print("Project: " + _project.string(), GREEN);
-//		_cout.print("Path: " + _projectPath.string(), GREEN);
-		_project = "0x04-checker";
 	}
 
 	Checker::~Checker() {
@@ -88,7 +84,7 @@ namespace alx {
 		} else {
 			return false;
 		}
-	}
+	} /* directoryExists */
 
 	void Checker::checkDependencies() const {
 
@@ -99,7 +95,7 @@ namespace alx {
 		} else {
 			_cout.print("svn is installed.", GREEN);
 		}
-	}
+	} /* checkDependencies */
 
 	void Checker::installSvn() const {
 
@@ -215,7 +211,7 @@ namespace alx {
 	} /* installBetty */
 
 
-	void Checker::copyDirectoryContent() {
+	void Checker::copyDirectoryContent() const {
 
 		DIR *dir;
 		struct dirent *entry;

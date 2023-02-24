@@ -48,7 +48,7 @@ namespace alx {
 		std::string	_file;
 		std::string	_log;
 
-		tests_t _testFiles;
+		mutable tests_t _testFiles; // mutable to be able to use it in const methods
 
 	public:
 		Checker();
@@ -73,7 +73,7 @@ namespace alx {
 		bool isRunningAsRoot() const;
 
 
-		void copyDirectoryContent();
+		void copyDirectoryContent() const;
 
 
 	}; /* class Checker */
