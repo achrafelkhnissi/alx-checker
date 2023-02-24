@@ -10,5 +10,8 @@
 #define ALX_CHECKER_MAIN_HPP
 
 #include "../src/Checker.hpp"
+#include "../src/Installer.hpp"
+#include "../src/Print.hpp"
+#include "../src/Animation.hpp"
 
 #endif //ALX_CHECKER_MAIN_HPP
