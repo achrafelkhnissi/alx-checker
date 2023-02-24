@@ -17,8 +17,10 @@ int main(int ac, char** av)
 
 //	checker.checkDependencies();
 //	checker.downloadTests();
+//	checker.checkProject();
 
-	checker.checkProject();
+	checker.copyDirectoryContent();
+
 
 	return EXIT_SUCCESS;
 }

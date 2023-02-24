@@ -18,8 +18,8 @@
 #include <cstdlib>		// EXIT_SUCCESS
 #include <fstream>		// std::ifstream
 #include <unistd.h>		// access, getuid
-
-
+#include <map>			// std::map
+#include <dirent.h>		// opendir, readdir, closedir
 
 #include "Print.hpp"
 
@@ -35,6 +35,9 @@ namespace alx {
 	class Checker {
 
 	private:
+		typedef std::map<std::string, std::string> tests_t;
+
+	private:
 		Print _cout;
 
 		std::string	_checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
@@ -44,6 +47,8 @@ namespace alx {
 
 		std::string	_file;
 		std::string	_log;
+
+		tests_t _testFiles;
 
 	public:
 		Checker();
@@ -66,6 +71,9 @@ namespace alx {
 		void installBetty() const;
 		void checkReadme() const;
 		bool isRunningAsRoot() const;
+
+
+		void copyDirectoryContent();
 
 
 	}; /* class Checker */

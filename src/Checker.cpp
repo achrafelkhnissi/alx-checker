@@ -211,6 +211,37 @@ namespace alx {
 		file.close();
 
 		_cout.success("betty installed successfully.");
+
 	} /* installBetty */
+
+
+	void Checker::copyDirectoryContent() {
+
+		DIR *dir;
+		struct dirent *entry;
+
+		std::string testsDirectory = "tests";
+
+		if (!(dir = opendir(testsDirectory.c_str()))) {
+			throw std::runtime_error("Failed to open tests directory");
+		}
+
+		while ((entry = readdir(dir)) != nullptr) {
+            if (entry->d_type == DT_REG) { // check if file is a regular file
+                std::string filePath = testsDirectory + "/" + entry->d_name;
+                std::ifstream fileStream(filePath);
+                std::string fileContent((std::istreambuf_iterator<char>(fileStream)),
+                                         std::istreambuf_iterator<char>());
+                _testFiles[entry->d_name] = fileContent;
+
+				// std::cout << GREEN << "File: " << entry->d_name << END << std::endl;
+				// std::cout << fileContent << std::endl;
+            }
+        }
+
+        closedir(dir);
+
+	} /* copyDirectoryContent */
+
 
 } /* namespace alx */
