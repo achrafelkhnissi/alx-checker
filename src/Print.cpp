@@ -84,7 +84,8 @@ namespace alx {
 	 * @param text : text to print
 	 */
 	void Print::info(const std::string &text) const {
-		std::cout << BLUE << text << END << std::endl;
+		std::cout << "[ " << BLUE << "INFO" << END << " ]: ";
+		std::cout << text << std::endl;
 	}
 
 }
