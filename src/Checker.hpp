@@ -68,9 +68,9 @@ namespace alx {
 		bool isRunningAsRoot() const;
 
 
-	};
+	}; /* class Checker */
 
-}
+} /* namespace alx */
 
 
-#endif //ALX_CHECKER_CHECKER_HPP
+#endif /* ALX_CHECKER_CHECKER_HPP */

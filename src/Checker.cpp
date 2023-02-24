@@ -76,7 +76,7 @@ namespace alx {
 		}
 
 		return;
-	}
+	} /* checkArgs */
 
 
 	bool Checker::directoryExists(const std::string& path) const {
@@ -119,7 +119,7 @@ namespace alx {
 			_cout.print("Error: svn is not installed.", RED);
 			exit(EXIT_FAILURE);
 		}
-	}
+	} /* installSvn */
 
 	void Checker::downloadTests(void) const {
 
@@ -133,7 +133,7 @@ namespace alx {
 		} else {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
-	}
+	} /* downloadTests */
 
 	bool Checker::isRunningAsRoot() const {
     	return getuid() == 0;
@@ -155,7 +155,7 @@ namespace alx {
 		} else {
 			_cout.print("betty is already installed.", GREEN);
 		}
-	}
+	} /* checkProject */
 
 	bool Checker::checkBetty() const {
 		return system("betty --version &> /dev/null");
@@ -211,6 +211,6 @@ namespace alx {
 		file.close();
 
 		_cout.success("betty installed successfully.");
-	}
+	} /* installBetty */
 
-}
+} /* namespace alx */
