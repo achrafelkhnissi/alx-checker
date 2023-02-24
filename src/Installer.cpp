@@ -2,9 +2,14 @@
 
 namespace alx {
 
-	Installer::Installer() : _dependencies() { }
+	Installer::Installer() : _dependencies(), _animation(), _cout() {}
 
 	Installer::~Installer() {}
+
+
+	std::vector<std::string> Installer::getDependencies() const {
+		return _dependencies;
+	}
 
 	/**
 	 * @name Installer
@@ -47,26 +52,78 @@ namespace alx {
 	 */
 	void Installer::checkDependencies() const {
 
-		int status = system("command -v svn &> /dev/null");
+		int status = 0;
+
+		if (isMacos()) {
+			std::cout <<"MacOS detected." << std::endl;
+		} else if (isLinux()) {
+			std::cout <<"Linux detected." << std::endl;
+		} else {
+			std::cout << "Unsupported OS." << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		if (isRunningAsRoot()) {
+			std::cout << "Running as root." << std::endl;
+		} else {
+			std::cout << "Running as user." << std::endl;
+		}
+
+//		if (isMacos()) {
+//			_cout.print("Checking dependencies...", GREEN);
+//			checkMacosDependencies();
+//		} else if (isLinux()) {
+//			_cout.print("Checking dependencies...", GREEN);
+//			checkLinuxDependencies();
+//		}
+//
+		if (isLinux()) {
+			status = system("command -v apt-get &> /dev/null");
+			if (status != 0) {
+				std::cout << "Error: apt-get is not installed." << std::endl;
+				_dependencies.push_back("apt-get");
+				exit(EXIT_FAILURE);
+			} else {
+				std::cout << "apt-get is installed." << std::endl;
+			}
+		} else if (isMacos()) {
+			status = system("command -v brew &> /dev/null");
+			if (status != 0) {
+				std::cout << "Error: brew is not installed." << std::endl;
+				installBrew();
+//				_dependencies.push_back("brew");
+				exit(EXIT_FAILURE); // TODO: remove this line
+			} else {
+				std::cout << "brew is installed." << std::endl;
+			}
+		}
+
+		status = system("command -v svn &> /dev/null");
 		if (status != 0) {
 			_dependencies.push_back("subversion");
 			return;
 		} else {
-			_cout.print("svn is installed.", GREEN);
+			std::cout << "subversion is installed." << std::endl;
 		}
 
 		if (checkBetty() == STATUS_KO) {
 			_dependencies.push_back("betty");
 		} else {
-			_cout.print("betty is installed.", GREEN);
+			std::cout << "betty is installed." << std::endl;
 		}
 
 	} /* checkDependencies */
 
 	void Installer::installDependencies() const {
 
+		std::cout << "Dependencies to install:" << std::endl;
+		for (auto dep : _dependencies) {
+			std::cout << dep << " ";
+		}
+		std::cout << std::endl;
+
 		if (_dependencies.empty()) {
-			_cout.print("All dependencies are installed.", GREEN);
+			std::cout << "All dependencies are installed." << std::endl;
 			return;
 		}
 
@@ -74,26 +131,20 @@ namespace alx {
 		for (auto dep : _dependencies) {
 
 			if (dep == "betty") {
-
-				if (checkBetty() == STATUS_KO) {
-					installBetty();
-					// remove betty from the dependencies list
-					_dependencies.remove("betty");
-					_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "betty"), _dependencies.end());
-				}
+				installBetty();
+				_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "betty"), _dependencies.end());
 				continue;
 			}
 
-			int status = system(cmd.c_str() + dep);
+
+			cmd += dep;
+			int status = system(cmd.c_str());
 			if (status != 0) {
-				_cout.print("Error: failed to install " + dep, RED);
-				exit(EXIT_FAILURE);
+				std::cout << "Error: Failed to install " << dep << std::endl;
 			} else {
-				_cout.print(dep + " installed successfully.", GREEN);
+				std::cout << dep << " installed successfully." << std::endl;
 			}
-
 		}
-
 	}
 
 	/**
@@ -119,12 +170,12 @@ namespace alx {
 
 		int status = system("sudo apt-get install subversion");
 		if (status != 0) {
-			_cout.print("Error: svn is not installed.", RED);
+			std::cout << "Error: Failed to install svn." << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
 		// remove svn from the dependencies list
-		_dependencies.remove("svn");
+		_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "subversion"), _dependencies.end());
 	} /* installSvn */
 
 	/**
@@ -164,10 +215,10 @@ namespace alx {
 
 		int status = system("git clone https://github.com/holbertonschool/Betty.git && cd Betty && ./install.sh && cd .. && rm -rf Betty");
 		if (status != 0) {
-			_cout.print("Error: Cloning betty repo failed.", RED);
+			std::cout << "Error: Cloning betty repo failed." << std::endl;
 			exit(EXIT_FAILURE);
 		} else {
-			_cout.print("Betty repo cloned successfully.", GREEN);
+			std::cout << "Betty installed successfully." << std::endl;
 		}
 
 		std::ofstream file("/betty");
@@ -197,12 +248,141 @@ namespace alx {
 		file << "done\n";
 		file.close();
 
-		_cout.success("betty installed successfully.");
+		std::cout << "Betty installed successfully! You can now run betty to check for style and documentation." << std::endl;
 
 		// remove betty from the dependencies list
-		_dependencies.remove("betty");
+		_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "betty"), _dependencies.end());
 
 	} /* installBetty */
+
+	std::string getHomeDir() {
+		return std::getenv("HOME");
+	}
+
+	bool directoryExists(const std::string& dirPath) {
+//    return std::filesystem::is_directory(dirPath);
+		struct stat info;
+
+		return stat(dirPath.c_str(), &info) == 0 && (info.st_mode & S_IFDIR);
+	}
+
+	void Installer::installBrew() const {
+
+		int status;
+
+		std::string goinfre = getHomeDir() + "/goinfre";
+		std::cout << "goinfre: " << goinfre << std::endl;
+
+
+
+		_cout.info("Checking if goinfre directory exists...");
+
+		return ;
+		if (directoryExists(goinfre)) {
+			std::cout << goinfre << " directory exists." << std::endl;
+		} else {
+			throw std::runtime_error( goinfre + " directory does not exist");
+		}
+
+		std::string homebrew = goinfre + "/brew";
+
+
+		if (directoryExists(homebrew)) {
+			std::cout << homebrew << " directory already exists." << std::endl;
+		} else {
+			/* Install homebrew */
+			std::cout << "Installing homebrew..." << std::endl;
+			_animation.start();
+
+			/* Start loading animation */
+//			std::thread loadingThread(loadingAnimation); // todo fix this
+
+
+//			int status = system("/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"");
+//			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to install homebrew");
+//			}
+
+			/* Removing already existed homebrew directory */
+			std::cout << "Removing already existed homebrew directory..." << std::endl;
+
+			std::string command = "rm -rf " + homebrew + " &> /dev/null";
+			status = system(command.c_str());
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to remove already existed homebrew directory");
+				std::cout << "Brew driectory already removed." << std::endl;
+			} else {
+				std::cout << "Successfully removed already existed homebrew directory." << std::endl;
+			}
+
+			command = "rm -rf " + goinfre + "/.brew &> /dev/null";
+			status = system(command.c_str());
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to remove already existed .brew directory");
+				std::cout << "Brew driectory already removed." << std::endl;
+			} else {
+				std::cout << "Successfully removed already existed .brew directory." << std::endl;
+			}
+
+			/* Clean .zshrc file */
+			status = system("sed -n '/brew/d' ~/.zshrc > ~/.zshrc.tmp && mv ~/.zshrc.tmp ~/.zshrc");
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to clean .zshrc file");
+				std::cout << "Failed to clean .zshrc file." << std::endl;
+			} else {
+				std::cout << "Successfully cleaned .zshrc file." << std::endl;
+			}
+
+			/* Curl brew */
+			command = "cd " + goinfre + " && mkdir homebrew";
+			command += " && curl -sL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew > /dev/null 2>&1";
+			status = system(command.c_str());
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to curl brew");
+				std::cout << "Failed to curl brew." << std::endl;
+			} else {
+				std::cout << "Successfully curled brew." << std::endl;
+			}
+
+			/* Add brew to .zshrc */
+			command = "echo 'export PATH=" + goinfre + "/homebrew/bin:$PATH' >> ~/.zshrc";
+			status = system(command.c_str());
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to add brew to .zshrc");
+				std::cout << "Failed to add brew to .zshrc." << std::endl;
+			} else {
+				std::cout << "Successfully added brew to .zshrc." << std::endl;
+			}
+
+			/* source .zshrc */
+			status = system("source ~/.zshrc > /dev/null 2>&1");
+			if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to source .zshrc");
+				std::cout << "Failed to source .zshrc." << std::endl;
+			} else {
+				std::cout << "Successfully sourced .zshrc." << std::endl;
+			}
+
+			/* Update brew */
+			status = system("brew update > /dev/null 2>&1");
+if (status == STATUS_KO) {
+//				throw std::runtime_error("Failed to update brew");
+				std::cout << "Failed to update brew." << std::endl;
+			} else {
+				std::cout << "Successfully updated brew." << std::endl;
+			}
+
+			/* Stop loading animation */
+			_animation.stop();
+
+			std::cout << GREEN << "Homebrew installed successfully!" << END << std::endl;
+
+		}
+
+		/* Installation Steps */
+
+
+	} /* installBrew */
 
 
 } /* namespace alx */

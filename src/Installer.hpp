@@ -9,15 +9,29 @@
 #include <string>		// std::string
 #include <vector>		// std::vector
 #include <cstdlib>		// EXIT_SUCCESS
+#include <unistd.h>		// access, getuid
+#include <cstdlib>		// system
+#include <fstream>		// std::ifstream
+#include <sys/stat.h>	// stat
+
+#include <filesystem>
+
+
 
 #include "Print.hpp"
+#include "Animation.hpp"
+
+#define STATUS_OK true
+#define STATUS_KO false
 
 namespace alx {
 
 	class Installer {
 
 	private:
-		std::vector<std::string> _dependencies;
+		mutable std::vector<std::string> _dependencies;
+		Animation _animation;
+		Print	  _cout;
 
 	public:
 		Installer();
@@ -31,18 +45,24 @@ namespace alx {
 		void check() const;
 
 
+		std::vector<std::string> getDependencies() const;
 		void checkDependencies() const;
 		void installDependencies() const;
 		void installSvn() const;
 
 		void downloadTests(void) const;
 
-		void checkBetty() const;
+		bool checkBetty() const;
 		void installBetty() const;
 		bool isRunningAsRoot() const;
 
 		bool isMacos() const;
 		bool isLinux() const;
+
+		void installBrew() const;
+
+		void loadingAnimation() const;
+
 
 	}; /* class Installer */
 
