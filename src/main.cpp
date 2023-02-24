@@ -19,7 +19,11 @@ int main(int ac, char** av)
 //	checker.downloadTests();
 //	checker.checkProject();
 
-	checker.copyDirectoryContent();
+	try {
+		checker.copyDirectoryContent();
+	} catch (const std::exception& e) {
+		std::cerr << "[" << RED << "ERROR" << END << "]: "<< e.what() << std::endl;
+	}
 
 
 	return EXIT_SUCCESS;

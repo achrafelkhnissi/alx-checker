@@ -26,12 +26,13 @@ namespace alx {
 		std::cout << "  -v, --version\t\t\tShow program's version number and exit" << std::endl;
 		std::cout << "  -f, --file\t\t\tSpecify the file to check" << std::endl;
 		std::cout << "  -l, --log\t\t\tSpecify the log file" << std::endl;
+		exit(EXIT_SUCCESS);
 	}
 
 	void Checker::checkArgs(int argc, char *argv[]) {
 		if (argc > 2) {
 			usage();
-			return;
+			throw std::invalid_argument("Too many arguments.");
 		}
 
 		std::string file = "";
@@ -40,40 +41,33 @@ namespace alx {
 		for (int i = 1; i < argc; i++) {
 			if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 				usage();
-				return;
 			} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-				std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
-				return;
+				printVersion();
 			} else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
 				if (i + 1 < argc) {
 					_file.assign(argv[i + 1]);
 					i++;
-				} else {
-					std::cerr << "Error: -f or --file option requires one argument." << std::endl;
-					return;
-				}
+				} else
+					throw std::invalid_argument("-f or --file option requires one argument.");
 			} else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--log") == 0) {
 				if (i + 1 < argc) {
 					_log.assign(argv[i + 1]);
 					i++;
-				} else {
-					_cout.print("Error: -l or --log option requires one argument.", RED);
-					return;
-				}
-			} else {
-				_cout.print("Error: Unknown option " + std::string(argv[i]), RED);
-				return;
-			}
+				} else
+					throw std::invalid_argument("-l or --log option requires one argument.");
+			} else
+				throw std::invalid_argument("Unknown option " + std::string(argv[i]));
 		}
 
-		if (file == "") {
-			std::cerr << "Error: No file specified." << std::endl;
-			return;
-		}
+		if (file == "")
+			throw std::invalid_argument("No file specified.");
 
 		return;
 	} /* checkArgs */
 
+	void Checker::printVersion() const {
+		std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
+	}
 
 	bool Checker::directoryExists(const std::string& path) const {
 		struct stat info;
@@ -124,8 +118,7 @@ namespace alx {
 
 		int status = system(cmd.c_str());
 		if (status != 0) {
-			_cout.error("Error: Can't download tests.");
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
 		} else {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
@@ -181,8 +174,7 @@ namespace alx {
 		std::ofstream file("/betty");
 		status = system("chmod +x /usr/local/bin/betty");
 		if (status != 0) {
-			_cout.print("Error: Failed to give betty execute permission", RED);
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Failed to give betty execute permission");
 		}
 		file << "#!/bin/bash\n";
 		file << "# Simply a wrapper script to keep you from having to use betty-style\n";
@@ -213,13 +205,16 @@ namespace alx {
 
 	void Checker::copyDirectoryContent() const {
 
+
+		downloadTests();
+
 		DIR *dir;
 		struct dirent *entry;
 
 		std::string testsDirectory = "tests";
 
 		if (!(dir = opendir(testsDirectory.c_str()))) {
-			throw std::runtime_error("Failed to open tests directory");
+			throw std::runtime_error("Failed to open <" + testsDirectory + "> directory");
 		}
 
 		while ((entry = readdir(dir)) != nullptr) {
@@ -230,7 +225,7 @@ namespace alx {
                                          std::istreambuf_iterator<char>());
                 _testFiles[entry->d_name] = fileContent;
 
-				// std::cout << GREEN << "File: " << entry->d_name << END << std::endl;
+				 std::cout << GREEN << "File: " << std::string(entry->d_name).at(0) << END << std::endl;
 				// std::cout << fileContent << std::endl;
             }
         }
