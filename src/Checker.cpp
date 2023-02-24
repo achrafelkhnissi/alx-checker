@@ -16,6 +16,7 @@ namespace alx {
 
 //		_cout.print("Project: " + _project.string(), GREEN);
 //		_cout.print("Path: " + _projectPath.string(), GREEN);
+		_project = "0x04-checker";
 	}
 
 	Checker::~Checker() {
@@ -120,4 +121,17 @@ namespace alx {
 		}
 	}
 
+	void Checker::downloadTests(void) const {
+
+		std::string url = _checkerRepository + "/" + _project.string();
+		std::string cmd = "svn export " + url + "/tests";
+
+		int status = system(cmd.c_str());
+		if (status != 0) {
+			_cout.error("Error: Can't download tests.");
+			exit(EXIT_FAILURE);
+		} else {
+			_cout.print("Tests downloaded successfully.", GREEN);
+		}
+	}
 }

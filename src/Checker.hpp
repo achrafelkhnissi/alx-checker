@@ -31,6 +31,8 @@ namespace alx {
 	private:
 		Print _cout;
 
+		std::string	_checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
+
 		fs::path _projectPath;
 		fs::path _project;
 
@@ -50,6 +52,8 @@ namespace alx {
 		void checkDependencies() const;
 		void installDependencies() const;
 		void installSvn() const;
+
+		void downloadTests(void) const;
 
 	};
 
