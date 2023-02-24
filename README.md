@@ -16,8 +16,11 @@ TODO:
 - Then it will create a map of the test files and the expected output.
 - Then it will run the executable with the test file as an argument and compare the output with the expected output.
 - But I need to check if it's possible to compare the output of the executable with the expected output.
-
 - I need to think if there's a more appropriate name for the tests/ directory and the expected_output/ directory.
+
+
+1. Put all the files of `tests/` in a data structure! either a map or a vector<pair>. [filename, file_content]
+2. Put all the files of `expected_output/` in a data structure! either a map or a vector<pair>. [filename, file_content]
 
 - `sh -c "$(curl -fsSL https://raw.githubusercontent.com/achrafelkhnissi/alx-checker/0x00-checker/install.sh)"`
 
