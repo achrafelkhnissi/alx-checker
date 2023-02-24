@@ -22,13 +22,11 @@
 #include <dirent.h>		// opendir, readdir, closedir
 
 #include "Print.hpp"
+#include "Installer.hpp"
 
 namespace fs = std::filesystem;
 
 #define ALX_CHECKER_VERSION "0.1"
-
-#define STATUS_OK 0
-#define STATUS_KO 1
 
 namespace alx {
 
@@ -38,12 +36,13 @@ namespace alx {
 		typedef std::map<std::string, std::string> tests_t;
 
 	private:
-		Print _cout;
+		Print		_cout;
+		Installer	_installer;
 
 		std::string	_checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
-
-		fs::path _projectPath;
-		fs::path _project;
+//
+//		fs::path _projectPath;
+//		fs::path _project;
 
 		std::string	_file;
 		std::string	_log;
@@ -74,6 +73,8 @@ namespace alx {
 
 
 		void copyDirectoryContent() const;
+
+		void printVersion() const;
 
 
 	}; /* class Checker */
