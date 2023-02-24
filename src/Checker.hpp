@@ -16,6 +16,9 @@
 #include <sys/stat.h>	// stat
 #include <algorithm>	// std::transform
 #include <cstdlib>		// EXIT_SUCCESS
+#include <fstream>		// std::ifstream
+#include <unistd.h>		// access, getuid
+
 
 
 #include "Print.hpp"
@@ -23,6 +26,9 @@
 namespace fs = std::filesystem;
 
 #define ALX_CHECKER_VERSION "0.1"
+
+#define STATUS_OK 0
+#define STATUS_KO 1
 
 namespace alx {
 
@@ -54,6 +60,13 @@ namespace alx {
 		void installSvn() const;
 
 		void downloadTests(void) const;
+
+		void checkProject() const;
+		bool checkBetty() const;
+		void installBetty() const;
+		void checkReadme() const;
+		bool isRunningAsRoot() const;
+
 
 	};
 

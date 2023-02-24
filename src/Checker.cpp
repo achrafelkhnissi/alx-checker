@@ -134,4 +134,83 @@ namespace alx {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
 	}
+
+	bool Checker::isRunningAsRoot() const {
+    	return getuid() == 0;
+	}
+
+	void Checker::checkProject() const {
+		_cout.print("Checking project " + _project.string(), GREEN);
+		_cout.print("Checking for betty...", GREEN);
+		if (checkBetty() == STATUS_KO) {
+			if (isRunningAsRoot()) {
+				installBetty();
+			} else {
+				_cout.print("Error: betty is not installed.", RED);
+				_cout.print("You must be root to install betty.", RED);
+				_cout.print("Please run the checker as root.", RED);
+				_cout.print("Example: sudo alx-checker", RED);
+				exit(EXIT_FAILURE);
+			}
+		} else {
+			_cout.print("betty is already installed.", GREEN);
+		}
+	}
+
+	bool Checker::checkBetty() const {
+		return system("betty --version &> /dev/null");
+	}
+
+	void Checker::installBetty() const {
+
+		std::cout << "Error: betty is not installed. Do you want to install it? [y/n]: ";
+
+		std::string answer;
+		std::getline(std::cin, answer);
+		std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
+
+		if (answer != "y" && answer != "yes") {
+			std::cout << "OK. Bye!" << std::endl;
+			exit(EXIT_SUCCESS);
+		}
+
+		int status = system("git clone https://github.com/holbertonschool/Betty.git && cd Betty && ./install.sh && cd .. && rm -rf Betty");
+		if (status != 0) {
+			_cout.print("Error: Cloning betty repo failed.", RED);
+			exit(EXIT_FAILURE);
+		} else {
+			_cout.print("Betty repo cloned successfully.", GREEN);
+		}
+
+		std::ofstream file("/betty");
+		status = system("chmod +x /usr/local/bin/betty");
+		if (status != 0) {
+			_cout.print("Error: Failed to give betty execute permission", RED);
+			exit(EXIT_FAILURE);
+		}
+		file << "#!/bin/bash\n";
+		file << "# Simply a wrapper script to keep you from having to use betty-style\n";
+		file << "# and betty-doc separately on every item.\n";
+		file << "# Originally by Tim Britton (@wintermanc3r), multiargument added by\n";
+		file << "# Larry Madeo (@hillmonkey)\n";
+		file << "\n";
+		file << "BIN_PATH=\"/usr/local/bin\"\n";
+		file << "BETTY_STYLE=\"betty-style\"\n";
+		file << "BETTY_DOC=\"betty-doc\"\n";
+		file << "\n";
+		file << "if [ \"$#\" = \"0\" ]; then\n";
+		file << "    echo \"No arguments passed.\n";
+		file << "    exit 1\n";
+		file << "fi\n";
+		file << "\n";
+		file << "for argument in \"$@\"; do\n";
+		file << "    echo -e \"\\n========== $argument ==========\"\n";
+		file << "    ${BIN_PATH}/${BETTY_STYLE} \"$argument\"\n";
+		file << "    ${BIN_PATH}/${BETTY_DOC} \"$argument\"\n";
+		file << "done\n";
+		file.close();
+
+		_cout.success("betty installed successfully.");
+	}
+
 }
