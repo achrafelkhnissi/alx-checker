@@ -8,11 +8,11 @@ RM			= rm -rf
 
 OBJDIR = build
 
-FILES		= $(addprefix src/, main Checker Print Installer Animation)
+FILES		= $(addprefix src/, main Checker Print Installer) #Animation
 
 SRC			= $(FILES:=.cpp)
 OBJ			= $(addprefix $(OBJDIR)/, $(FILES:=.o))
-HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, Checker.hpp Print.hpp Installer.hpp Animation.hpp)
+HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, Checker.hpp Print.hpp Installer.hpp) #Animation.hpp
 INCLUDES	= -I inc
 
 

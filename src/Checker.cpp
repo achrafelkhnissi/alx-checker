@@ -40,8 +40,8 @@ namespace alx {
 			throw std::invalid_argument("Too many arguments.");
 		}
 
-		std::string file = "";
-		std::string log = "";
+		std::string file;
+		std::string log;
 
 		for (int i = 1; i < argc; i++) {
 			if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
@@ -64,10 +64,8 @@ namespace alx {
 				throw std::invalid_argument("Unknown option " + std::string(argv[i]));
 		}
 
-		if (file == "")
+		if (file.empty())
 			throw std::invalid_argument("No file specified.");
-
-		return;
 	} /* checkArgs */
 
 	void Checker::printVersion() const {
@@ -75,7 +73,7 @@ namespace alx {
 	}
 
 	bool Checker::directoryExists(const std::string& path) const {
-		struct stat info;
+		struct stat info{};
 		if (stat(path.c_str(), &info) != 0) {
 			return false;
 		} else if (info.st_mode & S_IFDIR) {

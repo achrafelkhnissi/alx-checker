@@ -1,8 +1,19 @@
+/**
+ * @file Installer.cpp
+ * @brief Installer class implementation
+ * @author Achraf El Khnissi
+ */
+
 #include "Installer.hpp"
 
+/**
+ * @name alx namespace
+ * @brief The alx namespace
+ * @details This namespace contains all the classes and functions of the alx-checker project
+ */
 namespace alx {
 
-	Installer::Installer() : _dependencies(), _animation(), _cout() {}
+	Installer::Installer() : _dependencies(), _cout() {}
 
 	Installer::~Installer() {}
 
@@ -100,7 +111,7 @@ namespace alx {
 
 		status = system("command -v svn &> /dev/null");
 		if (status != 0) {
-			_dependencies.push_back("subversion");
+			_dependencies.emplace_back("subversion"); // TODO: what is the difference between push_back and emplace_back?
 			return;
 		} else {
 			std::cout << "subversion is installed." << std::endl;
@@ -117,7 +128,7 @@ namespace alx {
 	void Installer::installDependencies() const {
 
 		std::cout << "Dependencies to install:" << std::endl;
-		for (auto dep : _dependencies) {
+		for (const auto& dep : _dependencies) {
 			std::cout << dep << " ";
 		}
 		std::cout << std::endl;
@@ -128,7 +139,7 @@ namespace alx {
 		}
 
 		std::string cmd = "sudo apt-get install ";
-		for (auto dep : _dependencies) {
+		for (const auto& dep : _dependencies) {
 
 			if (dep == "betty") {
 				installBetty();
@@ -261,7 +272,7 @@ namespace alx {
 
 	bool directoryExists(const std::string& dirPath) {
 //    return std::filesystem::is_directory(dirPath);
-		struct stat info;
+		struct stat info{};
 
 		return stat(dirPath.c_str(), &info) == 0 && (info.st_mode & S_IFDIR);
 	}
@@ -277,7 +288,6 @@ namespace alx {
 
 		_cout.info("Checking if goinfre directory exists...");
 
-		return ;
 		if (directoryExists(goinfre)) {
 			std::cout << goinfre << " directory exists." << std::endl;
 		} else {
@@ -292,7 +302,6 @@ namespace alx {
 		} else {
 			/* Install homebrew */
 			std::cout << "Installing homebrew..." << std::endl;
-			_animation.start();
 
 			/* Start loading animation */
 //			std::thread loadingThread(loadingAnimation); // todo fix this
@@ -372,11 +381,7 @@ if (status == STATUS_KO) {
 				std::cout << "Successfully updated brew." << std::endl;
 			}
 
-			/* Stop loading animation */
-			_animation.stop();
-
 			std::cout << GREEN << "Homebrew installed successfully!" << END << std::endl;
-
 		}
 
 		/* Installation Steps */

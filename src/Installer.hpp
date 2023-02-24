@@ -30,7 +30,6 @@ namespace alx {
 
 	private:
 		mutable std::vector<std::string> _dependencies;
-		Animation _animation;
 		Print	  _cout;
 
 	public:
