@@ -24,7 +24,6 @@ namespace alx {
         _dependencies = {
                 "svn",
                 "betty",
-                "sldfj"
         };
 
     } /* End of constructor */

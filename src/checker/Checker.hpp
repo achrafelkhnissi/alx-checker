@@ -41,8 +41,8 @@ namespace alx {
 
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
-//		fs::path _projectPath;
-//		fs::path _project;
+        fs::path _projectPath;
+        fs::path _project;
 
         std::string _file;
         std::string _log;

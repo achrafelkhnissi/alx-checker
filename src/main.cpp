@@ -32,7 +32,9 @@ int main(int ac, char **av) {
 
     try {
 
-        alx::Installer installer;
+        alx::Checker checker;
+
+//        checker.check();
 
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;

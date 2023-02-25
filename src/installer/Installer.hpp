@@ -32,9 +32,6 @@ namespace alx {
 
         std::string _packageManager;
 
-        ProgressBar _progressBar;
-
-
     public:
 
         /* Constructors & Destructor */
