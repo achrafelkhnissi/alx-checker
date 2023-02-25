@@ -3,6 +3,8 @@
 //
 
 #include "Installer.hpp"
+#include <algorithm>
+#include <cstring>
 
 namespace alx {
 
