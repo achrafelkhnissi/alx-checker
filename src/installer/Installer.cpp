@@ -22,7 +22,7 @@ namespace alx {
         _packageManager = _isMacos ? "brew" : "apt-get";
 
         _dependencies = {
-                "svn",
+                "subversion",
                 "betty",
         };
 
