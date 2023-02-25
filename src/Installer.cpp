@@ -13,7 +13,13 @@
  */
 namespace alx {
 
-	Installer::Installer() : _dependencies(), _cout() {}
+	Installer::Installer() : _dependencies(), _cout() {
+                _isMacos = isMacos();
+                _isLinux = isLinux();
+                _isRoot = isRunningAsRoot();
+                _isFtStudent = isFtStudent();
+                _packageManager = _isMacos ? "brew" : "apt-get";
+        }
 
 	Installer::~Installer() {}
 
@@ -65,29 +71,6 @@ namespace alx {
 
 		int status = 0;
 
-		if (isMacos()) {
-			std::cout <<"MacOS detected." << std::endl;
-		} else if (isLinux()) {
-			std::cout <<"Linux detected." << std::endl;
-		} else {
-			std::cout << "Unsupported OS." << std::endl;
-			exit(EXIT_FAILURE);
-		}
-
-		if (isRunningAsRoot()) {
-			std::cout << "Running as root." << std::endl;
-		} else {
-			std::cout << "Running as user." << std::endl;
-		}
-
-//		if (isMacos()) {
-//			_cout.print("Checking dependencies...", GREEN);
-//			checkMacosDependencies();
-//		} else if (isLinux()) {
-//			_cout.print("Checking dependencies...", GREEN);
-//			checkLinuxDependencies();
-//		}
-//
 		if (isLinux()) {
 			status = system("command -v apt-get &> /dev/null");
 			if (status != 0) {
@@ -266,10 +249,22 @@ namespace alx {
 
 	} /* installBetty */
 
-	std::string getHomeDir() {
-		return std::getenv("HOME");
-	}
 
+        /**
+         * @name getHomeDir
+         * @brief Gets the home directory of the user
+         * @return $HOME env
+         */
+	std::string Installer::getHomeDir() const {
+		return std::getenv("HOME");
+	} /* getHomeDir */
+
+        /**
+         * @name directoryExists
+         * @brief Checks if a directory exists
+         * @param dirPath: path to the directory
+         * @return true if the directory exists, false otherwise
+         */
 	bool directoryExists(const std::string& dirPath) {
 //    return std::filesystem::is_directory(dirPath);
 		struct stat info{};
@@ -277,24 +272,36 @@ namespace alx {
 		return stat(dirPath.c_str(), &info) == 0 && (info.st_mode & S_IFDIR);
 	}
 
-	void Installer::installBrew() const {
+        /**
+         * @name installBrew
+         * @brief Installs Homebrew
+         * @details This function does the following:
+         */
+        void Installer::installBrew(std::string installDirectory, std::string version) const {
 
-		int status;
+		int             status;
+		bool            isFtStudent = false;
+                std::string     sudo;
+                std::string     homebrew;
+                std::string     goinfre;
+                std::string     uninstallCommand = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)\"";
+                std::string     installCommand = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"";
 
-		std::string goinfre = getHomeDir() + "/goinfre";
-		std::cout << "goinfre: " << goinfre << std::endl;
 
+                /*
+                 * NOTES:
+                 * 1. Brew binaries exits in "/goinfre/.brew/bin/" for FT students
+                 * 2. Brew binaries exits in "/usr/local/bin/" for non-FT students
+                 * 3. downgrade brew to 3.2.17 which can install valgrind for FT students
+                 *              * export HOMEBREW_NO_AUTO_UPDATE=1  //  prevent brew from updating itself
+                 *
+                 */
 
-
-		_cout.info("Checking if goinfre directory exists...");
-
-		if (directoryExists(goinfre)) {
-			std::cout << goinfre << " directory exists." << std::endl;
-		} else {
-			throw std::runtime_error( goinfre + " directory does not exist");
-		}
-
-		std::string homebrew = goinfre + "/brew";
+                if (isFtStudent) {
+                        sudo = "sudo";
+                        goinfre = getHomeDir() + "/goinfre";
+                        homebrew = goinfre + "/brew";
+                }
 
 
 		if (directoryExists(homebrew)) {
@@ -387,7 +394,15 @@ if (status == STATUS_KO) {
 		/* Installation Steps */
 
 
-	} /* installBrew */
+	}
+        bool Installer::isFtStudent() const {
+                return directoryExists("~/goinfre");
+        }
+
+
+
+        /* installBrew */
+
 
 
 } /* namespace alx */
