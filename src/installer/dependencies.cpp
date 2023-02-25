@@ -9,7 +9,7 @@ namespace alx {
     void Installer::checkDependencies() const {
         for (auto &dependency: _dependencies) {
             if (!checkDependency(dependency))
-                std::cout << "Dependency `" << dependency << "` is not installed." << std::endl;
+                _cout.error("Dependency `" + dependency + "` is not installed.\n");
         }
     }
 
@@ -21,7 +21,7 @@ namespace alx {
     void Installer::installDependencies() const {
         for (auto &dependency: _dependencies) {
             if (!checkDependency(dependency)) {
-                std::cout << "Executing: `sudo " << _packageManager << " install -y " << dependency << "`..." << std::endl;
+                _cout.info( "Executing: `sudo " + _packageManager + " install -y " + dependency + "`...\n");
                 installDependency(dependency);
             }
         }
