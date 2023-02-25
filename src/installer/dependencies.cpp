@@ -28,7 +28,7 @@ namespace alx {
     }
 
     void Installer::installDependency(const std::string &dependency) const {
-        std::string command = "sudo" + _packageManager + " install " + dependency;
+        std::string command = "sudo " + _packageManager + " install " + dependency;
         system(command.c_str());
     }
 
