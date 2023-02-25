@@ -44,7 +44,7 @@ namespace alx {
         /* Constructors & Destructor */
         Installer();
 
-        Installer(int ac, char **av);
+//        Installer(int ac, char **av);
 
         Installer(const std::vector<std::string> &dependencies);
 

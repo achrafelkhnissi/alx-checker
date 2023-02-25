@@ -7,8 +7,6 @@
  */
 
 #include "main.hpp"
-#include "installer/Installer.hpp"
-
 
 #include <iostream>
 #include <string>
@@ -27,26 +25,19 @@ void spinningAnimation(int status) {
     }
 }
 
-
-void installHomeBrew() {
-
-}
-
 int main(int ac, char **av) {
+
     (void) ac;
     (void) av;
-
 
     try {
 
         alx::Installer installer;
 
-//                installer.installBrew();
 
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;
     }
-
 
     return EXIT_SUCCESS;
 }

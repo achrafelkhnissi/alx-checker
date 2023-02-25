@@ -22,15 +22,15 @@ namespace alx {
         _packageManager = _isMacos ? "brew" : "apt-get";
     }
 
-    Installer::Installer(int ac, char **av) : _cout() {
-        _isMacos = isMacos();
-        _isLinux = isLinux();
-        _isRoot = isRunningAsRoot();
-        _isFtStudent = isFtStudent();
-        _packageManager = _isMacos ? "brew" : "apt-get";
-
-        checkArgs(ac, av);
-    }
+//    Installer::Installer(int ac, char **av) : _cout() {
+//        _isMacos = isMacos();
+//        _isLinux = isLinux();
+//        _isRoot = isRunningAsRoot();
+//        _isFtStudent = isFtStudent();
+//        _packageManager = _isMacos ? "brew" : "apt-get";
+//
+//        checkArgs(ac, av);
+//    }
 
     Installer::Installer(const std::vector<std::string> &dependencies) : _cout() {
         _isMacos = isMacos();
@@ -74,9 +74,8 @@ namespace alx {
         /* TODO: Implement check method */
     }
 
-    void Installer::checkArgs(int argc, char **argv) const {
-
-    }
-
+//    void Installer::checkArgs(int argc, char **argv) const {
+//
+//    }
 
 } /* namespace alx */
