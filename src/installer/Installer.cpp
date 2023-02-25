@@ -20,7 +20,14 @@ namespace alx {
         _isRoot = isRunningAsRoot();
         _isFtStudent = isFtStudent();
         _packageManager = _isMacos ? "brew" : "apt-get";
-    }
+
+        _dependencies = {
+                "svn",
+                "betty",
+                "sldfj"
+        };
+
+    } /* End of constructor */
 
 //    Installer::Installer(int ac, char **av) : _cout() {
 //        _isMacos = isMacos();

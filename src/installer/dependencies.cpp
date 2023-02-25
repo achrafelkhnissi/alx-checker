@@ -8,23 +8,21 @@ namespace alx {
 
     void Installer::checkDependencies() const {
         for (auto &dependency: _dependencies) {
-            if (!checkDependency(dependency)) {
-                std::cout << "Dependency " << dependency << " is not installed." << std::endl;
-            }
+            if (!checkDependency(dependency))
+                std::cout << "Dependency `" << dependency << "` is not installed." << std::endl;
         }
     }
 
     bool Installer::checkDependency(const std::string &dependency) const {
-        std::string command = "which " + dependency;
+        std::string command = "which " + dependency + " > /dev/null 2>&1";
         return system(command.c_str()) == 0;
     }
 
     void Installer::installDependencies() const {
         std::cout << "Installing dependencies..." << std::endl;
         for (auto &dependency: _dependencies) {
-            if (!checkDependency(dependency)) {
+            if (!checkDependency(dependency))
                 installDependency(dependency);
-            }
         }
     }
 
@@ -41,5 +39,4 @@ namespace alx {
         _dependencies = dependencies;
     }
 
-
-}
+} /* namespace alx */

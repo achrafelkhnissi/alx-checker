@@ -13,15 +13,9 @@
 #include <cstdlib>        // system
 #include <fstream>        // std::ifstream
 #include <sys/stat.h>    // stat
-
 #include <filesystem>
 
-
-//#include "Animation.hpp"
 #include "Printer.hpp" // TODO: make "Printer.hpp" work!
-
-#define STATUS_OK true
-#define STATUS_KO false
 
 namespace alx {
 
@@ -37,6 +31,8 @@ namespace alx {
         bool _isFtStudent;
 
         std::string _packageManager;
+
+        ProgressBar _progressBar;
 
 
     public:

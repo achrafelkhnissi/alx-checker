@@ -34,7 +34,6 @@ int main(int ac, char **av) {
 
         alx::Installer installer;
 
-
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;
     }
