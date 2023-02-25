@@ -55,6 +55,9 @@ $(OBJDIR)/%.o: %.cpp $(HEADER)
 	@ printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
 	@$(CC) $(FLAGS) $(OPTS) $(INCLUDES) -c $< -o $@
 
+run: $(NAME)
+	@./$(NAME)
+
 clean:
 	@ $(RM) $(OBJDIR) $(OBJ)
 	@printf "$(CURSIVE)$(GRAY)	- Removing object files ... $(RESET)\n"
