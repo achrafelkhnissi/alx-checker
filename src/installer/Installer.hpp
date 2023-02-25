@@ -63,8 +63,6 @@ namespace alx {
 
         void checkArgs(int argc, char *argv[]) const;
 
-        void downloadTests(void) const;
-
         bool checkBetty() const;
 
 

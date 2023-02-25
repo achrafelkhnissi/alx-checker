@@ -84,45 +84,44 @@ namespace alx {
     } /* directoryExists */
 
 
-//	void Checker::downloadTests(void) const {
+//    void Checker::downloadTests(void) const {
 //
-//		std::string url = _checkerRepository + "/" + _project.string();
-//		std::string cmd = "svn export " + url + "/tests";
+//        std::string url = _checkerRepository + "/" + _project.string();
+//        std::string cmd = "svn export " + url + "/tests";
 //
-//		int status = system(cmd.c_str());
-//		if (status != 0) {
-//			throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
-//		} else {
-//			_cout.print("Tests downloaded successfully.", GREEN);
-//		}
-//	} /* downloadTests */
+//        int status = system(cmd.c_str());
+//        if (status != 0) {
+//            throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
+//        } else {
+//            _cout.print("Tests downloaded successfully.", GREEN);
+//        }
+//    } /* downloadTests */
+
+//    bool Checker::isRunningAsRoot() const {
+//        return getuid() == 0;
+//    }
+
+//    void Checker::checkProject() const {
+//        _cout.print("Checking project " + _project.string(), GREEN);
+//        _cout.print("Checking for betty...", GREEN);
+//        if (checkBetty() == STATUS_KO) {
+//            if (isRunningAsRoot()) {
+//                installBetty();
+//            } else {
+//                _cout.print("Error: betty is not installed.", RED);
+//                _cout.print("You must be root to install betty.", RED);
+//                _cout.print("Please run the checker as root.", RED);
+//                _cout.print("Example: sudo alx-checker", RED);
+//                exit(EXIT_FAILURE);
+//            }
+//        } else {
+//            _cout.print("betty is already installed.", GREEN);
+//        }
+//    } /* checkProject */
 //
-//	bool Checker::isRunningAsRoot() const {
-//    	return getuid() == 0;
-//	}
-
-//	void Checker::checkProject() const {
-//		_cout.print("Checking project " + _project.string(), GREEN);
-//		_cout.print("Checking for betty...", GREEN);
-//		if (checkBetty() == STATUS_KO) {
-//			if (isRunningAsRoot()) {
-//				installBetty();
-//			} else {
-//				_cout.print("Error: betty is not installed.", RED);
-//				_cout.print("You must be root to install betty.", RED);
-//				_cout.print("Please run the checker as root.", RED);
-//				_cout.print("Example: sudo alx-checker", RED);
-//				exit(EXIT_FAILURE);
-//			}
-//		} else {
-//			_cout.print("betty is already installed.", GREEN);
-//		}
-//	} /* checkProject */
-
-//	bool Checker::checkBetty() const {
-//		return system("betty --version &> /dev/null");
-//	}
-
+//    bool Checker::checkBetty() const {
+//        return system("betty --version &> /dev/null");
+//    }
 
 
     void Checker::copyDirectoryContent() const {
