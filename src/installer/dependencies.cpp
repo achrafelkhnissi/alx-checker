@@ -21,14 +21,14 @@ namespace alx {
     void Installer::installDependencies() const {
         for (auto &dependency: _dependencies) {
             if (!checkDependency(dependency)) {
-                std::cout << "Executing: `sudo " << _packageManager << " install " << dependency << "`..." << std::endl;
+                std::cout << "Executing: `sudo " << _packageManager << " install -y " << dependency << "`..." << std::endl;
                 installDependency(dependency);
             }
         }
     }
 
     void Installer::installDependency(const std::string &dependency) const {
-        std::string command = "sudo " + _packageManager + " install " + dependency;
+        std::string command = "sudo " + _packageManager + " install -y " + dependency;
         system(command.c_str());
     }
 
