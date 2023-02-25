@@ -6,7 +6,7 @@
  * @date 2020-05-01
  */
 
-#include "main.hpp"
+#include "../inc/main.hpp"
 
 #include <iostream>
 #include <string>

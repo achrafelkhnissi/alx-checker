@@ -21,8 +21,8 @@
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
 
-#include "Printer.hpp"
-#include "Installer.hpp"
+#include "../printer/Printer.hpp"
+#include "../installer/Installer.hpp"
 
 namespace fs = std::filesystem;
 
