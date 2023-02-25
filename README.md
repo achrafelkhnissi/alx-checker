@@ -19,7 +19,6 @@
 
 This repository contains a checker created for the ALX Low-Level Programming course projects. The checker are designed to automate the checking process and ensure that the projects meet the requirements of the course. The checker cover various aspects of the projects, such as coding style, syntax, and expected output. The repository is a useful tool for ALX students to ensure that their projects are up to the standard required by the course.
 
-
 <!-- ## Checkers
 - [0x00-hello_world](./0x00-checker)
 - [0x01-variables_if_else_while](./0x01-checker)
