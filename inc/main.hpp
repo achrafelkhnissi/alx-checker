@@ -9,10 +9,9 @@
 #ifndef ALX_CHECKER_MAIN_HPP
 #define ALX_CHECKER_MAIN_HPP
 
-#include "../src/Checker.hpp"
-#include "../src/Installer.hpp"
-#include "../src/Print.hpp"
+#include "Checker.hpp"
+#include "Installer.hpp"
+#include "Printer.hpp"
 
-//#include "../src/Animation.hpp"
 
 #endif //ALX_CHECKER_MAIN_HPP

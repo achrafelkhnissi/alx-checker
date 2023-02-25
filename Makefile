@@ -8,12 +8,25 @@ RM			= rm -rf
 
 OBJDIR = build
 
-FILES		= $(addprefix src/, main Checker Print Installer) #Animation
+ANIMATION	= $(addprefix animation/, animation)
+ANIM_HEADER	= $(addprefix animation/, animation.hpp)
+
+CHERCKER	= $(addprefix checker/, Checker)
+CHECKER_HEADER	= $(addprefix checker/, Checker.hpp)
+
+INSTALLER	= $(addprefix installer/, Installer dependencies installMethods installerUtils)
+INSTALLER_HEADER	= $(addprefix installer/, Installer.hpp)
+
+PRINTER		= $(addprefix printer/, Printer)
+PRINTER_HEADER	= $(addprefix printer/, Printer.hpp)
+
+FILES		= $(addprefix src/, main $(CHERCKER) $(INSTALLER) $(PRINTER))
 
 SRC			= $(FILES:=.cpp)
 OBJ			= $(addprefix $(OBJDIR)/, $(FILES:=.o))
-HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, Checker.hpp Print.hpp Installer.hpp) #Animation.hpp
-INCLUDES	= -I inc
+
+HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, $(CHECKER_HEADER) $(INSTALLER_HEADER) $(PRINTER_HEADER))
+INCLUDES	= $(addprefix -I , inc $(addprefix src/, Checker Installer Printer))
 
 
 #Colors:

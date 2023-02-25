@@ -7,6 +7,7 @@
  */
 
 #include "main.hpp"
+#include "installer/Installer.hpp"
 
 
 #include <iostream>
@@ -15,7 +16,7 @@
 #include <chrono>
 #include <cstdlib>
 
-void spinningAnimation(bool status) {
+void spinningAnimation(int status) {
     char spinChars[] = {'|', '/', '-', '\\'};
     int i = 0;
     while (!WIFEXITED(status)) {
@@ -26,24 +27,26 @@ void spinningAnimation(bool status) {
     }
 }
 
-int main(int ac, char** av)
-{
-	(void)ac;
-	(void)av;
 
-        std::string     installCommand = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\" &";
+void installHomeBrew() {
 
-	try {
+}
 
-        std::string     installTestsCommand = "svn export https://github.com/achrafelkhnissi/alx-low_level_programming/trunk/0x04-more_functions_nested_loops/tests &";
-        int status = system(installTestsCommand.c_str());
-        spinningAnimation(status);
+int main(int ac, char **av) {
+    (void) ac;
+    (void) av;
 
 
-	} catch (const std::exception& e) {
-		std::cerr << "[" << RED << "ERROR" << END << "]: "<< e.what() << std::endl;
-	}
+    try {
+
+        alx::Installer installer;
+
+//                installer.installBrew();
+
+    } catch (const std::exception &e) {
+        std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;
+    }
 
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

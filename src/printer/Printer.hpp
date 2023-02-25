@@ -45,29 +45,36 @@
  */
 namespace alx {
 
-	/**
-	 * @brief Print class
-	 * @details This class is used to print colored text in the terminal
-	 * @see https://en.wikipedia.org/wiki/ANSI_escape_code
-	 */
-	class Print {
+    /**
+     * @brief Print class
+     * @details This class is used to print colored text in the terminal
+     * @see https://en.wikipedia.org/wiki/ANSI_escape_code
+     */
+    class Printer {
 
-	public:
-		Print();
-		~Print();
+    public:
+        Printer();
 
-	template<typename... Args>
-	void printf(const Args&... args) const;
+        ~Printer();
 
-	void print(const std::string &text, const std::string &color) const;
-	void print(const std::string &text, const std::string &color, const std::string &background) const;
-	void print(const std::string &text, const std::string &color, const std::string &background, const std::string &style) const;
+        template<typename... Args>
+        void printf(const Args &... args) const;
 
-	void error(const std::string &text) const;
-	void warning(const std::string &text) const;
-	void success(const std::string &text) const;
-	void info(const std::string &text) const;
-	};
+        void print(const std::string &text, const std::string &color) const;
+
+        void print(const std::string &text, const std::string &color, const std::string &background) const;
+
+        void print(const std::string &text, const std::string &color, const std::string &background,
+                   const std::string &style) const;
+
+        void error(const std::string &text) const;
+
+        void warning(const std::string &text) const;
+
+        void success(const std::string &text) const;
+
+        void info(const std::string &text) const;
+    };
 }
 
 #endif //ALX_CHECKER_PRINT_HPP
