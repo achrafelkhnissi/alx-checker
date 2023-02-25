@@ -14,30 +14,16 @@
 #include <thread>
 #include <chrono>
 #include <cstdlib>
-void executeCommandWithAnimation(const std::string& command)
-{
-    // Print initial loading message
-    std::cout << "Executing command: " << command << std::endl;
-    std::cout << "Loading... ";
 
-    // Define animation characters
-    const std::string animationChars = "|/-\\";
-    int animationIndex = 0;
-
-    // Execute command
-    system(command.c_str());
-
-    // Update loading animation until command finishes
-    while (system(NULL) && !system(command.c_str()))
-    {
-        std::cout << animationChars[animationIndex % animationChars.size()] << std::flush;
-        animationIndex++;
+void spinningAnimation(bool status) {
+    char spinChars[] = {'|', '/', '-', '\\'};
+    int i = 0;
+    while (!WIFEXITED(status)) {
+        std::cout << "\r[ " << spinChars[i % 4] << " ] Loading... ";
+        std::cout.flush();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::cout << "\b" << std::flush;
+        i++;
     }
-
-    // Print completion message
-    std::cout << "Done!" << std::endl;
 }
 
 int main(int ac, char** av)
@@ -45,8 +31,13 @@ int main(int ac, char** av)
 	(void)ac;
 	(void)av;
 
+        std::string     installCommand = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\" &";
 
 	try {
+
+        std::string     installTestsCommand = "svn export https://github.com/achrafelkhnissi/alx-low_level_programming/trunk/0x04-more_functions_nested_loops/tests &";
+        int status = system(installTestsCommand.c_str());
+        spinningAnimation(status);
 
 
 	} catch (const std::exception& e) {

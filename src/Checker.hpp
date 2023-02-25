@@ -1,85 +1,85 @@
-//
-// Created by Achraf El khnissi on 2/24/23.
-//
+/**
+ * @file Checker.hpp
+ * @brief Checker class definition
+ * @author Achraf El Khnissi
+ * @version 1.0
+ * @date 2021-02-23
+ */
 
-#ifndef ALX_CHECKER_INSTALLER_HPP
-#define ALX_CHECKER_INSTALLER_HPP
+#ifndef ALX_CHECKER_CHECKER_HPP
+#define ALX_CHECKER_CHECKER_HPP
 
 #include <iostream>		// std::cout, std::cerr
+#include <filesystem>	// std::filesystem
 #include <string>		// std::string
-#include <vector>		// std::vector
-#include <cstdlib>		// EXIT_SUCCESS
-#include <unistd.h>		// access, getuid
-#include <cstdlib>		// system
-#include <fstream>		// std::ifstream
+#include <cstring>		// strcmp
 #include <sys/stat.h>	// stat
-
-#include <filesystem>
-
-
+#include <algorithm>	// std::transform
+#include <cstdlib>		// EXIT_SUCCESS
+#include <fstream>		// std::ifstream
+#include <unistd.h>		// access, getuid
+#include <map>			// std::map
+#include <dirent.h>		// opendir, readdir, closedir
 
 #include "Print.hpp"
-#include "Animation.hpp"
+#include "Installer.hpp"
 
-#define STATUS_OK true
-#define STATUS_KO false
+namespace fs = std::filesystem;
+
+#define ALX_CHECKER_VERSION "0.1"
 
 namespace alx {
 
-	class Installer {
+	class Checker {
 
 	private:
-		mutable std::vector<std::string> _dependencies;
-		Print	  _cout;
+		typedef std::map<std::string, std::string> tests_t;
 
-                bool    _isMacos;
-                bool    _isLinux;
-                bool    _isRoot;
-                bool    _isFtStudent;
+	private:
+		Print		_cout;
+		Installer	_installer;
 
-                std::string _packageManager;
+		std::string	_checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
+//
+//		fs::path _projectPath;
+//		fs::path _project;
 
+		std::string	_file;
+		std::string	_log;
 
-
+		mutable tests_t _testFiles; // mutable to be able to use it in const methods
 
 	public:
-		Installer();
-		~Installer();
+		Checker();
+		~Checker();
 
-		void install() const;
-		void uninstall() const;
-		void update() const;
 		void usage() const;
-		void checkArgs(int argc, char *argv[]) const;
+		void checkArgs(int argc, char *argv[]);
 		void check() const;
 
+		bool directoryExists(const std::string& path) const;
 
-		std::vector<std::string> getDependencies() const;
 		void checkDependencies() const;
 		void installDependencies() const;
 		void installSvn() const;
 
 		void downloadTests(void) const;
 
+		void checkProject() const;
 		bool checkBetty() const;
 		void installBetty() const;
+		void checkReadme() const;
+		bool isRunningAsRoot() const;
 
-		bool isMacos() const;
-		bool isLinux() const;
-                bool isRunningAsRoot() const;
-                bool isFtStudent() const;
 
-		void installBrew(std::string installDirectory = "/usr/local/Homebrew",
-                                 std::string version = "latest") const;
+		void copyDirectoryContent() const;
 
-		void loadingAnimation() const;
+		void printVersion() const;
 
-                std::string getHomeDir() const;
 
-	}; /* class Installer */
+	}; /* class Checker */
 
 } /* namespace alx */
 
 
-
-#endif //ALX_CHECKER_INSTALLER_HPP
+#endif /* ALX_CHECKER_CHECKER_HPP */

@@ -32,6 +32,16 @@ namespace alx {
 		mutable std::vector<std::string> _dependencies;
 		Print	  _cout;
 
+                bool    _isMacos;
+                bool    _isLinux;
+                bool    _isRoot;
+                bool    _isFtStudent;
+
+                std::string _packageManager;
+
+
+
+
 	public:
 		Installer();
 		~Installer();
@@ -53,15 +63,18 @@ namespace alx {
 
 		bool checkBetty() const;
 		void installBetty() const;
-		bool isRunningAsRoot() const;
 
 		bool isMacos() const;
 		bool isLinux() const;
+                bool isRunningAsRoot() const;
+                bool isFtStudent() const;
 
-		void installBrew() const;
+		void installBrew(std::string installDirectory = "/usr/local/Homebrew",
+                                 std::string version = "latest") const;
 
 		void loadingAnimation() const;
 
+                std::string getHomeDir() const;
 
 	}; /* class Installer */
 
