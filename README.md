@@ -37,3 +37,4 @@ This repository contains a checker created for the ALX Low-Level Programming cou
     - `make [task number]`: Checks for one task if it has the correct output
     - `make check-all`: Checks for all tasks at the same time
     - `make clean`: Deletes generated files
+
