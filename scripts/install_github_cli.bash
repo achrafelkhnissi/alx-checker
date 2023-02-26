@@ -30,14 +30,22 @@ function setup_github_cli() {
   # Test your connection
   ssh -T git@github.com
 
+  printf "\nSigning commits with SSH\n"
+  git config --global commit.gpgsign true
+  git config --global gpg.format ssh
+  git config --global user.signingkey ~/.ssh/id_ed25519.pub
+
+
+
+
 }
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-#  echo "Installing GitHub CLI..."
-#  brew install gh
+  echo "Installing GitHub CLI..."
+  brew install gh
 
-#  printf "\n\nGenerating SSH key...\n"
-#  generate_ssh_key
+  printf "\n\nGenerating SSH key...\n"
+  generate_ssh_key
 
   printf "\n\nSetting up GitHub CLI...\n"
   setup_github_cli
