@@ -25,7 +25,7 @@ FILES		= $(addprefix src/, main $(CHERCKER) $(INSTALLER) $(PRINTER))
 SRC			= $(FILES:=.cpp)
 OBJ			= $(addprefix $(OBJDIR)/, $(FILES:=.o))
 
-HEADER		= $(addprefix inc/, main.hpp) $(addprefix src/, $(CHECKER_HEADER) $(INSTALLER_HEADER) $(PRINTER_HEADER))
+HEADER		= $(addprefix inc/, main.hpp indicators.hpp) $(addprefix src/, $(CHECKER_HEADER) $(INSTALLER_HEADER) $(PRINTER_HEADER))
 INCLUDES	= $(addprefix -I , inc $(addprefix src/, Checker Installer Printer))
 
 
@@ -54,6 +54,9 @@ $(OBJDIR)/%.o: %.cpp $(HEADER)
 	@mkdir -p $(dir $@)
 	@ printf "$(CURSIVE)$(GRAY) 	- Making object file $@ from source file $< ... $(RESET)\n"
 	@$(CC) $(FLAGS) $(OPTS) $(INCLUDES) -c $< -o $@
+
+run: $(NAME)
+	@./$(NAME)
 
 clean:
 	@ $(RM) $(OBJDIR) $(OBJ)

@@ -6,7 +6,7 @@
  * @date 2020-05-01
  */
 
-#include "main.hpp"
+#include "../inc/main.hpp"
 
 #include <iostream>
 #include <string>
@@ -32,10 +32,7 @@ int main(int ac, char **av) {
 
     try {
 
-        alx::Installer installer;
-
-		installer.installBrew();
-
+        alx::Checker checker;
 
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;

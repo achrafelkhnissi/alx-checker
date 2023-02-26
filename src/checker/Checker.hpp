@@ -21,8 +21,8 @@
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
 
-#include "Printer.hpp"
-#include "Installer.hpp"
+#include "../printer/Printer.hpp"
+#include "../installer/Installer.hpp"
 
 namespace fs = std::filesystem;
 
@@ -41,8 +41,8 @@ namespace alx {
 
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
-//		fs::path _projectPath;
-//		fs::path _project;
+        fs::path _projectPath;
+        fs::path _project;
 
         std::string _file;
         std::string _log;

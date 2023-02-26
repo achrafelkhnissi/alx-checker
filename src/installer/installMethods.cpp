@@ -3,6 +3,8 @@
 //
 
 #include "Installer.hpp"
+#include <algorithm>
+#include <cstring>
 
 namespace alx {
 
@@ -153,37 +155,5 @@ namespace alx {
 
         _cout.print("Homebrew installed successfully!", GREEN);
     } /* installBrew */
-
-    /**
-     * @name installSvn
-     * @brief Installs svn
-     * @details This function does the following:
-     * 		- Asks the user if he wants to install svn
-     * 		- If yes, it installs svn
-     * 		- If no, it exits the program
-     */
-    void Installer::installSvn() const {
-
-        std::cout << "Error: svn is not installed. Do you want to install it? [y/n]";
-
-        std::string answer;
-        std::getline(std::cin, answer);
-        std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
-
-        if (answer != "y" && answer != "yes") {
-            std::cout << "OK. Bye!" << std::endl;
-            exit(EXIT_SUCCESS);
-        }
-
-        int status = system("sudo apt-get install subversion");
-        if (status != 0) {
-            std::cout << "Error: Failed to install svn." << std::endl;
-            exit(EXIT_FAILURE);
-        }
-
-        // remove svn from the dependencies list
-        _dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "subversion"), _dependencies.end());
-    } /* installSvn */
-
 
 } /* namespace alx */

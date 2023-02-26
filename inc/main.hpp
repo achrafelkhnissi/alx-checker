@@ -9,9 +9,14 @@
 #ifndef ALX_CHECKER_MAIN_HPP
 #define ALX_CHECKER_MAIN_HPP
 
-#include "Checker.hpp"
-#include "Installer.hpp"
-#include "Printer.hpp"
+#define ROOT_UID 0
 
+//#include "Checker.hpp"
+//#include "Installer.hpp"
+//#include "Printer.hpp"
+
+#include "../src/checker/Checker.hpp"
+#include "../src/installer/Installer.hpp"
+#include "../src/printer/Printer.hpp"
 
 #endif //ALX_CHECKER_MAIN_HPP

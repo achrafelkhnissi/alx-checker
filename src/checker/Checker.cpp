@@ -11,13 +11,16 @@
 namespace alx {
 
     Checker::Checker() : _cout(), _installer() {
-//		_projectPath = fs::current_path();
-//		_project = _projectPath.filename();
+		_projectPath = fs::current_path();
+		_project = _projectPath.filename();
 
-//		_installer.checkDependencies();
-//		if (_installer.getDependencies().size() > 0) {
-//			_installer.installDependencies();
-//		}
+                std::cout << "Project: " << _project << std::endl;
+                std::cout << "Project path: " << _projectPath << std::endl;
+
+		_installer.checkDependencies();
+		if (!_installer.getDependencies().empty()) {
+			_installer.installDependencies();
+		}
     }
 
     Checker::~Checker() {
