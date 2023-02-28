@@ -8,9 +8,11 @@ project(alx-checker
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CONFIG_HPP_IN "${PROJECT_SOURCE_DIR}/config.h.in")
+set(CONFIG_HPP    "${PROJECT_BINARY_DIR}/config.h")
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-configure_file(${PROJECT_SOURCE_DIR}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
+configure_file(${CONFIG_HPP_IN} ${CONFIG_HPP})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
