@@ -38,3 +38,6 @@ This repository contains a checker created for the ALX Low-Level Programming cou
     - `make check-all`: Checks for all tasks at the same time
     - `make clean`: Deletes generated files
 
+## Author
+This project is authored and maintained by:
+- Achraf El Khnissi ([@achrafelkhnissi](https://twitter.com/suprivada)) - Software Engineering Student
