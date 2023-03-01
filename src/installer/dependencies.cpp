@@ -1,23 +1,29 @@
-//
-// Created by Achraf El khnissi on 2/25/23.
-//
+/**
+ * @file dependencies.cpp
+ * @brief Installer dependencies functions implementation
+ * @details This file contains the implementation of the functions used to install the dependencies of the alx-checker project
+ * @author Achraf El Khnissi
+ * @date Wednesday, March 1 2023
+ */
 
 #include "Installer.hpp"
 
 namespace alx {
 
     void Installer::checkDependencies() const {
-
         _cout.info("Checking dependencies...\n");
-        for (auto &dependency: _dependencies) {
-            if (!checkDependency(dependency)) {
-                _cout.error("\t-Dependency `" + dependency + "` is not installed.");
-            } else {
-                _dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), dependency),
-                                    _dependencies.end());
-            }
-        }
-    }
+		auto it = _dependencies.begin();
+		while (it != _dependencies.end()) {
+			if (checkDependency(*it)) {
+				_cout.print("\t-Dependency `" + *it + "` is installed.\n", GREEN);
+				it = _dependencies.erase(it);
+				it = _dependencies.begin();
+			} else {
+				_cout.print("\t-Dependency `" + *it + "` is not installed.\n", RED);
+				++it;
+			}
+		}
+	}
 
     bool Installer::checkDependency(const std::string &dependency) const {
         std::string command = "which " + dependency + " > /dev/null 2>&1";
@@ -32,10 +38,8 @@ namespace alx {
         if (!_dependencies.empty())
             _cout.info("Installing dependencies...");
         for (auto &dependency: _dependencies) {
-            if (!checkDependency(dependency)) {
                 _cout.print("\t-Executing: `" + _sudo + " " + _packageManager + " install " + dependency + "`...\n", YELLOW);
                 installDependency(dependency);
-            }
         }
 		std::cout << "Dependencies is " << (_dependencies.empty() ? "empty" : "not empty") << std::endl;
 		if (_dependencies.empty()) {
@@ -45,7 +49,14 @@ namespace alx {
 
     void Installer::installDependency(const std::string &dependency) const {
         std::string command = _sudo + " " + _packageManager + " install " + dependency;
-        int status = system(command.c_str());
+
+		int status;
+
+		if (dependency == "betty")
+			status = installBetty();
+		else
+			status = system(command.c_str());
+
 		if (status != 0) {
 			_cout.error("\t\t-Error while installing `" + dependency + "`.");
 		} else
