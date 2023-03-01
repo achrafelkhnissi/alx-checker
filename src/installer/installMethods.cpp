@@ -22,7 +22,7 @@ namespace alx {
      * 		- Gives the wrapper script execute permission
      * 		- This wrapper script is placed in /usr/local/bin
      */
-    void Installer::installBetty() const {
+    int Installer::installBetty() const {
 
         std::cout << "Error: betty is not installed. Do you want to install it? [y/n]: ";
 
@@ -32,22 +32,23 @@ namespace alx {
 
         if (answer != "y" && answer != "yes") {
             std::cout << "OK. Bye!" << std::endl;
-            exit(EXIT_SUCCESS);
+			return EXIT_SUCCESS;
         }
 
         int status = system(
             "git clone https://github.com/holbertonschool/Betty.git && cd Betty && ./install.sh && cd .. && rm -rf Betty");
         if (status != 0) {
             std::cout << "Error: Cloning betty repo failed." << std::endl;
-            exit(EXIT_FAILURE);
+            return EXIT_FAILURE;
         } else {
-            std::cout << "Betty installed successfully." << std::endl;
+            std::cout << "Betty cloned successfully." << std::endl;
         }
 
         std::ofstream file("/betty");
         status = system("chmod +x /usr/local/bin/betty");
         if (status != 0) {
-            throw std::runtime_error("Failed to give betty execute permission");
+			return EXIT_FAILURE;
+//            throw std::runtime_error("Failed to give betty execute permission");
         }
         file << "#!/bin/bash\n";
         file << "# Simply a wrapper script to keep you from having to use betty-style\n";
@@ -77,6 +78,7 @@ namespace alx {
         // remove betty from the dependencies list
         _dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), "betty"), _dependencies.end());
 
+		return EXIT_SUCCESS;
     } /* installBetty */
 
 
