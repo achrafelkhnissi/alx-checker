@@ -7,7 +7,6 @@
  */
 
 #include "Checker.hpp"
-#include "config.hpp"
 
 namespace alx {
 
@@ -15,13 +14,14 @@ namespace alx {
 		_projectPath = fs::current_path();
 		_project = _projectPath.filename();
 
-                std::cout << "Project: " << _project << std::endl;
-                std::cout << "Project path: " << _projectPath << std::endl;
+		std::cout << "Project: " << _project << std::endl;
+		std::cout << "Project path: " << _projectPath << std::endl;
 
 		_installer.checkDependencies();
-		if (!_installer.getDependencies().empty()) {
+		if (!_installer.getDependencies().empty())
 			_installer.installDependencies();
-		}
+		else
+			_cout.info("No dependencies to install.");
     }
 
     Checker::~Checker() {
@@ -73,7 +73,7 @@ namespace alx {
     } /* checkArgs */
 
     void Checker::printVersion() const {
-        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
+//        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
     }
 
     bool Checker::directoryExists(const std::string &path) const {
