@@ -89,23 +89,9 @@ namespace alx {
         }
     } /* directoryExists */
 
-
-//    void Checker::downloadTests(void) const {
-//
-//        std::string url = _checkerRepository + "/" + _project.string();
-//        std::string cmd = "svn export " + url + "/tests";
-//
-//        int status = system(cmd.c_str());
-//        if (status != 0) {
-//            throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
-//        } else {
-//            _cout.print("Tests downloaded successfully.", GREEN);
-//        }
-//    } /* downloadTests */
-
-//    bool Checker::isRunningAsRoot() const {
-//        return getuid() == 0;
-//    }
+    bool Checker::_isRunningAsRoot() const {
+        return getuid() == 0;
+    }
 
 //    void Checker::checkProject() const {
 //        _cout.print("Checking project " + _project.string(), GREEN);

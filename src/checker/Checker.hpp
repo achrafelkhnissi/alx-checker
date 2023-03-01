@@ -73,7 +73,9 @@ namespace alx {
         void printVersion() const;
 
 
-    }; /* class Checker */
+		bool _isRunningAsRoot() const;
+
+	}; /* class Checker */
 
 } /* namespace alx */
 
