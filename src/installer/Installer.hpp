@@ -15,7 +15,7 @@
 #include <sys/stat.h>    // stat
 #include <filesystem>
 
-#include "../printer/Printer.hpp" // TODO: make "Printer.hpp" work!
+#include "Printer.hpp" // TODO: make "Printer.hpp" work!
 
 namespace alx {
 
@@ -96,7 +96,7 @@ namespace alx {
 
         void installSvn() const;
 
-        void installBetty() const;
+        int installBetty() const;
 
         void installBrew() const;
 
