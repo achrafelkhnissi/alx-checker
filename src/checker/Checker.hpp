@@ -38,6 +38,7 @@ namespace alx {
         Printer _cout;
         Installer _installer;
 
+		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/alx-low_level_programming/trunk/";
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
         fs::path _projectPath;
