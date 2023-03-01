@@ -13,6 +13,7 @@
 
 - Add `--help` option
 - Add `--version` option
+- Download and execute `alx-checker` from the `release` page.
 
 - Check betty style for all the `.h/c` files in the current directory.
 - Download the `test_files` for the current project.
