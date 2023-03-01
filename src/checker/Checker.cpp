@@ -162,7 +162,12 @@ namespace alx {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
 
-	} /* _downloadTests */
+	}
+
+	void Checker::banner() const {
+
+	}
+	/* _downloadTests */
 
 
 } /* namespace alx */

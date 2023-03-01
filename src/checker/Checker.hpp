@@ -54,6 +54,8 @@ namespace alx {
 
         ~Checker();
 
+		void banner() const;
+
         void usage() const;
 
         void checkArgs(int argc, char *argv[]);
