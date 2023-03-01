@@ -7,6 +7,7 @@
  */
 
 #include "Checker.hpp"
+#include "config.hpp"
 
 namespace alx {
 
