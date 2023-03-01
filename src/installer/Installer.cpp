@@ -24,10 +24,9 @@ namespace alx {
         _packageManager = _isMacos ? "brew" : "apt-get";
 
         _dependencies = {
-                "subversion",
+                "svn",
                 "betty",
         };
-
     } /* End of constructor */
 
 //    Installer::Installer(int ac, char **av) : _cout() {
