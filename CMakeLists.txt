@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 project(alx-checker
         VERSION 0.1.0
         DESCRIPTION "A checker for alx"
-        HOMEPAGE_URL "https://github.com/achrafelkhnissi/CMake-Playground"
+        HOMEPAGE_URL "https://github.com/achrafelkhnissi/alx-checker"
         LANGUAGES CXX)
 
 set(FATAL_ERROR "CMake version 3.24 or higher is required. Download the latest version from https://cmake.org/download/")
