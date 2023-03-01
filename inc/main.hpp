@@ -11,12 +11,9 @@
 
 #define ROOT_UID 0
 
-//#include "Checker.hpp"
-//#include "Installer.hpp"
-//#include "Printer.hpp"
-
-#include "../src/checker/Checker.hpp"
-#include "../src/installer/Installer.hpp"
-#include "../src/printer/Printer.hpp"
+#include "Checker.hpp"
+#include "Installer.hpp"
+#include "Printer.hpp"
+#include "config.hpp"
 
 #endif //ALX_CHECKER_MAIN_HPP
