@@ -156,7 +156,28 @@ namespace alx {
 
         closedir(dir);
 
-    } /* copyDirectoryContent */
+    }
+
+	void Checker::downloadTests() const {
+
+//		std::string url = _checkerRepository + "/" + _project.string();
+		std::string cmd = "svn export " + _testFilesUrl;
+
+		// check if the directory exists
+		if (directoryExists("test_files")) {
+			_cout.print("Directory <tests> already exists.", RED);
+			_cout.print("Please remove it before downloading the tests.", RED);
+			exit(EXIT_FAILURE);
+		}
+
+		int status = system(cmd.c_str());
+		if (status != 0) {
+			throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
+		} else {
+			_cout.print("Tests downloaded successfully.", GREEN);
+		}
+
+	} /* _downloadTests */
 
 
 } /* namespace alx */

@@ -24,6 +24,8 @@ int main(int ac, char **av) {
 
 		alx::Checker checker;
 
+		checker.downloadTests();
+
 		checker.printVersion();
 
     } catch (const std::exception &e) {
