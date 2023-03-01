@@ -15,6 +15,8 @@ namespace alx {
 
     Installer::Installer() : _cout() {
 
+		_sudo = "";
+
         _isMacos = isMacos();
         _isLinux = isLinux();
         _isRoot = isRunningAsRoot();
