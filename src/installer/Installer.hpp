@@ -25,6 +25,7 @@ namespace alx {
         mutable std::vector<std::string> _dependencies;
         Printer _cout;
 
+		std::string _sudo;
         bool _isMacos;
         bool _isLinux;
         bool _isRoot;
@@ -75,6 +76,8 @@ namespace alx {
 
         /* Dependencies Methods */
         bool checkDependency(const std::string &dependency) const;
+
+		void _deleteDependency(const std::string &dependency) const;
 
         void checkDependencies() const;
 
