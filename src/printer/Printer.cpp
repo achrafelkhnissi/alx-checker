@@ -89,4 +89,20 @@ namespace alx {
         std::cout << text << std::endl;
     }
 
+	void Printer::yellow(const std::string &text) const {
+		termcolor::yellow(std::cout) << text << termcolor::reset << std::endl;
+	}
+
+	void Printer::red(const std::string &text) const {
+		termcolor::red(std::cout) << text << termcolor::reset << std::endl;
+	}
+
+	void Printer::green(const std::string &text) const {
+		termcolor::green(std::cout) << text << termcolor::reset << std::endl;
+	}
+
+	void Printer::cyan(const std::string &text) const {
+		termcolor::cyan(std::cout) << text << termcolor::reset << std::endl;
+	}
+
 }

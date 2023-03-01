@@ -2,6 +2,7 @@
  * @file Print.hpp
  * @brief Print class definition
  * @author Achraf El Khnissi
+ * @see https://github.com/ikalnytskyi/termcolor/
  */
 
 #ifndef ALX_CHECKER_PRINT_HPP
@@ -38,6 +39,7 @@
 #include <iostream>
 #include <cstdio>
 #include <sstream>
+#include "termcolor.hpp"
 
 /*
  * @brief alx namespace
@@ -74,6 +76,11 @@ namespace alx {
         void success(const std::string &text) const;
 
         void info(const std::string &text) const;
+
+		void yellow(const std::string& text) const;
+		void red(const std::string& text) const;
+		void green(const std::string& text) const;
+		void cyan(const std::string& text) const;
     };
 }
 
