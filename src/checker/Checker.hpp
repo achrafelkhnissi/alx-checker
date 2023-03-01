@@ -26,8 +26,6 @@
 
 namespace fs = std::filesystem;
 
-#define ALX_CHECKER_VERSION "0.1"
-
 namespace alx {
 
     class Checker {
