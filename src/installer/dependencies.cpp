@@ -24,23 +24,33 @@ namespace alx {
         return system(command.c_str()) == 0;
     }
 
+	void Installer::_deleteDependency(const std::string &dependency) const {
+		_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), dependency), _dependencies.end());
+	}
+
     void Installer::installDependencies() const {
         if (!_dependencies.empty())
             _cout.info("Installing dependencies...");
         for (auto &dependency: _dependencies) {
             if (!checkDependency(dependency)) {
-                _cout.print( "\t-Executing: `sudo " + _packageManager + " install -y " + dependency + "`...\n", YELLOW);
+                _cout.print("\t-Executing: `" + _sudo + " " + _packageManager + " install " + dependency + "`...\n", YELLOW);
                 installDependency(dependency);
             }
         }
-        if (!_dependencies.empty())
-            _cout.success("\tDependencies installed successfully.");
+		std::cout << "Dependencies is " << (_dependencies.empty() ? "empty" : "not empty") << std::endl;
+		if (_dependencies.empty()) {
+			_cout.success("\tDependencies installed successfully.");
+		}
     }
 
     void Installer::installDependency(const std::string &dependency) const {
-        std::string command = "sudo " + _packageManager + " install -y " + dependency;
-        system(command.c_str());
-    }
+        std::string command = _sudo + " " + _packageManager + " install " + dependency;
+        int status = system(command.c_str());
+		if (status != 0) {
+			_cout.error("\t\t-Error while installing `" + dependency + "`.");
+		} else
+			_deleteDependency(dependency);
+	}
 
     const std::vector<std::string> &Installer::getDependencies() const {
         return _dependencies;
