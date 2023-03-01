@@ -3,7 +3,6 @@
  * @brief Checker class implementation
  * @author Achraf El Khnissi
  * @version 1.0
- * @date 2021-02-23
  */
 
 #include "Checker.hpp"
