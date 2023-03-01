@@ -18,14 +18,6 @@ set(CONFIG_HPP_IN "${PROJECT_SOURCE_DIR}/inc/config.hpp.in")
 set(CONFIG_HPP    "${PROJECT_BINARY_DIR}/config.hpp")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-set(CMAKE_PROJECT_SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/main.cpp
-                               ${CMAKE_SOURCE_DIR}/src/checker/Checker.cpp
-                               ${CMAKE_SOURCE_DIR}/src/installer/Installer.cpp
-                               ${CMAKE_SOURCE_DIR}/src/installer/installerUtils.cpp
-                               ${CMAKE_SOURCE_DIR}/src/installer/installMethods.cpp
-                               ${CMAKE_SOURCE_DIR}/src/installer/dependencies.cpp
-                               ${CMAKE_SOURCE_DIR}/src/printer/Printer.cpp
-                               ${CMAKE_SOURCE_DIR}/src/animation/Animation.cpp)
 
 # Disable in-source builds to prevent source tree corruption.
 if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
@@ -55,7 +47,16 @@ include_directories(${PROJECT_SOURCE_DIR}/src/animation)
 
 configure_file(${CONFIG_HPP_IN} ${CONFIG_HPP})
 
-add_executable(${PROJECT_NAME} ${CMAKE_PROJECT_SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+target_sources(${PROJECT_NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/checker/Checker.cpp
+        ${CMAKE_SOURCE_DIR}/src/installer/Installer.cpp
+        ${CMAKE_SOURCE_DIR}/src/installer/installerUtils.cpp
+        ${CMAKE_SOURCE_DIR}/src/installer/installMethods.cpp
+        ${CMAKE_SOURCE_DIR}/src/installer/dependencies.cpp
+        ${CMAKE_SOURCE_DIR}/src/printer/Printer.cpp
+        ${CMAKE_SOURCE_DIR}/src/animation/Animation.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
                             ${PROJECT_BINARY_DIR}
@@ -64,3 +65,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC
                             ${PROJECT_SOURCE_DIR}/src/installer
                             ${PROJECT_SOURCE_DIR}/src/printer
                             ${PROJECT_SOURCE_DIR}/src/animation)
+
