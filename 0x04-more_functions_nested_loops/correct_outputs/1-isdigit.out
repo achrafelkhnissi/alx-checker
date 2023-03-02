@@ -1,0 +1,8 @@
+A is not digit	| Your function says: not digit	| [OK]
+a is not digit	| Your function says: not digit	| [OK]
+Z is not digit	| Your function says: not digit	| [OK]
+z is not digit	| Your function says: not digit	| [OK]
+0 is digit	| Your function says: digit	| [OK]
+9 is digit	| Your function says: digit	| [OK]
+  is not digit	| Your function says: not digit	| [OK]
+A is not digit	| Your function says: not digit	| [OK]

@@ -1,0 +1,8 @@
+A is upper	| Your function says: upper	| [OK]
+a is not upper	| Your function says: not upper	| [OK]
+Z is upper	| Your function says: upper	| [OK]
+z is not upper	| Your function says: not upper	| [OK]
+0 is not upper	| Your function says: not upper	| [OK]
+9 is not upper	| Your function says: not upper	| [OK]
+  is not upper	| Your function says: not upper	| [OK]
+A is upper	| Your function says: upper	| [OK]

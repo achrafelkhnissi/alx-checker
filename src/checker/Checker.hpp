@@ -54,6 +54,8 @@ namespace alx {
         files_t _testFiles; // mutable to be able to use it in const methods
 		files_t _projectFiles;
 
+		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
+
     public:
         Checker();
 		Checker(int ac, char** av);
@@ -86,6 +88,7 @@ namespace alx {
 		bool _isRunningAsRoot() const;
 
 		void _checkProjectFile(const std::string &file) const;
+		void _checkProjectTask(const std::string &file) const;
 
 		std::string getBasename(const std::string &path);
 

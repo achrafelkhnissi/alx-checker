@@ -6,10 +6,24 @@
  */
 
 #include "Checker.hpp"
-#include <libgen.h>
-
 
 namespace alx {
+
+	void Checker::banner() const {
+		std::cout << std::endl;
+		_cout.yellow(" █████╗ ██╗     ██╗  ██╗     ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ");
+		_cout.yellow("██╔══██╗██║     ╚██╗██╔╝    ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗");
+		_cout.yellow("███████║██║      ╚███╔╝     ██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝");
+		_cout.yellow("██╔══██║██║      ██╔██╗     ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗");
+		_cout.yellow("██║  ██║███████╗██╔╝ ██╗    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║");
+		_cout.yellow("╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝");
+		_cout.yellow("    version: v" + std::string(ALX_CHECKER_VERSION) + "\t\t\t\tAuthor: Achraf EL KHNISSI");
+		std::cout << std::endl;
+		std::cout << "Welcome to the alx-checker tool!" << std::endl;
+		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
+		std::cout << "Twitter: "; _cout.green("@suprivada");
+
+	} /*banner */
 
     Checker::Checker() : _cout(), _installer() {
 
@@ -57,13 +71,51 @@ namespace alx {
 
 		std::cout << "Prefix number: " << prefix << std::endl;
 
-		std::string test = "0-test";
+		std::string test = "0-main.c";
 
-		// check the the string start with the prefix number
+		// check the string start with the prefix number
 		if (test.compare(0, prefix.length(), prefix) != 0) {
 			std::cout << "File not matched with the prefix number." << std::endl;
 		} else
 			std::cout << "File matched with the prefix number." << std::endl;
+
+		// Create a bin directory
+		std::string bin_dir = _projectPath + "/bin";
+		if (mkdir(bin_dir.c_str(), 0777) == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+		} else
+			std::cout << "Directory created successfully." << std::endl;
+
+		// remove .c from the file name
+		std::string output = _file.substr(0, _file.find_last_of('.'));
+
+		// Compile the file
+		std::string command = "gcc -I ." + _CFLAGS + " tests/" + test + " -o " + bin_dir + "/" + output;
+
+		// Execute the command
+		int status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+		} else
+			std::cout << "File compiled successfully." << std::endl;
+
+		// Execute the compiled file and save the output in a file
+		command = bin_dir + "/" + output + " > " + bin_dir + "/" + output + ".out";
+		status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+		} else
+			std::cout << "File executed successfully." << std::endl;
+
+		// Compare the output with the expected output
+		std::string expected_output = "correct_outputs/" + output + ".out";
+		command = "diff " + bin_dir + "/" + output + ".out " + expected_output;
+		status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+		} else
+			std::cout << "File executed successfully." << std::endl;
+
 
 		exit(1);
 	}
@@ -71,24 +123,6 @@ namespace alx {
     Checker::~Checker() {
         // TODO
     }
-
-	std::string Checker::getBasename(const std::string& path) {
-    size_t pos = path.find_last_of("/\\");
-    if (pos != std::string::npos) {
-        return path.substr(pos + 1);
-    }
-    return path;
-	}
-
-	std::string Checker::getParentDirectory(const std::string& path) {
-	    std::string parent_dir;
-	    size_t last_slash_pos = path.rfind('/');
-	    if (last_slash_pos != std::string::npos) {
-	        parent_dir = path.substr(0, last_slash_pos);
-	    }
-	    return getBasename(parent_dir);
-	}
-
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -132,19 +166,10 @@ namespace alx {
     } /* checkArgs */
 
     void Checker::printVersion() const {
-//        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
+        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
     }
 
-    bool Checker::directoryExists(const std::string &path) const {
-        struct stat info{};
-        if (stat(path.c_str(), &info) != 0) {
-            return false;
-        } else if (info.st_mode & S_IFDIR) {
-            return true;
-        } else {
-            return false;
-        }
-    } /* directoryExists */
+
 
     bool Checker::_isRunningAsRoot() const {
         return getuid() == 0;
@@ -157,7 +182,6 @@ namespace alx {
 //			std::cout << "File: " << fileName << std::endl;
 //		}
 //    }
-
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
 
@@ -214,21 +238,6 @@ namespace alx {
 
 	} /* _downloadTests */
 
-	void Checker::banner() const {
-		std::cout << std::endl;
-		_cout.yellow(" █████╗ ██╗     ██╗  ██╗     ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ");
-		_cout.yellow("██╔══██╗██║     ╚██╗██╔╝    ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗");
-		_cout.yellow("███████║██║      ╚███╔╝     ██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝");
-		_cout.yellow("██╔══██║██║      ██╔██╗     ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗");
-		_cout.yellow("██║  ██║███████╗██╔╝ ██╗    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║");
-		_cout.yellow("╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝");
-		_cout.yellow("    version: v" + std::string(ALX_CHECKER_VERSION) + "\t\t\t\tAuthor: Achraf EL KHNISSI");
-		std::cout << std::endl;
-		std::cout << "Welcome to the alx-checker tool!" << std::endl;
-		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
-		std::cout << "Twitter: "; _cout.green("@suprivada");
-
-	} /*banner */
 
 	void Checker::_printTestFiles() const {
 		std::cout << std::endl;
