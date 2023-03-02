@@ -37,8 +37,6 @@ namespace alx {
 
 	Checker::Checker(int ac, char** av) : _cout(), _installer() {
 
-		checkArgs(ac, av);
-
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
 		_project = getBasename(_projectPath);
@@ -47,6 +45,27 @@ namespace alx {
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
 
 		// TODO: Check dependencies and install them if needed
+		checkArgs(ac, av);
+
+    	size_t dash_pos = _file.find_first_of('-');
+		if (dash_pos == std::string::npos) {
+			// No dash found, return -1 to indicate error
+			throw std::invalid_argument("Invalid file name.");
+		}
+		// Extract the substring that precedes the dash
+		std::string prefix = _file.substr(0, dash_pos);
+
+		std::cout << "Prefix number: " << prefix << std::endl;
+
+		std::string test = "0-test";
+
+		// check the the string start with the prefix number
+		if (test.compare(0, prefix.length(), prefix) != 0) {
+			std::cout << "File not matched with the prefix number." << std::endl;
+		} else
+			std::cout << "File matched with the prefix number." << std::endl;
+
+		exit(1);
 	}
 
     Checker::~Checker() {
@@ -87,10 +106,7 @@ namespace alx {
             throw std::invalid_argument("Too many arguments.");
         }
 
-        std::string file;
-        std::string log;
-
-        for (int i = 1; i < argc; i++) {
+        for (int i = 0; i < argc; i++) {
             if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
                 usage();
             } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
