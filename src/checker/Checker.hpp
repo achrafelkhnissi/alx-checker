@@ -32,7 +32,7 @@ namespace alx {
     class Checker {
 
     private:
-        typedef std::map<std::string, std::string> tests_t;
+        typedef std::map<std::string, std::string> files_t;
 
     private:
         Printer _cout;
@@ -47,7 +47,8 @@ namespace alx {
         std::string _file;
         std::string _log;
 
-        mutable tests_t _testFiles; // mutable to be able to use it in const methods
+        files_t _testFiles; // mutable to be able to use it in const methods
+		files_t _projectFiles;
 
     public:
         Checker();
@@ -70,7 +71,8 @@ namespace alx {
 
         void checkReadme() const;
 
-        void copyDirectoryContent() const;
+        void _readDirectory() const;
+		void _printTestFiles() const;
 
         void printVersion() const;
 

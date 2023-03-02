@@ -115,27 +115,33 @@ namespace alx {
 //    }
 
 
-    void Checker::copyDirectoryContent() const {
+    void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
 
         DIR *dir;
         struct dirent *entry;
 
-        std::string testsDirectory = "tests";
-
-        if (!(dir = opendir(testsDirectory.c_str()))) {
-            throw std::runtime_error("Failed to open <" + testsDirectory + "> directory");
+        if (!(dir = opendir(directoryPath.c_str()))) {
+            throw std::runtime_error("Failed to open <" + directoryPath + "> directory");
         }
 
         while ((entry = readdir(dir)) != nullptr) {
             if (entry->d_type == DT_REG) { // check if file is a regular file
-                std::string filePath = testsDirectory + "/" + entry->d_name;
-                std::ifstream fileStream(filePath);
-                std::string fileContent((std::istreambuf_iterator<char>(fileStream)),
-                                        std::istreambuf_iterator<char>());
-                _testFiles[entry->d_name] = fileContent;
+				std::string fileName = entry->d_name;
+                std::string filePath = directoryPath + "/" + fileName;
 
-                std::cout << GREEN << "File: " << std::string(entry->d_name).at(0) << END << std::endl;
-                // std::cout << fileContent << std::endl;
+				if (!isnumber(fileName[0])) {
+					_cout.print("Skipping file <" + fileName + ">", RED);
+					continue ;
+				}
+
+                std::ifstream file(filePath);
+				if (!file.is_open()) {
+					throw std::runtime_error("Failed to open <" + filePath + "> file");
+				}
+
+                std::string fileContent((std::istreambuf_iterator<char>(file)),
+                                        std::istreambuf_iterator<char>());
+                files[fileName] = fileContent;
             }
         }
 
@@ -178,6 +184,16 @@ namespace alx {
 		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
 		std::cout << "Twitter: "; _cout.green("@suprivada");
 
+	}
+
+	void Checker::_printTestFiles() const {
+		std::cout << std::endl;
+		_cout.print("Test files:", GREEN);
+		for (const auto &file : _testFiles) {
+			std::cout << "\t" << file.first << std::endl;
+			std::cout << "\t\t" << file.second << std::endl;
+		}
+		std::cout << std::endl;
 	}
 	/* _downloadTests */
 
