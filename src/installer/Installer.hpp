@@ -14,6 +14,7 @@
 #include <fstream>        // std::ifstream
 #include <sys/stat.h>    // stat
 #include <filesystem>
+#include <algorithm>    // std::transform
 
 #include "Printer.hpp" // TODO: make "Printer.hpp" work!
 

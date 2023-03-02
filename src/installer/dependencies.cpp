@@ -31,7 +31,9 @@ namespace alx {
     }
 
 	void Installer::_deleteDependency(const std::string &dependency) const {
-		_dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), dependency), _dependencies.end());
+		// _dependencies.erase(std::remove(_dependencies.begin(), _dependencies.end(), dependency), _dependencies.end());
+	    _dependencies.erase(std::remove_if(_dependencies.begin(), _dependencies.end(), [dependency](const std::string& s){ return s == dependency; }), _dependencies.end());
+
 	}
 
     void Installer::installDependencies() const {
