@@ -59,3 +59,7 @@ This project is authored and maintained by:
 - [0x04-more_functions_nested_loops](https://github.com/achrafelkhnissi/alx-low_level_programming)
 - [0x05-pointers_arrays_strings](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x05-pointers_arrays_strings)
 - [0x06-pointers_arrays_strings](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x06-pointers_arrays_strings)
+
+## TODO
+- [ ] While installing Betty in 1337 iMac, Find a way to install it without using sudo
+- [ ] Tell the user to run the script using sudo if it fails to install Betty
