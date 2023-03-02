@@ -35,6 +35,7 @@ namespace alx {
 			return EXIT_SUCCESS;
         }
 
+		// TODO: Error here while installing betty on 42 iMac
         int status = system(
             "git clone https://github.com/holbertonschool/Betty.git && cd Betty && ./install.sh && cd .. && rm -rf Betty");
         if (status != 0) {

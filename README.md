@@ -41,3 +41,25 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 ## Author
 This project is authored and maintained by:
 - Achraf El Khnissi ([@achrafelkhnissi](https://twitter.com/suprivada)) - Software Engineering Student
+
+
+## Alx Projects
+
+#### - [alx-system_engineering-devops](https://github.com/achrafelkhnissi/alx-system_engineering-devops)
+- [0x00-shell_basics](https://github.com/achrafelkhnissi/alx-system_engineering-devops/tree/main/0x00-shell_basics)
+- [0x01-shell_permissions](https://github.com/achrafelkhnissi/alx-system_engineering-devops/tree/main/0x01-shell_permissions)
+- [0x02-shell_redirections](https://github.com/achrafelkhnissi/alx-system_engineering-devops/tree/main/0x02-shell_redirections)
+- [0x03-shell_variables_expansions](https://github.com/achrafelkhnissi/alx-system_engineering-devops/tree/main/0x03-shell_variables_expansions)
+  
+#### - [alx-low_level_programming](https://github.com/achrafelkhnissi/alx-low_level_programming)
+- [0x00-hello_world](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x00-hello_world)
+- [0x01-variables_if_else_while](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x01-variables_if_else_while)
+- [0x02-functions_nested_loops](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x02-functions_nested_loops)
+- [0x03-debugging](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x03-debugging)
+- [0x04-more_functions_nested_loops](https://github.com/achrafelkhnissi/alx-low_level_programming)
+- [0x05-pointers_arrays_strings](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x05-pointers_arrays_strings)
+- [0x06-pointers_arrays_strings](https://github.com/achrafelkhnissi/alx-low_level_programming/tree/main/0x06-pointers_arrays_strings)
+
+## TODO
+- [ ] While installing Betty in 1337 iMac, Find a way to install it without using sudo
+- [ ] Tell the user to run the script using sudo if it fails to install Betty

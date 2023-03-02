@@ -34,26 +34,31 @@ namespace alx {
     class Checker {
 
     private:
-        typedef std::map<std::string, std::string> files_t;
+
+		typedef std::map<std::string, std::string> files_t;
 
     private:
         Printer _cout;
         Installer _installer;
 
-		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/alx-low_level_programming/trunk/";
+		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/";
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
-        fs::path _projectPath;
-        fs::path _project;
+//        fs::path _projectPath;  // error: 'path' is unavailable: introduced in macOS 10.15
+//        fs::path _project;
+
+		std::string _projectPath;
+		std::string _project;
 
         std::string _file;
-        std::string _log;
+        std::string _output;
 
         files_t _testFiles; // mutable to be able to use it in const methods
 		files_t _projectFiles;
 
     public:
         Checker();
+		Checker(int ac, char** av);
 
         ~Checker();
 
@@ -73,13 +78,20 @@ namespace alx {
 
         void checkReadme() const;
 
-        void _readDirectory() const;
+		void _readDirectory(const std::string& directoryPath, files_t& files) const;
 		void _printTestFiles() const;
 
         void printVersion() const;
 
+		void printHelp() const;
+
 		bool _isRunningAsRoot() const;
 
+		void _checkProjectFile(const std::string &file) const;
+
+		std::string getBasename(const std::string &path);
+
+		std::string getParentDirectory(const std::string &path);
         void _readDirectory(const std::string& directoryPath, files_t& files) const;
 
 	}; /* class Checker */
