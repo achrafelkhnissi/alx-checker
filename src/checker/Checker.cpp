@@ -129,7 +129,7 @@ namespace alx {
 				std::string fileName = entry->d_name;
                 std::string filePath = directoryPath + "/" + fileName;
 
-				if (!isnumber(fileName[0])) {
+				if (!std::isdigit(fileName[0])) {
 					_cout.print("Skipping file <" + fileName + ">", RED);
 					continue ;
 				}

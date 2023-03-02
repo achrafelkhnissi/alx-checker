@@ -20,6 +20,8 @@
 #include <unistd.h>                // access, getuid
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
+#include <cctype>                // std::tolower
+#include <ctype.h>                // tolower
 
 #include "Printer.hpp"
 #include "Installer.hpp"
@@ -76,8 +78,9 @@ namespace alx {
 
         void printVersion() const;
 
-
 		bool _isRunningAsRoot() const;
+
+        void _readDirectory(const std::string& directoryPath, files_t& files) const;
 
 	}; /* class Checker */
 
