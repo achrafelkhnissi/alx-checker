@@ -32,7 +32,8 @@ namespace alx {
     class Checker {
 
     private:
-        typedef std::map<std::string, std::string> files_t;
+
+		typedef std::map<std::string, std::string> files_t;
 
     private:
         Printer _cout;
@@ -48,13 +49,14 @@ namespace alx {
 		std::string _project;
 
         std::string _file;
-        std::string _log;
+        std::string _output;
 
         files_t _testFiles; // mutable to be able to use it in const methods
 		files_t _projectFiles;
 
     public:
         Checker();
+		Checker(int ac, char** av);
 
         ~Checker();
 

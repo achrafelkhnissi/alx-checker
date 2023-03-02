@@ -35,6 +35,20 @@ namespace alx {
 			_cout.info("No dependencies to install.");
     }
 
+	Checker::Checker(int ac, char** av) : _cout(), _installer() {
+
+		checkArgs(ac, av);
+
+		/* Get the current working directory and the project name */
+		_projectPath = getenv("PWD");
+		_project = getBasename(_projectPath);
+
+		std::string parent_dir = getParentDirectory(_projectPath);
+		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
+
+		// TODO: Check dependencies and install them if needed
+	}
+
     Checker::~Checker() {
         // TODO
     }
@@ -63,7 +77,7 @@ namespace alx {
         std::cout << "  -h, --help\t\t\tShow this help message and exit" << std::endl;
         std::cout << "  -v, --version\t\t\tShow program's version number and exit" << std::endl;
         std::cout << "  -f, --file\t\t\tSpecify the file to check" << std::endl;
-        std::cout << "  -l, --log\t\t\tSpecify the log file" << std::endl;
+        std::cout << "  -o, --output\t\t\tSpecify the log file" << std::endl;
         exit(EXIT_SUCCESS);
     }
 
@@ -87,18 +101,18 @@ namespace alx {
                     i++;
                 } else
                     throw std::invalid_argument("-f or --file option requires one argument.");
-            } else if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--log") == 0) {
+            } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
-                    _log.assign(argv[i + 1]);
+					_output.assign(argv[i + 1]);
                     i++;
                 } else
-                    throw std::invalid_argument("-l or --log option requires one argument.");
+                    throw std::invalid_argument("-o or --output option requires one argument.");
             } else
                 throw std::invalid_argument("Unknown option " + std::string(argv[i]));
         }
 
-        if (file.empty())
-            throw std::invalid_argument("No file specified.");
+//        if (file.empty())
+//            throw std::invalid_argument("No file specified.");
     } /* checkArgs */
 
     void Checker::printVersion() const {

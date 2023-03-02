@@ -16,13 +16,10 @@
 
 int main(int ac, char **av) {
 
-    (void) ac;
-    (void) av;
-
     try {
 		std::cout << "ALX_CHECKER_VERSION: " << ALX_CHECKER_VERSION << std::endl;
 
-		alx::Checker checker;
+		alx::Checker checker(ac, av);
 
 //		checker.checkProject();
 		// Move the executable to /usr/local/bin and run it from anywhere
