@@ -28,8 +28,6 @@ namespace alx {
 		std::cout << "Project path: " << _projectPath << std::endl;
 		std::cout << "Test directory: " << _testFilesUrl << std::endl;
 
-		exit(EXIT_SUCCESS);
-
 		_installer.checkDependencies();
 		if (!_installer.getDependencies().empty())
 			_installer.installDependencies();
