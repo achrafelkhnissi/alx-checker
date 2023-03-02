@@ -6,28 +6,58 @@
  */
 
 #include "Checker.hpp"
+#include <libgen.h>
+
 
 namespace alx {
 
     Checker::Checker() : _cout(), _installer() {
-		_projectPath = fs::current_path();
-		_project = _projectPath.filename();
-		_testFilesUrl += _project.string() + "/test_files";
+
+		/* Get the current working directory and the project name */
+		_projectPath = getenv("PWD");
+		_project = getBasename(_projectPath);
+
+		std::string parent_dir = getParentDirectory(_projectPath);
+		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
+
+//		_projectPath = fs::current_path();
+//		_project = _projectPath.filename();
+//		_testFilesUrl += _project.string() + "/test_files";
 
 		std::cout << "Project: " << _project << std::endl;
 		std::cout << "Project path: " << _projectPath << std::endl;
 		std::cout << "Test directory: " << _testFilesUrl << std::endl;
 
-//		_installer.checkDependencies();
-//		if (!_installer.getDependencies().empty())
-//			_installer.installDependencies();
-//		else
-//			_cout.info("No dependencies to install.");
+		exit(EXIT_SUCCESS);
+
+		_installer.checkDependencies();
+		if (!_installer.getDependencies().empty())
+			_installer.installDependencies();
+		else
+			_cout.info("No dependencies to install.");
     }
 
     Checker::~Checker() {
         // TODO
     }
+
+	std::string Checker::getBasename(const std::string& path) {
+    size_t pos = path.find_last_of("/\\");
+    if (pos != std::string::npos) {
+        return path.substr(pos + 1);
+    }
+    return path;
+	}
+
+	std::string Checker::getParentDirectory(const std::string& path) {
+	    std::string parent_dir;
+	    size_t last_slash_pos = path.rfind('/');
+	    if (last_slash_pos != std::string::npos) {
+	        parent_dir = path.substr(0, last_slash_pos);
+	    }
+	    return getBasename(parent_dir);
+	}
+
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -92,13 +122,13 @@ namespace alx {
         return getuid() == 0;
     }
 
-    void Checker::checkProject() const {
-
-		for (const auto& file : fs::directory_iterator(_projectPath)) {
-			std::string fileName = file.path().filename().string();
-			std::cout << "File: " << fileName << std::endl;
-		}
-    }
+//    void Checker::checkProject() const {
+//
+//		for (const auto& file : fs::directory_iterator(_projectPath)) {
+//			std::string fileName = file.path().filename().string();
+//			std::cout << "File: " << fileName << std::endl;
+//		}
+//    }
 
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {

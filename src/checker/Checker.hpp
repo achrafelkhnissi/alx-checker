@@ -38,11 +38,14 @@ namespace alx {
         Printer _cout;
         Installer _installer;
 
-		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/alx-low_level_programming/trunk/";
+		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/";
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
-        fs::path _projectPath;
-        fs::path _project;
+//        fs::path _projectPath;  // error: 'path' is unavailable: introduced in macOS 10.15
+//        fs::path _project;
+
+		std::string _projectPath;
+		std::string _project;
 
         std::string _file;
         std::string _log;
@@ -71,7 +74,7 @@ namespace alx {
 
         void checkReadme() const;
 
-        void _readDirectory() const;
+		void _readDirectory(const std::string& directoryPath, files_t& files) const;
 		void _printTestFiles() const;
 
         void printVersion() const;
@@ -81,6 +84,10 @@ namespace alx {
 		bool _isRunningAsRoot() const;
 
 		void _checkProjectFile(const std::string &file) const;
+
+		std::string getBasename(const std::string &path);
+
+		std::string getParentDirectory(const std::string &path);
 	}; /* class Checker */
 
 } /* namespace alx */
