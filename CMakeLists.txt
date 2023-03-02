@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/checker/Checker.cpp
+        ${CMAKE_SOURCE_DIR}/src/checker/checkerUtils.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/Installer.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/installerUtils.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/installMethods.cpp
