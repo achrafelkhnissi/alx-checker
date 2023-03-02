@@ -23,6 +23,14 @@ namespace alx {
         _isFtStudent = isFtStudent();
         _packageManager = _isMacos ? "brew" : "apt-get";
 
+		int status = system("which brew");
+		if (status != 0) {
+			std::cout << "Brew not installed!" << std::endl;
+			installBrew();
+		} else {
+			std::cout << "Brew already installed!" << std::endl;
+		}
+
         _dependencies = {
                 "svn",
                 "betty",
