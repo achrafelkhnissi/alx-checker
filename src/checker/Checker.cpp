@@ -18,11 +18,11 @@ namespace alx {
 		std::cout << "Project path: " << _projectPath << std::endl;
 		std::cout << "Test directory: " << _testFilesUrl << std::endl;
 
-		_installer.checkDependencies();
-		if (!_installer.getDependencies().empty())
-			_installer.installDependencies();
-		else
-			_cout.info("No dependencies to install.");
+//		_installer.checkDependencies();
+//		if (!_installer.getDependencies().empty())
+//			_installer.installDependencies();
+//		else
+//			_cout.info("No dependencies to install.");
     }
 
     Checker::~Checker() {
@@ -92,27 +92,13 @@ namespace alx {
         return getuid() == 0;
     }
 
-//    void Checker::checkProject() const {
-//        _cout.print("Checking project " + _project.string(), GREEN);
-//        _cout.print("Checking for betty...", GREEN);
-//        if (checkBetty() == STATUS_KO) {
-//            if (isRunningAsRoot()) {
-//                installBetty();
-//            } else {
-//                _cout.print("Error: betty is not installed.", RED);
-//                _cout.print("You must be root to install betty.", RED);
-//                _cout.print("Please run the checker as root.", RED);
-//                _cout.print("Example: sudo alx-checker", RED);
-//                exit(EXIT_FAILURE);
-//            }
-//        } else {
-//            _cout.print("betty is already installed.", GREEN);
-//        }
-//    } /* checkProject */
-//
-//    bool Checker::checkBetty() const {
-//        return system("betty --version &> /dev/null");
-//    }
+    void Checker::checkProject() const {
+
+		for (const auto& file : fs::directory_iterator(_projectPath)) {
+			std::string fileName = file.path().filename().string();
+			std::cout << "File: " << fileName << std::endl;
+		}
+    }
 
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
@@ -168,7 +154,7 @@ namespace alx {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
 
-	}
+	} /* _downloadTests */
 
 	void Checker::banner() const {
 		std::cout << std::endl;
@@ -184,7 +170,7 @@ namespace alx {
 		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
 		std::cout << "Twitter: "; _cout.green("@suprivada");
 
-	}
+	} /*banner */
 
 	void Checker::_printTestFiles() const {
 		std::cout << std::endl;
@@ -194,8 +180,23 @@ namespace alx {
 			std::cout << "\t\t" << file.second << std::endl;
 		}
 		std::cout << std::endl;
-	}
-	/* _downloadTests */
+	}  /* _printTestFiles */
 
+	void Checker::_checkProjectFile(const std::string& file) const {
+		_cout.print("Checking project file...", GREEN);
+		// Check the file using betty
+		std::string cmd = "betty " + file;
+		int status = system(cmd.c_str());
+		if (status != 0) {
+			_cout.print("Error: project file is not valid.", RED);
+			exit(EXIT_FAILURE);
+		}
+
+		if (file.empty()) {
+			_cout.print("Error: project file is empty.", RED);
+			exit(EXIT_FAILURE);
+		}
+		_cout.print("Project file is not empty.", GREEN);
+	} /* _checkProjectFile */
 
 } /* namespace alx */

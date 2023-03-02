@@ -76,9 +76,11 @@ namespace alx {
 
         void printVersion() const;
 
+		void printHelp() const;
 
 		bool _isRunningAsRoot() const;
 
+		void _checkProjectFile(const std::string &file) const;
 	}; /* class Checker */
 
 } /* namespace alx */

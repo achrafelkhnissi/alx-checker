@@ -24,6 +24,7 @@ int main(int ac, char **av) {
 
 		alx::Checker checker;
 
+		checker.checkProject();
 		// Move the executable to /usr/local/bin and run it from anywhere
 		/*
 		int status = system("cp alx-checker /usr/local/bin");
