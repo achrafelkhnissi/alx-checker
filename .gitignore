@@ -2,3 +2,5 @@
 build/
 bin/
 Playground/
+cmake-build-debug
+
