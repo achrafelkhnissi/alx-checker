@@ -28,6 +28,12 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 
 ---
 
+<!-- ## Installation -->
+
+## Requirements
+
+- Clang 5.0 and later
+
 ## Usage
 - Clone the repository: `git clone https://github.com/achrafelkhnissi/low-level-programming-checkers.git`
 - Copy your project to where your project's checker is located
