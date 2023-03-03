@@ -29,7 +29,7 @@ namespace fs = std::filesystem;
 
 namespace alx {
 
-	enum option { HELP, VERSION, TEST, ALL, FILE, INSTALL, UNINSTALL, UPDATE, OUTPUT};
+	enum option { HELP, VERSION, TEST, ALL, FILE, INSTALL, UNINSTALL, UPDATE, OUTPUT, DIFF};
 
     class Checker {
 
@@ -101,6 +101,12 @@ namespace alx {
 		std::string _getMainFile(const std::string &file) const;
 
 		std::string _getCorrectOutput(const std::string &file) const;
+
+		int diff(const std::string &correctOutput, const std::string &output);
+
+		int compile(const std::string &file, const std::string &output);
+
+		int createDirectory(const std::string &path);
 	}; /* class Checker */
 
 } /* namespace alx */

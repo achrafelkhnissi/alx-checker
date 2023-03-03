@@ -79,6 +79,7 @@ namespace alx {
         exit(EXIT_SUCCESS);
     }
 
+	// TODO: Handle multiple flags
     void Checker::checkArgs(int argc, char *argv[]) {
         if (argc > 2) {
             usage();
@@ -221,8 +222,6 @@ namespace alx {
 		if (!fs::exists(_projectPath + "/bin")) {
 			fs::create_directory(_projectPath + "/bin");
 		}
-		//	if (access("bin", F_OK) == -1)
-		//		mkdir("bin", 0777);
 
 		// Create test_output/ directory if it doesn't exist
 		if (!fs::exists(_projectPath + "/test_output")) {
@@ -263,6 +262,29 @@ namespace alx {
 			exit(1);
 		} else
 			std::cout << "diff executed successfully." << std::endl;
+
+		if (_flag == OUTPUT) {
+			std::cout << "Output saved in " << _output << std::endl;
+		}
+		if (_flag == DIFF) {
+			std::cout << "Diff saved in " << _output << std::endl;
+		}
+
+		if (_flag == FILE) {
+			command = "cat " + _output;
+			status = system(command.c_str());
+			if (status == -1) {
+				std::cout << "Error: " << strerror(errno) << std::endl;
+				exit(1);
+			} else
+				std::cout << "File printed successfully." << std::endl;
+		}
+
+//		if (status == 0) {
+//			_cout.print("Test passed.", GREEN);
+//		} else {
+//			_cout.print("Test failed.", RED);
+//		}
 
 	} /* _checkProjectFile */
 

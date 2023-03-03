@@ -63,10 +63,4 @@ namespace alx
 		return mainFile;
 	}
 
-	std::string Checker::_getCorrectOutput(const std::string& file) const {
-		std::string correctOutput = "test_files/" + _getBasename(file);
-		correctOutput.replace(correctOutput.find(".c"), 2, ".out");
-		return correctOutput;
-	}
-
-}
+} /* alx namespace */
