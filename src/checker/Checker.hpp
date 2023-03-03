@@ -29,6 +29,8 @@ namespace fs = std::filesystem;
 
 namespace alx {
 
+	enum option { HELP, VERSION, TEST, ALL, FILE, INSTALL, UNINSTALL, UPDATE, OUTPUT};
+
     class Checker {
 
     private:
@@ -47,6 +49,8 @@ namespace alx {
 
 		std::string _projectPath;
 		std::string _project;
+
+		enum option _flag = ALL;
 
         std::string _file;
         std::string _output;
@@ -87,12 +91,14 @@ namespace alx {
 
 		bool _isRunningAsRoot() const;
 
-		void _checkProjectFile(const std::string &file) const;
-		void _checkProjectTask(const std::string &file) const;
+		void _checkProjectTasks(const std::string &file) const;
+		void _checkTask(const std::string &file);
 
-		std::string getBasename(const std::string &path);
+		std::string _getBasename(const std::string &path) const;
 
 		std::string getParentDirectory(const std::string &path);
+
+		std::string _getMainFile(const std::string &file) const;
 	}; /* class Checker */
 
 } /* namespace alx */

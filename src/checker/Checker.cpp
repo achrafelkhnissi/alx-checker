@@ -29,7 +29,7 @@ namespace alx {
 
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
-		_project = getBasename(_projectPath);
+		_project = _getBasename(_projectPath);
 
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
@@ -53,7 +53,7 @@ namespace alx {
 
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
-		_project = getBasename(_projectPath);
+		_project = _getBasename(_projectPath);
 
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
@@ -61,63 +61,8 @@ namespace alx {
 		// TODO: Check dependencies and install them if needed
 		checkArgs(ac, av);
 
-    	size_t dash_pos = _file.find_first_of('-');
-		if (dash_pos == std::string::npos) {
-			// No dash found, return -1 to indicate error
-			throw std::invalid_argument("Invalid file name.");
-		}
-		// Extract the substring that precedes the dash
-		std::string prefix = _file.substr(0, dash_pos);
-
-		std::cout << "Prefix number: " << prefix << std::endl;
-
-		std::string test = "0-main.c";
-
-		// check the string start with the prefix number
-		if (test.compare(0, prefix.length(), prefix) != 0) {
-			std::cout << "File not matched with the prefix number." << std::endl;
-		} else
-			std::cout << "File matched with the prefix number." << std::endl;
-
-		// Create a bin directory
-		std::string bin_dir = _projectPath + "/bin";
-		if (mkdir(bin_dir.c_str(), 0777) == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-		} else
-			std::cout << "Directory created successfully." << std::endl;
-
-		// remove .c from the file name
-		std::string output = _file.substr(0, _file.find_last_of('.'));
-
-		// Compile the file
-		std::string command = "gcc -I ." + _CFLAGS + " tests/" + test + " -o " + bin_dir + "/" + output;
-
-		// Execute the command
-		int status = system(command.c_str());
-		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-		} else
-			std::cout << "File compiled successfully." << std::endl;
-
-		// Execute the compiled file and save the output in a file
-		command = bin_dir + "/" + output + " > " + bin_dir + "/" + output + ".out";
-		status = system(command.c_str());
-		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-		} else
-			std::cout << "File executed successfully." << std::endl;
-
-		// Compare the output with the expected output
-		std::string expected_output = "correct_outputs/" + output + ".out";
-		command = "diff " + bin_dir + "/" + output + ".out " + expected_output;
-		status = system(command.c_str());
-		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-		} else
-			std::cout << "File executed successfully." << std::endl;
-
-
-		exit(1);
+		if (_flag == FILE)
+			_checkTask(_file);
 	}
 
     Checker::~Checker() {
@@ -141,11 +86,14 @@ namespace alx {
         }
 
         for (int i = 0; i < argc; i++) {
-            if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+			if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--all") == 0) {
+				_flag = ALL; // it's not necessary
+			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
                 usage();
             } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
                 printVersion();
             } else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
+				_flag = FILE;
                 if (i + 1 < argc) {
                     _file.assign(argv[i + 1]);
                     i++;
@@ -153,6 +101,7 @@ namespace alx {
                     throw std::invalid_argument("-f or --file option requires one argument.");
             } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
+					_flag = OUTPUT;
 					_output.assign(argv[i + 1]);
                     i++;
                 } else
@@ -170,18 +119,21 @@ namespace alx {
     }
 
 
-
     bool Checker::_isRunningAsRoot() const {
         return getuid() == 0;
     }
 
-//    void Checker::checkProject() const {
-//
-//		for (const auto& file : fs::directory_iterator(_projectPath)) {
-//			std::string fileName = file.path().filename().string();
-//			std::cout << "File: " << fileName << std::endl;
-//		}
-//    }
+    void Checker::checkProject() const {
+
+		for (const auto& file : fs::directory_iterator(_projectPath)) {
+			std::string fileName = file.path().filename().string();
+			std::cout << "File: " << fileName << std::endl;
+
+
+
+		} /* for */
+
+	} /* checkProject */
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
 
@@ -249,21 +201,67 @@ namespace alx {
 		std::cout << std::endl;
 	}  /* _printTestFiles */
 
-	void Checker::_checkProjectFile(const std::string& file) const {
+	void Checker::_checkTask(const std::string& fileName) {
 		_cout.print("Checking project file...", GREEN);
 		// Check the file using betty
-		std::string cmd = "betty " + file;
+		std::string cmd = "betty " + fileName;
 		int status = system(cmd.c_str());
 		if (status != 0) {
 			_cout.print("Error: project file is not valid.", RED);
 			exit(EXIT_FAILURE);
 		}
 
-		if (file.empty()) {
+		if (fileName.empty()) {
 			_cout.print("Error: project file is empty.", RED);
 			exit(EXIT_FAILURE);
 		}
 		_cout.print("Project file is not empty.", GREEN);
+
+			// Create a bin/ directory if it doesn't exist
+			if (!fs::exists(_projectPath + "/bin")) {
+				fs::create_directory(_projectPath + "/bin");
+			}
+
+			// Create test_output/ directory if it doesn't exist
+			if (!fs::exists(_projectPath + "/test_output")) {
+				fs::create_directory(_projectPath + "/test_output");
+			}
+
+			// Get the appropriate main for the file
+			std::string main = _getMainFile(fileName);
+
+			// remove .c from the file name
+			std::string executable = fileName.substr(0, fileName.find_last_of('.'));
+
+			// Compile the file
+			std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + main + " -o " + "bin/" + executable;
+			status = system(command.c_str());
+			if (status == -1) {
+				std::cout << "Error: " << strerror(errno) << std::endl;
+				exit(1);
+			} else
+				std::cout << fileName << " OK." << std::endl;
+
+			// Execute the compiled file and save the output in a file
+			_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
+			command = "bin/" + executable + " > " + _output;
+			status = system(command.c_str());
+			if (status == -1) {
+				std::cout << "Error: " << strerror(errno) << std::endl;
+				exit(1);
+			} else
+				std::cout << "File executed successfully." << std::endl;
+
+			// Compare the output with the expected output
+			std::string expectedOutput = "expected_output/" + executable + ".out";
+			command = "diff test_output/" + executable + ".out " + expectedOutput;
+			status = system(command.c_str());
+			if (status == -1) {
+				std::cout << "Error: " << strerror(errno) << std::endl;
+				exit(1);
+			} else
+				std::cout << "diff executed successfully." << std::endl;
+
 	} /* _checkProjectFile */
 
 } /* namespace alx */
