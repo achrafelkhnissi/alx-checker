@@ -20,7 +20,6 @@
 #include <unistd.h>                // access, getuid
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
-#include <curl/curl.h>
 
 #include "Printer.hpp"
 #include "Installer.hpp"
