@@ -82,7 +82,7 @@ namespace alx {
 
         void downloadTests(void) const;
 
-        void checkProject() const;
+        void checkProject();
 
         void checkReadme() const;
 
@@ -91,11 +91,8 @@ namespace alx {
 
         void printVersion() const;
 
-		void printHelp() const;
-
 		bool _isRunningAsRoot() const;
 
-		void _checkProjectTasks(const std::string &file) const;
 		void _checkTask(const std::string &file);
 
 		std::string _getBasename(const std::string &path) const;

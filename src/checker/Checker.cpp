@@ -63,8 +63,6 @@ namespace alx {
 		// TODO: Check dependencies and install them if needed
 		checkArgs(ac, av);
 
-		if (_flag == FILE)
-			_checkTask(_file);
 	}
 
     Checker::~Checker() {
@@ -105,7 +103,6 @@ namespace alx {
                     i++;
                 } else
                     throw std::invalid_argument("-f or --file option requires one argument.");
-				_checkTask(_file);
             } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
 					_flag = OUTPUT;
@@ -130,14 +127,20 @@ namespace alx {
         return getuid() == 0;
     }
 
-    void Checker::checkProject() const {
+    void Checker::checkProject() {
+
+		if (_flag == FILE) {
+			_checkTask(_file);
+			return;
+		}
 
 		for (const auto& file : fs::directory_iterator(_projectPath)) {
 			std::string fileName = file.path().filename().string();
-			std::cout << "File: " << fileName << std::endl;
-
-
-
+//			std::cout << "File: " << fileName << std::endl;
+			if (isdigit(fileName[0])) {
+				_checkTask(fileName);
+				sleep(1);
+			}
 		} /* for */
 
 	} /* checkProject */
@@ -209,7 +212,9 @@ namespace alx {
 	}  /* _printTestFiles */
 
 	void Checker::_checkTask(const std::string& fileName) {
-		_cout.print("Checking project file...", GREEN);
+
+		_cout.print("Checking task <" + fileName + ">...", GREEN);
+
 		// Check the file using betty
 		std::string cmd = "betty " + fileName;
 		int status = system(cmd.c_str());
@@ -220,7 +225,6 @@ namespace alx {
 		if (fileName.empty()) {
 			throw std::runtime_error("Project file is empty.");
 		}
-		_cout.print("Project file is not empty.", GREEN);
 
 		// Create a bin/ directory if it doesn't exist
 		if (!fs::exists(_projectPath + "/bin")) {
@@ -239,49 +243,37 @@ namespace alx {
 		std::string executable = fileName.substr(0, fileName.find_last_of('.'));
 
 		// Compile the file
-		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + main + " -o " + "bin/" + executable;
+		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " test_files/_putchar.c " + main + " -o " + "bin/" + executable;
 		status = system(command.c_str());
 		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-			exit(1);
-		} else
-			std::cout << fileName << " OK." << std::endl;
+			throw std::runtime_error(strerror(errno));
+		}
 
 		// Execute the compiled file and save the output in a file
 		_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
 		command = "bin/" + executable + " > " + _output;
 		status = system(command.c_str());
 		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-			exit(1);
-		} else
-			std::cout << "File executed successfully." << std::endl;
+			throw std::runtime_error(strerror(errno));
+		}
 
 		// Compare the output with the expected output
 		std::string expectedOutput = "expected_output/" + executable + ".out";
 		command = "diff test_output/" + executable + ".out " + expectedOutput;
 		status = system(command.c_str());
 		if (status == -1) {
-			std::cout << "Error: " << strerror(errno) << std::endl;
-			exit(1);
-		} else
-			std::cout << "diff executed successfully." << std::endl;
-
-		if (_flag == OUTPUT) {
-			std::cout << "Output saved in " << _output << std::endl;
-		}
-		if (_flag == DIFF) {
-			std::cout << "Diff saved in " << _output << std::endl;
+			throw std::runtime_error(strerror(errno));
 		}
 
 		if (_flag == FILE) {
+
+			std::cout << std::endl;
+			std::cout << "=====  Output  =====" << std::endl;
+
 			command = "cat " + _output;
 			status = system(command.c_str());
-			if (status == -1) {
-				std::cout << "Error: " << strerror(errno) << std::endl;
-				exit(1);
-			} else
-				std::cout << "File printed successfully." << std::endl;
+			if (status == -1)
+				throw std::runtime_error(strerror(errno));
 		}
 
 //		if (status == 0) {
