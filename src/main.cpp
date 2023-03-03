@@ -3,7 +3,6 @@
  * @brief Main file
  * @author Achraf El Khnissi
  * @version 0.1
- * @date 2020-05-01
  */
 
 #include "main.hpp"
@@ -16,10 +15,20 @@
 
 int main(int ac, char **av) {
 
+	(void)ac;
+	(void)av;
+
     try {
 		std::cout << "ALX_CHECKER_VERSION: " << ALX_CHECKER_VERSION << std::endl;
 
-		alx::Checker checker(--ac, ++av);
+//		alx::Checker checker(--ac, ++av);
+		std::string path = getenv("PATH");
+		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker";
+
+		std::cout << "PATH: " << path << std::endl;
+		std::cout << "ALX_PATH: " << alxPath << std::endl;
+
+//		std::string alxPath = getenv("ALX_PATH");
 
 //		checker.checkProject();
 		// Move the executable to /usr/local/bin and run it from anywhere
