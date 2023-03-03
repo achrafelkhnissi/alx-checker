@@ -72,3 +72,4 @@ This project is authored and maintained by:
 - [ ] Handle multiple flags
 - [x] Add update functionality to the checker
 - [ ] Make the script installable with `apt-get` and `brew` (check checkinstall) - [guide](https://packaging.ubuntu.com/html/)
+- [ ] Reform the code to c++98 instead of c++17
