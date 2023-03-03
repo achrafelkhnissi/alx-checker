@@ -105,6 +105,7 @@ namespace alx {
                     i++;
                 } else
                     throw std::invalid_argument("-f or --file option requires one argument.");
+				_checkTask(_file);
             } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
 					_flag = OUTPUT;
@@ -213,13 +214,11 @@ namespace alx {
 		std::string cmd = "betty " + fileName;
 		int status = system(cmd.c_str());
 		if (status != 0) {
-			_cout.print("Error: project file is not valid.", RED);
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Failed to check file using betty.");
 		}
 
 		if (fileName.empty()) {
-			_cout.print("Error: project file is empty.", RED);
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Project file is empty.");
 		}
 		_cout.print("Project file is not empty.", GREEN);
 
