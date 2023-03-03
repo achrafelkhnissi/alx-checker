@@ -26,6 +26,9 @@ namespace alx {
 
         std::cout << "Error: betty is not installed. Do you want to install it? [y/n]: ";
 
+        if (!_isRoot)
+            throw std::runtime_error("Betty needs root privileges to be installed. Please run `sudo alx-checker`");
+
         std::string answer;
         std::getline(std::cin, answer);
         std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
