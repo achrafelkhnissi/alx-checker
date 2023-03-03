@@ -63,6 +63,11 @@ namespace alx
 		return mainFile;
 	}
 
+	std::string Checker::_getCurrentDirectory() const {
+		char buff[FILENAME_MAX];
+		getcwd(buff, FILENAME_MAX);
+		return {buff};
+	}
 
 
 } /* alx namespace */

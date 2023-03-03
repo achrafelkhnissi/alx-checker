@@ -111,6 +111,8 @@ namespace alx {
 		int compile(const std::string &file, const std::string &output);
 
 		int createDirectory(const std::string &path);
+
+		std::string _getCurrentDirectory() const;
 	}; /* class Checker */
 
 } /* namespace alx */
