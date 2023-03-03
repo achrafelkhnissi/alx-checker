@@ -29,7 +29,7 @@ namespace alx
 		return system(diffCommand.c_str());
 	}
 
-	std::string Checker::getBasename(const std::string& path) {
+	std::string Checker::_getBasename(const std::string& path) const {
 		size_t pos = path.find_last_of("/\\");
 		if (pos != std::string::npos) {
 			return path.substr(pos + 1);
@@ -56,5 +56,12 @@ namespace alx
             return false;
         }
     } /* directoryExists */
+
+	std::string Checker::_getMainFile(const std::string& file) const {
+		std::string mainFile = "test_files/" + _getBasename(file);
+		mainFile.replace(mainFile.find(".c"), 2, "-main.c");
+		return mainFile;
+	}
+
 
 }
