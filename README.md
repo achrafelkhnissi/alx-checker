@@ -73,3 +73,5 @@ This project is authored and maintained by:
 - [x] Add update functionality to the checker
 - [ ] Make the script installable with `apt-get` and `brew` (check checkinstall) - [guide](https://packaging.ubuntu.com/html/)
 - [ ] Reform the code to c++11 instead of c++17
+- [ ] Make the output more colorful and beautiful
+- [ ] Add a progress bar
