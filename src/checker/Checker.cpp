@@ -27,6 +27,8 @@ namespace alx {
 
     Checker::Checker() : _cout(), _installer() {
 
+		_sudo = (_isRunningAsRoot()) ? "sudo " : "";
+
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
 		_project = _getBasename(_projectPath);
@@ -87,6 +89,9 @@ namespace alx {
         }
 
         for (int i = 0; i < argc; i++) {
+			if (strcmp(argv[i], "--update") == 0) {
+				_update();
+			}
 			if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--all") == 0) {
 				_flag = ALL; // it's not necessary
 			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
@@ -287,5 +292,60 @@ namespace alx {
 //		}
 
 	} /* _checkProjectFile */
+
+		void Checker::_update() const {
+
+		int status;
+
+		std::string cloneCommand = "git clone https://github.com/achrafelkhnissi/alx-checker.git ~/.alx-checker";
+		std::string cmakeCommand = "cmake -B build && cmake --build build";
+
+		// TODO: check if the program is running as root
+		std::string moveCommand = _sudo + "mv bin/alx-checker /usr/local/bin";
+
+
+		std::cout << "Updating alx-checker..." << std::endl;
+
+
+		// check if the directory exists
+		if (directoryExists("~/.alx-checker")) {
+			status = system("rm -rf ~/.alx-checker");
+			if (status != 0) {
+				throw std::runtime_error("Failed to remove ~/.alx-checker");
+			}
+		}
+
+		// clone the repository
+		status = system(cloneCommand.c_str());
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// change the current directory to the cloned repository
+		status = chdir("~/.alx-checker");
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// build the project
+		status = system(cmakeCommand.c_str());
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// move the executable to /usr/local/bin
+//		status = system(moveCommand.c_str());
+//		if (status != 0) {
+//			throw std::runtime_error(strerror(errno));
+//		}
+
+		// add the executable to the PATH
+		std::string path = getenv("PATH");
+		path += ":" +  std::string(getenv("HOME")) + std::string("/.alx-checker/bin");
+		setenv("PATH", path.c_str(), 1);
+
+		std::cout << "alx-checker updated successfully!" << std::endl;
+
+	} /* update */
 
 } /* namespace alx */

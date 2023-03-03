@@ -20,6 +20,7 @@
 #include <unistd.h>                // access, getuid
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
+#include <curl/curl.h>
 
 #include "Printer.hpp"
 #include "Installer.hpp"
@@ -40,6 +41,8 @@ namespace alx {
     private:
         Printer _cout;
         Installer _installer;
+
+		std::string _sudo;
 
 		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/";
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
@@ -73,6 +76,8 @@ namespace alx {
         void checkArgs(int argc, char *argv[]);
 
         void check() const;
+
+		void _update() const;
 
         bool directoryExists(const std::string &path) const;
 
