@@ -217,50 +217,52 @@ namespace alx {
 		}
 		_cout.print("Project file is not empty.", GREEN);
 
-			// Create a bin/ directory if it doesn't exist
-			if (!fs::exists(_projectPath + "/bin")) {
-				fs::create_directory(_projectPath + "/bin");
-			}
+		// Create a bin/ directory if it doesn't exist
+		if (!fs::exists(_projectPath + "/bin")) {
+			fs::create_directory(_projectPath + "/bin");
+		}
+		//	if (access("bin", F_OK) == -1)
+		//		mkdir("bin", 0777);
 
-			// Create test_output/ directory if it doesn't exist
-			if (!fs::exists(_projectPath + "/test_output")) {
-				fs::create_directory(_projectPath + "/test_output");
-			}
+		// Create test_output/ directory if it doesn't exist
+		if (!fs::exists(_projectPath + "/test_output")) {
+			fs::create_directory(_projectPath + "/test_output");
+		}
 
-			// Get the appropriate main for the file
-			std::string main = _getMainFile(fileName);
+		// Get the appropriate main for the file
+		std::string main = _getMainFile(fileName);
 
-			// remove .c from the file name
-			std::string executable = fileName.substr(0, fileName.find_last_of('.'));
+		// remove .c from the file name
+		std::string executable = fileName.substr(0, fileName.find_last_of('.'));
 
-			// Compile the file
-			std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + main + " -o " + "bin/" + executable;
-			status = system(command.c_str());
-			if (status == -1) {
-				std::cout << "Error: " << strerror(errno) << std::endl;
-				exit(1);
-			} else
-				std::cout << fileName << " OK." << std::endl;
+		// Compile the file
+		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + main + " -o " + "bin/" + executable;
+		status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+			exit(1);
+		} else
+			std::cout << fileName << " OK." << std::endl;
 
-			// Execute the compiled file and save the output in a file
-			_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
-			command = "bin/" + executable + " > " + _output;
-			status = system(command.c_str());
-			if (status == -1) {
-				std::cout << "Error: " << strerror(errno) << std::endl;
-				exit(1);
-			} else
-				std::cout << "File executed successfully." << std::endl;
+		// Execute the compiled file and save the output in a file
+		_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
+		command = "bin/" + executable + " > " + _output;
+		status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+			exit(1);
+		} else
+			std::cout << "File executed successfully." << std::endl;
 
-			// Compare the output with the expected output
-			std::string expectedOutput = "expected_output/" + executable + ".out";
-			command = "diff test_output/" + executable + ".out " + expectedOutput;
-			status = system(command.c_str());
-			if (status == -1) {
-				std::cout << "Error: " << strerror(errno) << std::endl;
-				exit(1);
-			} else
-				std::cout << "diff executed successfully." << std::endl;
+		// Compare the output with the expected output
+		std::string expectedOutput = "expected_output/" + executable + ".out";
+		command = "diff test_output/" + executable + ".out " + expectedOutput;
+		status = system(command.c_str());
+		if (status == -1) {
+			std::cout << "Error: " << strerror(errno) << std::endl;
+			exit(1);
+		} else
+			std::cout << "diff executed successfully." << std::endl;
 
 	} /* _checkProjectFile */
 

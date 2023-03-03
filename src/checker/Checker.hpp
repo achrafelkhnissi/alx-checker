@@ -99,6 +99,8 @@ namespace alx {
 		std::string getParentDirectory(const std::string &path);
 
 		std::string _getMainFile(const std::string &file) const;
+
+		std::string _getCorrectOutput(const std::string &file) const;
 	}; /* class Checker */
 
 } /* namespace alx */

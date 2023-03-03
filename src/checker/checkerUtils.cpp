@@ -43,7 +43,7 @@ namespace alx
 	    if (last_slash_pos != std::string::npos) {
 	        parent_dir = path.substr(0, last_slash_pos);
 	    }
-	    return getBasename(parent_dir);
+	    return _getBasename(parent_dir);
 	}
 
 	bool Checker::directoryExists(const std::string &path) const {
@@ -63,5 +63,10 @@ namespace alx
 		return mainFile;
 	}
 
+	std::string Checker::_getCorrectOutput(const std::string& file) const {
+		std::string correctOutput = "test_files/" + _getBasename(file);
+		correctOutput.replace(correctOutput.find(".c"), 2, ".out");
+		return correctOutput;
+	}
 
 }
