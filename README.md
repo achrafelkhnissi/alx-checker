@@ -71,3 +71,4 @@ This project is authored and maintained by:
 - [ ] Tell the user to run the script using sudo if it fails to install Betty
 - [ ] Handle multiple flags
 - [x] Add update functionality to the checker
+- [ ] Make the script installable with `apt-get` and `brew` (check checkinstall)
