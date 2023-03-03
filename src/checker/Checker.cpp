@@ -333,16 +333,12 @@ namespace alx {
 			throw std::runtime_error(strerror(errno));
 		}
 
-		// move the executable to /usr/local/bin
-//		status = system(moveCommand.c_str());
-//		if (status != 0) {
-//			throw std::runtime_error(strerror(errno));
-//		}
-
 		// add the executable to the PATH
 		std::string path = getenv("PATH");
-		path += ":" +  std::string(getenv("HOME")) + std::string("/.alx-checker/bin");
-		setenv("PATH", path.c_str(), 1);
+		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
+		if (setenv("PATH", (alxPath + ":" + path).c_str(), 1)) {
+			throw std::runtime_error(strerror(errno));
+		}
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
