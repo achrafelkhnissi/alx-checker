@@ -58,8 +58,20 @@ namespace alx
     } /* directoryExists */
 
 	std::string Checker::_getMainFile(const std::string& file) const {
-		std::string mainFile = "test_files/" + _getBasename(file);
-		mainFile.replace(mainFile.find(".c"), 2, "-main.c");
+
+		// get hyphen position
+		std::size_t hyphenPos = file.find('-');
+		if (hyphenPos == std::string::npos || hyphenPos == 0) {
+			throw std::runtime_error("Invalid file name: " + file);
+		}
+
+		// get main file name
+		std::string mainFile = "test_files/" + file.substr(0, hyphenPos) + "-main.c";
+
+		// if it doesn't exist return empty string
+		if (!std::filesystem::exists(mainFile))
+			return "";
+
 		return mainFile;
 	}
 
