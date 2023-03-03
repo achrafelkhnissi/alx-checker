@@ -63,3 +63,5 @@ This project is authored and maintained by:
 ## TODO
 - [ ] While installing Betty in 1337 iMac, Find a way to install it without using sudo
 - [ ] Tell the user to run the script using sudo if it fails to install Betty
+- [ ] Handle multiple flags
+- [x] Add update functionality to the checker
