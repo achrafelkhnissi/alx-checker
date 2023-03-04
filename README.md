@@ -75,3 +75,4 @@ This project is authored and maintained by:
 - [ ] Reform the code to c++11 instead of c++17
 - [ ] Make the output more colorful and beautiful
 - [ ] Add a progress bar
+- [ ] For each project add 2 directories one for `test_files` and the other for `expected_output`
