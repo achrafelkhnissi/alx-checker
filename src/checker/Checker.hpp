@@ -31,6 +31,8 @@ namespace fs = std::filesystem;
 
 namespace alx {
 
+	enum option { HELP, VERSION, TEST, ALL, FILE, INSTALL, UNINSTALL, UPDATE, OUTPUT, DIFF};
+
     class Checker {
 
     private:
@@ -41,6 +43,8 @@ namespace alx {
         Printer _cout;
         Installer _installer;
 
+		std::string _sudo;
+
 		std::string _testFilesUrl = "https://github.com/achrafelkhnissi/";
         std::string _checkerRepository = "https://github.com/achrafelkhnissi/alx-checker/trunk";
 
@@ -50,11 +54,15 @@ namespace alx {
 		std::string _projectPath;
 		std::string _project;
 
+		enum option _flag = ALL;
+
         std::string _file;
         std::string _output;
 
         files_t _testFiles; // mutable to be able to use it in const methods
 		files_t _projectFiles;
+
+		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
 
     public:
         Checker();
@@ -70,11 +78,13 @@ namespace alx {
 
         void check() const;
 
+		void _update() const;
+
         bool directoryExists(const std::string &path) const;
 
         void downloadTests(void) const;
 
-        void checkProject() const;
+        void checkProject();
 
         void checkReadme() const;
 
@@ -83,16 +93,27 @@ namespace alx {
 
         void printVersion() const;
 
-		void printHelp() const;
-
 		bool _isRunningAsRoot() const;
 
-		void _checkProjectFile(const std::string &file) const;
+		void _checkTask(const std::string &file);
 
-		std::string getBasename(const std::string &path);
+		std::string _getBasename(const std::string &path) const;
 
 		std::string getParentDirectory(const std::string &path);
+
         void _readDirectory(const std::string& directoryPath, files_t& files) const;
+
+		std::string _getMainFile(const std::string &file) const;
+
+		std::string _getCorrectOutput(const std::string &file) const;
+
+		int diff(const std::string &correctOutput, const std::string &output);
+
+		int compile(const std::string &file, const std::string &output);
+
+		int createDirectory(const std::string &path);
+
+		std::string _getCurrentDirectory() const;
 
 	}; /* class Checker */
 

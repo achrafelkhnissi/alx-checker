@@ -6,16 +6,32 @@
  */
 
 #include "Checker.hpp"
-#include <libgen.h>
-
 
 namespace alx {
 
+	void Checker::banner() const {
+		std::cout << std::endl;
+		_cout.yellow(" █████╗ ██╗     ██╗  ██╗     ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ");
+		_cout.yellow("██╔══██╗██║     ╚██╗██╔╝    ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗");
+		_cout.yellow("███████║██║      ╚███╔╝     ██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝");
+		_cout.yellow("██╔══██║██║      ██╔██╗     ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗");
+		_cout.yellow("██║  ██║███████╗██╔╝ ██╗    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║");
+		_cout.yellow("╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝");
+		_cout.yellow("    version: v" + std::string(ALX_CHECKER_VERSION) + "\t\t\t\tAuthor: Achraf EL KHNISSI");
+		std::cout << std::endl;
+		std::cout << "Welcome to the alx-checker tool!" << std::endl;
+		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
+		std::cout << "Twitter: "; _cout.green("@suprivada");
+
+	} /*banner */
+
     Checker::Checker() : _cout(), _installer() {
+
+		_sudo = (_isRunningAsRoot()) ? "sudo " : "";
 
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
-		_project = getBasename(_projectPath);
+		_project = _getBasename(_projectPath);
 
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
@@ -37,39 +53,21 @@ namespace alx {
 
 	Checker::Checker(int ac, char** av) : _cout(), _installer() {
 
-		checkArgs(ac, av);
-
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
-		_project = getBasename(_projectPath);
+		_project = _getBasename(_projectPath);
 
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
 
 		// TODO: Check dependencies and install them if needed
+		checkArgs(ac, av);
+
 	}
 
     Checker::~Checker() {
         // TODO
     }
-
-	std::string Checker::getBasename(const std::string& path) {
-    size_t pos = path.find_last_of("/\\");
-    if (pos != std::string::npos) {
-        return path.substr(pos + 1);
-    }
-    return path;
-	}
-
-	std::string Checker::getParentDirectory(const std::string& path) {
-	    std::string parent_dir;
-	    size_t last_slash_pos = path.rfind('/');
-	    if (last_slash_pos != std::string::npos) {
-	        parent_dir = path.substr(0, last_slash_pos);
-	    }
-	    return getBasename(parent_dir);
-	}
-
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -81,21 +79,25 @@ namespace alx {
         exit(EXIT_SUCCESS);
     }
 
+	// TODO: Handle multiple flags
     void Checker::checkArgs(int argc, char *argv[]) {
         if (argc > 2) {
             usage();
             throw std::invalid_argument("Too many arguments.");
         }
 
-        std::string file;
-        std::string log;
-
-        for (int i = 1; i < argc; i++) {
-            if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+        for (int i = 0; i < argc; i++) {
+			if (strcmp(argv[i], "--update") == 0) {
+				_update();
+			}
+			if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--all") == 0) {
+				_flag = ALL; // it's not necessary
+			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
                 usage();
             } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
                 printVersion();
             } else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
+				_flag = FILE;
                 if (i + 1 < argc) {
                     _file.assign(argv[i + 1]);
                     i++;
@@ -103,6 +105,7 @@ namespace alx {
                     throw std::invalid_argument("-f or --file option requires one argument.");
             } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
+					_flag = OUTPUT;
 					_output.assign(argv[i + 1]);
                     i++;
                 } else
@@ -116,32 +119,31 @@ namespace alx {
     } /* checkArgs */
 
     void Checker::printVersion() const {
-//        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
+        std::cout << "alx-checker version " << ALX_CHECKER_VERSION << std::endl;
     }
 
-    bool Checker::directoryExists(const std::string &path) const {
-        struct stat info{};
-        if (stat(path.c_str(), &info) != 0) {
-            return false;
-        } else if (info.st_mode & S_IFDIR) {
-            return true;
-        } else {
-            return false;
-        }
-    } /* directoryExists */
 
     bool Checker::_isRunningAsRoot() const {
         return getuid() == 0;
     }
 
-//    void Checker::checkProject() const {
-//
-//		for (const auto& file : fs::directory_iterator(_projectPath)) {
-//			std::string fileName = file.path().filename().string();
-//			std::cout << "File: " << fileName << std::endl;
-//		}
-//    }
+    void Checker::checkProject() {
 
+		if (_flag == FILE) {
+			_checkTask(_file);
+			return;
+		}
+
+		for (const auto& file : fs::directory_iterator(_projectPath)) {
+			std::string fileName = file.path().filename().string();
+//			std::cout << "File: " << fileName << std::endl;
+			if (isdigit(fileName[0])) {
+				_checkTask(fileName);
+				sleep(1);
+			}
+		} /* for */
+
+	} /* checkProject */
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
 
@@ -198,22 +200,6 @@ namespace alx {
 
 	} /* _downloadTests */
 
-	void Checker::banner() const {
-		std::cout << std::endl;
-		_cout.yellow(" █████╗ ██╗     ██╗  ██╗     ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗ ");
-		_cout.yellow("██╔══██╗██║     ╚██╗██╔╝    ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗");
-		_cout.yellow("███████║██║      ╚███╔╝     ██║     ███████║█████╗  ██║     █████╔╝ █████╗  ██████╔╝");
-		_cout.yellow("██╔══██║██║      ██╔██╗     ██║     ██╔══██║██╔══╝  ██║     ██╔═██╗ ██╔══╝  ██╔══██╗");
-		_cout.yellow("██║  ██║███████╗██╔╝ ██╗    ╚██████╗██║  ██║███████╗╚██████╗██║  ██╗███████╗██║  ██║");
-		_cout.yellow("╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝");
-		_cout.yellow("    version: v" + std::string(ALX_CHECKER_VERSION) + "\t\t\t\tAuthor: Achraf EL KHNISSI");
-		std::cout << std::endl;
-		std::cout << "Welcome to the alx-checker tool!" << std::endl;
-		std::cout << "If you encounter any errors or bugs, please contact me for assistance." << std::endl;
-		std::cout << "Twitter: "; _cout.green("@suprivada");
-
-	} /*banner */
-
 	void Checker::_printTestFiles() const {
 		std::cout << std::endl;
 		_cout.print("Test files:", GREEN);
@@ -224,21 +210,128 @@ namespace alx {
 		std::cout << std::endl;
 	}  /* _printTestFiles */
 
-	void Checker::_checkProjectFile(const std::string& file) const {
-		_cout.print("Checking project file...", GREEN);
+	void Checker::_checkTask(const std::string& fileName) {
+
+		_cout.print("Checking task <" + fileName + ">...", GREEN);
+
 		// Check the file using betty
-		std::string cmd = "betty " + file;
+		std::string cmd = "betty " + fileName;
 		int status = system(cmd.c_str());
 		if (status != 0) {
-			_cout.print("Error: project file is not valid.", RED);
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Failed to check file using betty.");
 		}
 
-		if (file.empty()) {
-			_cout.print("Error: project file is empty.", RED);
-			exit(EXIT_FAILURE);
+		if (fileName.empty()) {
+			throw std::runtime_error("Project file is empty.");
 		}
-		_cout.print("Project file is not empty.", GREEN);
+
+		// Create a bin/ directory if it doesn't exist
+		if (!fs::exists(_projectPath + "/bin")) {
+			fs::create_directory(_projectPath + "/bin");
+		}
+
+		// Create test_output/ directory if it doesn't exist
+		if (!fs::exists(_projectPath + "/test_output")) {
+			fs::create_directory(_projectPath + "/test_output");
+		}
+
+		// Get the appropriate main for the file
+		std::string main = _getMainFile(fileName);
+
+		// remove .c from the file name
+		std::string executable = fileName.substr(0, fileName.find_last_of('.'));
+
+		// Compile the file
+		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " test_files/_putchar.c " + main + " -o " + "bin/" + executable;
+		status = system(command.c_str());
+		if (status == -1) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// Execute the compiled file and save the output in a file
+		_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
+		command = "bin/" + executable + " > " + _output;
+		status = system(command.c_str());
+		if (status == -1) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// Compare the output with the expected output
+		std::string expectedOutput = "expected_output/" + executable + ".out";
+		command = "diff test_output/" + executable + ".out " + expectedOutput;
+		status = system(command.c_str());
+		if (status == -1) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		if (_flag == FILE) {
+
+			std::cout << std::endl;
+			std::cout << "=====  Output  =====" << std::endl;
+
+			command = "cat " + _output;
+			status = system(command.c_str());
+			if (status == -1)
+				throw std::runtime_error(strerror(errno));
+		}
+
+//		if (status == 0) {
+//			_cout.print("Test passed.", GREEN);
+//		} else {
+//			_cout.print("Test failed.", RED);
+//		}
+
 	} /* _checkProjectFile */
+
+		void Checker::_update() const {
+
+		int status;
+
+		std::string cloneCommand = "git clone https://github.com/achrafelkhnissi/alx-checker.git ~/.alx-checker";
+		std::string cmakeCommand = "cmake -B build && cmake --build build";
+
+		// TODO: check if the program is running as root
+		std::string moveCommand = _sudo + "mv bin/alx-checker /usr/local/bin";
+
+
+		std::cout << "Updating alx-checker..." << std::endl;
+
+
+		// check if the directory exists
+		if (directoryExists("~/.alx-checker")) {
+			status = system("rm -rf ~/.alx-checker");
+			if (status != 0) {
+				throw std::runtime_error("Failed to remove ~/.alx-checker");
+			}
+		}
+
+		// clone the repository
+		status = system(cloneCommand.c_str());
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// change the current directory to the cloned repository
+		status = chdir("~/.alx-checker");
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// build the project
+		status = system(cmakeCommand.c_str());
+		if (status != 0) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		// add the executable to the PATH
+		std::string path = getenv("PATH");
+		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
+		if (setenv("PATH", (alxPath + ":" + path).c_str(), 1)) {
+			throw std::runtime_error(strerror(errno));
+		}
+
+		std::cout << "alx-checker updated successfully!" << std::endl;
+
+	} /* update */
 
 } /* namespace alx */

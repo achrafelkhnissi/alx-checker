@@ -28,6 +28,12 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 
 ---
 
+<!-- ## Installation -->
+
+## Requirements
+
+- Clang 5.0 and later
+
 ## Usage
 - Clone the repository: `git clone https://github.com/achrafelkhnissi/low-level-programming-checkers.git`
 - Copy your project to where your project's checker is located
@@ -63,3 +69,9 @@ This project is authored and maintained by:
 ## TODO
 - [ ] While installing Betty in 1337 iMac, Find a way to install it without using sudo
 - [ ] Tell the user to run the script using sudo if it fails to install Betty
+- [ ] Handle multiple flags
+- [x] Add update functionality to the checker
+- [ ] Make the script installable with `apt-get` and `brew` (check checkinstall) - [guide](https://packaging.ubuntu.com/html/)
+- [ ] Reform the code to c++11 instead of c++17
+- [ ] Make the output more colorful and beautiful
+- [ ] Add a progress bar

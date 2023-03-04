@@ -9,7 +9,7 @@ project(alx-checker
 set(FATAL_ERROR "CMake version 3.24 or higher is required. Download the latest version from https://cmake.org/download/")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -g -std=c++17")
 # For Debugging
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g --address-sanitizer")*
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/checker/Checker.cpp
+        ${CMAKE_SOURCE_DIR}/src/checker/checkerUtils.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/Installer.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/installerUtils.cpp
         ${CMAKE_SOURCE_DIR}/src/installer/installMethods.cpp
