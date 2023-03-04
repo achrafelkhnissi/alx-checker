@@ -118,22 +118,23 @@ namespace alx
 		}
 		f2.close();
 
-		std::cout << "newLineCount: " << newLineCount << std::endl;
+		// std::cout << "newLineCount: " << newLineCount << std::endl;
 		if (fileContent.at(fileContent.size() - 1) != '\n')
 			endsWithNewLine = false;
 
 
 		std::string result = (newLineCount == 2) ? "OK" : "KO";
-		std::cout << "2 lines: " << result << std::endl;
+		std::cout << "Contains 2 lines\t: " << ((newLineCount == 2) ? "OK" : "KO") << std::endl;
 
+		
 		result = (shebang) ? "OK" : "KO";
-		std::cout << "Shebang: " << result << std::endl;
+		std::cout << "Contains a Shebang\t: " << result << std::endl;
 
 		result = (endsWithNewLine) ? "OK" : "KO";
-		std::cout << "Ends with a new line: " << result << std::endl;
+		std::cout << "Ends with a newline\t: " << result << std::endl;
 
 		result = (hasSpecialChars) ? "KO" : "OK";
-		std::cout << "Has special characters: " << result << std::endl;
+		std::cout << "Has forbidden character\t: " << result << std::endl;
 
 		return (newLineCount == 2 && shebang && endsWithNewLine && !hasSpecialChars);
 	}

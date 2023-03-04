@@ -62,27 +62,6 @@ namespace alx {
 		// TODO: Initialize the funciton pointers
 		initTaskMap();
 
-		if (_flag == FILE)
-			_check00x00(_file);
-
-		for (const auto& file : fs::directory_iterator(_projectPath)) {
-			std::string fileName = file.path().filename().string();
-			if (isdigit(fileName[0])) {
-				if (fileName.find(".c") == std::string::npos) {
-					// TODO: Check which project contains the file
-					// TODO: Give the file to the appropriate project checker
-					_check00x00(fileName);
-				} else
-					_checkTask(fileName);
-			}
-			if (fileName == "README.md") {
-				// TODO: add a variable to hold a value true if README.md is found
-				if (fileName.empty())
-					throw std::runtime_error("README.md file is empty");
-				continue;
-			}
-		}
-
 	} /* Checker Constructor */
 
 	void Checker::initTaskMap() {
@@ -90,11 +69,12 @@ namespace alx {
 
 			std::string cmd = "./0-preprocessor";
 
-			std::cout << "Execution: ";
+			std::cout << "Execution\t\t: ";
 			int status = system(cmd.c_str());
 			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
 
 			// check if a file named c exists
+			std::cout << "`c` file created\t: ";
 			std::cout << (fs::exists("c") ? "OK" : "KO") << std::endl;
 		};
 
@@ -102,7 +82,7 @@ namespace alx {
 
 			std::string cmd = "./1-compiler";
 
-			std::cout << "Execution: ";
+			std::cout << "Execution\t\t: ";
 			int status = system(cmd.c_str());
 			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
 
@@ -112,6 +92,7 @@ namespace alx {
 			// repleace .c with .o
 			obj = obj.substr(0, obj.find_last_of('.')) + ".o";
 
+			std::cout << "`.o` file created\t: ";
 			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
 		};
 
@@ -119,7 +100,7 @@ namespace alx {
 
 			std::string cmd = "./2-assembler";
 
-			std::cout << "Execution: ";
+			std::cout << "Execution\t\t: ";
 			int status = system(cmd.c_str());
 			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
 
@@ -129,6 +110,7 @@ namespace alx {
 			// repleace .c with .o
 			obj = obj.substr(0, obj.find_last_of('.')) + ".s";
 
+			std::cout << "`.s` file created\t: ";
 			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
 		};
 
@@ -136,10 +118,11 @@ namespace alx {
 
 			std::string cmd = "./3-name";
 
-			std::cout << "Execution: ";
+			std::cout << "Execution\t\t: ";
 			int status = system(cmd.c_str());
 			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
 
+			std::cout << "`cisfun` file created\t: ";
 			std::cout << (fs::exists("cisfun") ? "OK" : "KO") << std::endl;
 		};
 
@@ -147,8 +130,10 @@ namespace alx {
 
 			std::string cmd = "./100-intel";
 
-			std::cout << "Execution: ";
+			std::cout << "Execution\t\t: ";
 			int status = system(cmd.c_str());
+			if (status != 0)
+				throw std::runtime_error("100-intel");
 			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
 
 			// Check if file ends with .o
@@ -157,6 +142,7 @@ namespace alx {
 			// repleace .c with .o
 			obj = obj.substr(0, obj.find_last_of('.')) + ".s";
 
+			std::cout << "`.s` file created\t: ";
 			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
 
 			std::ifstream file(obj);
@@ -170,7 +156,8 @@ namespace alx {
 				}
 			}
 
-			std::cout << "Intel: " << (found ? "OK" : "KO") << std::endl;
+
+			std::cout << "Intel syntax\t\t: " << (found ? "OK" : "KO") << std::endl;
 		};
 
 	}
@@ -250,13 +237,24 @@ namespace alx {
 			return;
 		}
 
+		bool readmeFound = false;
+
 		for (const auto& file : fs::directory_iterator(_projectPath)) {
 			std::string fileName = file.path().filename().string();
 			if (isdigit(fileName[0])) {
 				_checkTask(fileName);
 				sleep(1);
 			}
+			if (fileName == "README.md") {
+				// TODO: add a variable to hold a value true if README.md is found
+				if (fileName.empty())
+					throw std::runtime_error("README.md file is empty");
+				readmeFound = true;
+			}
 		} /* for */
+
+		if (!readmeFound)
+			throw std::runtime_error("README.md file not found");
 
 	} /* checkProject */
 
@@ -327,9 +325,20 @@ namespace alx {
 
 	void Checker::_checkTask(const std::string& fileName) {
 
-		// TODO: handle the case when the file is not a .c file
+		std::cout << termcolor::yellow << termcolor::bold << termcolor::underline << "\nChecking task <" << fileName << ">" << termcolor::reset << std::endl;
 
-		_cout.print("Checking task <" + fileName + ">...", GREEN);
+		// TODO: handle the case when the file is not a .c file
+		if (fileName.find(".c") == std::string::npos) {
+			// TODO: Check which project contains the file
+			// TODO: Give the file to the appropriate project checker
+			if (!_checkScript(fileName))
+				throw std::runtime_error("Failed.");
+
+			// Set env CFILE=main.c
+			setenv("CFILE", "main.c", 1);
+			_taskMap.at(fileName)(); // error while using [] instead of at()
+			return ;
+		}
 
 		// Check the file using betty
 		std::string cmd = "betty " + fileName;
@@ -389,7 +398,7 @@ namespace alx {
 			std::cout << std::endl;
 			std::cout << "=====  Output  =====\n\n" << std::endl;
 
-			std::cout << "Your output\t: ";
+			std::cout << "Your output\t: \n";
 			std::ifstream file(_output);
 			if (!file.is_open()) {
 				throw std::runtime_error("Failed to open <" + _output + "> file");
@@ -400,7 +409,7 @@ namespace alx {
 
 			std::cout << fileContent << std::endl;
 
-			std::cout << "Expected output\t: ";
+			std::cout << "Expected output\t: \n";
 			std::ifstream expectedFile(expectedOutput);
 			if (!expectedFile.is_open()) {
 				throw std::runtime_error("Failed to open <" + expectedOutput + "> file");
@@ -415,7 +424,7 @@ namespace alx {
 		}
 
 		std::cout << std::endl;
-		std::cout << fileName << "\t: ";
+		std::cout << fileName << "\t\t: ";
 
 		if (status == 0) {
 			_cout.print("Test passed.\n", GREEN);
@@ -475,22 +484,5 @@ namespace alx {
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
 	} /* update */
-
-	void Checker::_check00x00(const std::string& file) {
-
-		// check if the file ends with .c
-		if (file.substr(file.find_last_of('.') + 1) == "c") {
-			_checkTask(file);
-			exit(0); // TODO: handle this
-		}
-
-		if (!_checkScript(file))
-			throw std::runtime_error("Failed.");
-
-		// Set env CFILE=main.c
-		setenv("CFILE", "main.c", 1);
-		_taskMap.at(file)(); // error while using [] instead of at()
-
-	} /* _check00x00 */
 
 } /* namespace alx */
