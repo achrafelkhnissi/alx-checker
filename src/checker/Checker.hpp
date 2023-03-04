@@ -28,6 +28,12 @@
 
 namespace fs = std::filesystem;
 
+#define OK termcolor::green << std::setw(20) << std::left << "OK" << termcolor::reset
+#define KO termcolor::red << std::setw(20) << std::left << "KO" << termcolor::reset
+#define FAILED termcolor::red << std::setw(20) << std::left << "FAILED" << termcolor::reset
+#define SUCCESS termcolor::green << std::setw(20) << std::left << "SUCCESS" << termcolor::reset
+#define NP termcolor::bright_grey << std::setw(20) << std::left << "NOT PRESENT" << termcolor::reset
+
 namespace alx {
 
 	enum option { HELP, VERSION, TEST, ALL, FILE, INSTALL, UNINSTALL, UPDATE, OUTPUT, DIFF};
@@ -63,8 +69,8 @@ namespace alx {
 
 		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
 
-		std::map<std::string, std::map<std::string, void(*)(void)> > _projectMap;
-		std::map<std::string, void(*)(void)> _taskMap;
+		std::map<std::string, std::map<std::string, bool(*)(void)> > _projectMap;
+		std::map<std::string, bool(*)(void)> _taskMap;
 
     public:
         Checker();
@@ -117,12 +123,15 @@ namespace alx {
 
 		bool _is0x00(const std::string &file) const;
 
-		void _check00x00(const std::string &file);
-
-
 		void initTaskMap();
 
 		bool _checkScript(const std::string &file) const;
+
+		std::string _upperCase(const std::string &str) const;
+
+		void footer() const;
+
+		void initProjectMap();
 	}; /* class Checker */
 
 } /* namespace alx */
