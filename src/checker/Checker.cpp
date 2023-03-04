@@ -60,7 +60,7 @@ namespace alx {
 		checkArgs(ac, av);
 
 		// TODO: Initialize the funciton pointers
-		initMap();
+		initTaskMap();
 
 		if (_flag == FILE)
 			_check00x00(_file);
@@ -83,8 +83,8 @@ namespace alx {
 
 	} /* Checker Constructor */
 
-	void Checker::initMap() {
-		_0x00["0-preprocessor"] = []() {
+	void Checker::initTaskMap() {
+		_taskMap["0-preprocessor"] = []() {
 
 			std::string cmd = "./0-preprocessor";
 
@@ -96,6 +96,22 @@ namespace alx {
 			std::cout << (fs::exists("c") ? "OK" : "KO") << std::endl;
 		};
 
+		_taskMap["1-compiler"] = []() {
+
+			std::string cmd = "./1-compiler";
+
+			std::cout << "Execution: ";
+			int status = system(cmd.c_str());
+			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
+
+			// Check if file ends with .o
+			std::string obj = getenv("CFILE");
+
+			// repleace .c with .o
+			obj = obj.substr(0, obj.find_last_of('.')) + ".o";
+
+			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
+		};
 
 	}
 
@@ -104,69 +120,10 @@ namespace alx {
     }
 
 	bool Checker::_is0x00(const std::string& file) const {
-		return _0x00.find(file) != _0x00.end();
+		return _taskMap.find(file) != _taskMap.end();
 	}
 
-	void Checker::_check00x00(const std::string& file) const {
 
-		// Check if the files has 2 lines and ends with a new line
-		std::ifstream f(file);
-		std::string line;
-		int count = 0;
-
-
-		const std::string specialChars = "&&||;";
-		bool shebang = true;
-		bool endsWithNewLine = true;
-		bool hasSpecialChars = false;
-
-		while (std::getline(f, line)) {
-
-			// check if the file has a shebang
-			if (count == 0 && line != "#!/bin/bash")
-				shebang = false;
-
-			// check if the file has special characters
-			if (count == 1 && line.find_first_of(specialChars) != std::string::npos)
-				hasSpecialChars = true;
-
-			count++;
-		}
-		f.close();
-
-		std::ifstream f2(file);
-		std::string fileContent;
-		char c;
-		int newLineCount = 0;
-		while (f2.get(c)) {
-			if (c == '\n')
-				newLineCount++;
-			fileContent += c;
-		}
-		f2.close();
-
-		std::cout << "newLineCount: " << newLineCount << std::endl;
-		if (fileContent.at(fileContent.size() - 1) != '\n')
-			endsWithNewLine = false;
-
-
-		std::string result = (count == 2) ? "OK" : "KO";
-		std::cout << "2 lines: " << result << std::endl;
-
-		result = (shebang) ? "OK" : "KO";
-		std::cout << "Shebang: " << result << std::endl;
-
-		result = (endsWithNewLine) ? "OK" : "KO";
-		std::cout << "Ends with a new line: " << result << std::endl;
-
-		result = (hasSpecialChars) ? "KO" : "OK";
-		std::cout << "Has special characters: " << result << std::endl;
-
-		// Set env CFILE=main.c
-		setenv("CFILE", "main.c", 1);
-		_0x00.at(file)(); // error while using [] instead of at()
-
-	}
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -432,8 +389,17 @@ namespace alx {
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
-	}
+	} /* update */
 
-	/* update */
+	void Checker::_check00x00(const std::string& file) const {
+
+		if (!_checkScript(file))
+			throw std::runtime_error("Failed.");
+
+		// Set env CFILE=main.c
+		setenv("CFILE", "main.c", 1);
+		_taskMap.at(file)(); // error while using [] instead of at()
+
+	} /* _check00x00 */
 
 } /* namespace alx */

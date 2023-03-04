@@ -63,7 +63,8 @@ namespace alx {
 
 		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
 
-		std::map<std::string, void(*)(void)> _0x00;
+		std::map<std::string, std::map<std::string, void(*)(void)> > _projectMap;
+		std::map<std::string, void(*)(void)> _taskMap;
 
     public:
         Checker();
@@ -119,7 +120,9 @@ namespace alx {
 		void _check00x00(const std::string &file) const;
 
 
-		void initMap();
+		void initTaskMap();
+
+		bool _checkScript(const std::string &file) const;
 	}; /* class Checker */
 
 } /* namespace alx */
