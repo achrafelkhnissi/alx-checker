@@ -117,7 +117,7 @@ namespace alx {
 
 		bool _is0x00(const std::string &file) const;
 
-		void _check00x00(const std::string &file) const;
+		void _check00x00(const std::string &file);
 
 
 		void initTaskMap();

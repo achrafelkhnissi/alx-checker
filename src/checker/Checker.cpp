@@ -68,23 +68,18 @@ namespace alx {
 		for (const auto& file : fs::directory_iterator(_projectPath)) {
 			std::string fileName = file.path().filename().string();
 			if (isdigit(fileName[0])) {
-
-				if (fileName == "README.md") {
-					// TODO: add a variable to hold a value true if README.md is found
-					if (fileName.empty())
-						throw std::runtime_error("README.md file is empty");
-					continue;
-				}
-
 				if (fileName.find(".c") == std::string::npos) {
-
 					// TODO: Check which project contains the file
-
 					// TODO: Give the file to the appropriate project checker
 					_check00x00(fileName);
-
 				} else
 					_checkTask(fileName);
+			}
+			if (fileName == "README.md") {
+				// TODO: add a variable to hold a value true if README.md is found
+				if (fileName.empty())
+					throw std::runtime_error("README.md file is empty");
+				continue;
 			}
 		}
 
@@ -372,7 +367,8 @@ namespace alx {
 
 		// Execute the compiled file and save the output in a file
 		_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
-		command = "bin/" + executable + " > " + _output;
+		std::string redirect = (fileName == "101-quote.c") ? " 2> " : " > "; // because 101-quote.c prints to stderr
+		command = "bin/" + executable + redirect + _output;
 		status = system(command.c_str());
 		if (status == -1) {
 			throw std::runtime_error(strerror(errno));
@@ -388,20 +384,32 @@ namespace alx {
 
 		if (_flag == FILE) {
 
-			std::cout << std::endl;
-			std::cout << "=====  Output  =====" << std::endl;
+			// TODO: fix wrong output for 0x00-hello_world/101-quote.c
 
-			command = "cat " + _output;
-			status = system(command.c_str());
-			if (status == -1)
-				throw std::runtime_error(strerror(errno));
+			std::cout << std::endl;
+			std::cout << "=====  Output  =====\n" << std::endl;
+
+			std::ifstream file(_output);
+			if (!file.is_open()) {
+				throw std::runtime_error("Failed to open <" + _output + "> file");
+			}
+
+			std::string fileContent((std::istreambuf_iterator<char>(file)),
+									std::istreambuf_iterator<char>());
+
+			std::cout << fileContent << std::endl;
+			
+			std::cout << "====================" << std::endl;
 		}
 
-//		if (status == 0) {
-//			_cout.print("Test passed.", GREEN);
-//		} else {
-//			_cout.print("Test failed.", RED);
-//		}
+		std::cout << std::endl;
+		std::cout << fileName << "\t: ";
+
+		if (status == 0) {
+			_cout.print("Test passed.\n", GREEN);
+		} else {
+			_cout.print("Test failed.\n", RED);
+		}
 
 	} /* _checkProjectFile */
 
@@ -456,7 +464,13 @@ namespace alx {
 
 	} /* update */
 
-	void Checker::_check00x00(const std::string& file) const {
+	void Checker::_check00x00(const std::string& file) {
+
+		// check if the file ends with .c
+		if (file.substr(file.find_last_of('.') + 1) == "c") {
+			_checkTask(file);
+			exit(0); // TODO: handle this
+		}
 
 		if (!_checkScript(file))
 			throw std::runtime_error("Failed.");
