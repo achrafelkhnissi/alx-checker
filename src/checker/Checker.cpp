@@ -65,21 +65,28 @@ namespace alx {
 		if (_flag == FILE)
 			_check00x00(_file);
 
-		exit(1);
+		for (const auto& file : fs::directory_iterator(_projectPath)) {
+			std::string fileName = file.path().filename().string();
+			if (isdigit(fileName[0])) {
 
-//		for (const auto& file : fs::directory_iterator(_projectPath)) {
-//			std::string fileName = file.path().filename().string();
-//			if (isdigit(fileName[0])) {
-//				if (fileName.find(".c") == std::string::npos) {
-//
-//					// TODO: Check which project contains the file
-//
-//					// TODO: Give the file to the appropriate project checker
-//					_check00x00(fileName);
-//
-//				}
-//			}
-//		}
+				if (fileName == "README.md") {
+					// TODO: add a variable to hold a value true if README.md is found
+					if (fileName.empty())
+						throw std::runtime_error("README.md file is empty");
+					continue;
+				}
+
+				if (fileName.find(".c") == std::string::npos) {
+
+					// TODO: Check which project contains the file
+
+					// TODO: Give the file to the appropriate project checker
+					_check00x00(fileName);
+
+				} else
+					_checkTask(fileName);
+			}
+		}
 
 	} /* Checker Constructor */
 
@@ -111,6 +118,64 @@ namespace alx {
 			obj = obj.substr(0, obj.find_last_of('.')) + ".o";
 
 			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
+		};
+
+		_taskMap["2-assembler"] = []() {
+
+			std::string cmd = "./2-assembler";
+
+			std::cout << "Execution: ";
+			int status = system(cmd.c_str());
+			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
+
+			// Check if file ends with .o
+			std::string obj = getenv("CFILE");
+
+			// repleace .c with .o
+			obj = obj.substr(0, obj.find_last_of('.')) + ".s";
+
+			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
+		};
+
+		_taskMap["3-name"] = []() {
+
+			std::string cmd = "./3-name";
+
+			std::cout << "Execution: ";
+			int status = system(cmd.c_str());
+			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
+
+			std::cout << (fs::exists("cisfun") ? "OK" : "KO") << std::endl;
+		};
+
+		_taskMap["100-intel"] = []() {
+
+			std::string cmd = "./100-intel";
+
+			std::cout << "Execution: ";
+			int status = system(cmd.c_str());
+			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
+
+			// Check if file ends with .o
+			std::string obj = getenv("CFILE");
+
+			// repleace .c with .o
+			obj = obj.substr(0, obj.find_last_of('.')) + ".s";
+
+			std::cout << (fs::exists(obj) ? "OK" : "KO") << std::endl;
+
+			std::ifstream file(obj);
+			std::string line;
+			bool found = false;
+
+			while (std::getline(file, line)) {
+				if (line.find("intel") != std::string::npos) {
+					found = true;
+					break;
+				}
+			}
+
+			std::cout << "Intel: " << (found ? "OK" : "KO") << std::endl;
 		};
 
 	}
