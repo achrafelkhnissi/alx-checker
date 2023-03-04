@@ -40,10 +40,6 @@ namespace alx {
 //		_project = _projectPath.filename();
 //		_testFilesUrl += _project.string() + "/test_files";
 
-		std::cout << "Project: " << _project << std::endl;
-		std::cout << "Project path: " << _projectPath << std::endl;
-		std::cout << "Test directory: " << _testFilesUrl << std::endl;
-
 		_installer.checkDependencies();
 		if (!_installer.getDependencies().empty())
 			_installer.installDependencies();
@@ -63,11 +59,114 @@ namespace alx {
 		// TODO: Check dependencies and install them if needed
 		checkArgs(ac, av);
 
+		// TODO: Initialize the funciton pointers
+		initMap();
+
+		if (_flag == FILE)
+			_check00x00(_file);
+
+		exit(1);
+
+//		for (const auto& file : fs::directory_iterator(_projectPath)) {
+//			std::string fileName = file.path().filename().string();
+//			if (isdigit(fileName[0])) {
+//				if (fileName.find(".c") == std::string::npos) {
+//
+//					// TODO: Check which project contains the file
+//
+//					// TODO: Give the file to the appropriate project checker
+//					_check00x00(fileName);
+//
+//				}
+//			}
+//		}
+
+	} /* Checker Constructor */
+
+	void Checker::initMap() {
+		_0x00["0-preprocessor"] = []() {
+
+			std::string cmd = "./0-preprocessor";
+
+			std::cout << "Execution: ";
+			int status = system(cmd.c_str());
+			std::cout << (status == 0 ? "OK" : "KO") << std::endl;
+
+			// check if a file named c exists
+			std::cout << (fs::exists("c") ? "OK" : "KO") << std::endl;
+		};
+
+
 	}
 
     Checker::~Checker() {
         // TODO
     }
+
+	bool Checker::_is0x00(const std::string& file) const {
+		return _0x00.find(file) != _0x00.end();
+	}
+
+	void Checker::_check00x00(const std::string& file) const {
+
+		// Check if the files has 2 lines and ends with a new line
+		std::ifstream f(file);
+		std::string line;
+		int count = 0;
+
+
+		const std::string specialChars = "&&||;";
+		bool shebang = true;
+		bool endsWithNewLine = true;
+		bool hasSpecialChars = false;
+
+		while (std::getline(f, line)) {
+
+			// check if the file has a shebang
+			if (count == 0 && line != "#!/bin/bash")
+				shebang = false;
+
+			// check if the file has special characters
+			if (count == 1 && line.find_first_of(specialChars) != std::string::npos)
+				hasSpecialChars = true;
+
+			count++;
+		}
+		f.close();
+
+		std::ifstream f2(file);
+		std::string fileContent;
+		char c;
+		int newLineCount = 0;
+		while (f2.get(c)) {
+			if (c == '\n')
+				newLineCount++;
+			fileContent += c;
+		}
+		f2.close();
+
+		std::cout << "newLineCount: " << newLineCount << std::endl;
+		if (fileContent.at(fileContent.size() - 1) != '\n')
+			endsWithNewLine = false;
+
+
+		std::string result = (count == 2) ? "OK" : "KO";
+		std::cout << "2 lines: " << result << std::endl;
+
+		result = (shebang) ? "OK" : "KO";
+		std::cout << "Shebang: " << result << std::endl;
+
+		result = (endsWithNewLine) ? "OK" : "KO";
+		std::cout << "Ends with a new line: " << result << std::endl;
+
+		result = (hasSpecialChars) ? "KO" : "OK";
+		std::cout << "Has special characters: " << result << std::endl;
+
+		// Set env CFILE=main.c
+		setenv("CFILE", "main.c", 1);
+		_0x00.at(file)(); // error while using [] instead of at()
+
+	}
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -136,7 +235,6 @@ namespace alx {
 
 		for (const auto& file : fs::directory_iterator(_projectPath)) {
 			std::string fileName = file.path().filename().string();
-//			std::cout << "File: " << fileName << std::endl;
 			if (isdigit(fileName[0])) {
 				_checkTask(fileName);
 				sleep(1);
@@ -211,6 +309,8 @@ namespace alx {
 	}  /* _printTestFiles */
 
 	void Checker::_checkTask(const std::string& fileName) {
+
+		// TODO: handle the case when the file is not a .c file
 
 		_cout.print("Checking task <" + fileName + ">...", GREEN);
 
@@ -332,6 +432,8 @@ namespace alx {
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
-	} /* update */
+	}
+
+	/* update */
 
 } /* namespace alx */

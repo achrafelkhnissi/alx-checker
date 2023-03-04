@@ -20,7 +20,7 @@ int main(int ac, char **av) {
 
 		alx::Checker checker(--ac, ++av);
 
-		checker.checkProject();
+		// checker.checkProject();
 
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;

@@ -21,7 +21,6 @@
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
 #include <cctype>                // std::tolower
-#include <ctype.h>                // tolower
 
 #include "Printer.hpp"
 #include "Installer.hpp"
@@ -64,6 +63,8 @@ namespace alx {
 
 		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
 
+		std::map<std::string, void(*)(void)> _0x00;
+
     public:
         Checker();
 		Checker(int ac, char** av);
@@ -101,8 +102,6 @@ namespace alx {
 
 		std::string getParentDirectory(const std::string &path);
 
-        void _readDirectory(const std::string& directoryPath, files_t& files) const;
-
 		std::string _getMainFile(const std::string &file) const;
 
 		std::string _getCorrectOutput(const std::string &file) const;
@@ -115,6 +114,12 @@ namespace alx {
 
 		std::string _getCurrentDirectory() const;
 
+		bool _is0x00(const std::string &file) const;
+
+		void _check00x00(const std::string &file) const;
+
+
+		void initMap();
 	}; /* class Checker */
 
 } /* namespace alx */
