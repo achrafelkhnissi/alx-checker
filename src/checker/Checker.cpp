@@ -384,11 +384,12 @@ namespace alx {
 
 		if (_flag == FILE) {
 
-			// TODO: fix wrong output for 0x00-hello_world/101-quote.c
+			// todo: duplicated code here
 
 			std::cout << std::endl;
-			std::cout << "=====  Output  =====\n" << std::endl;
+			std::cout << "=====  Output  =====\n\n" << std::endl;
 
+			std::cout << "Your output\t: ";
 			std::ifstream file(_output);
 			if (!file.is_open()) {
 				throw std::runtime_error("Failed to open <" + _output + "> file");
@@ -398,6 +399,17 @@ namespace alx {
 									std::istreambuf_iterator<char>());
 
 			std::cout << fileContent << std::endl;
+
+			std::cout << "Expected output\t: ";
+			std::ifstream expectedFile(expectedOutput);
+			if (!expectedFile.is_open()) {
+				throw std::runtime_error("Failed to open <" + expectedOutput + "> file");
+			}
+
+			std::string expectedFileContent((std::istreambuf_iterator<char>(expectedFile)),
+											std::istreambuf_iterator<char>());
+
+			std::cout << expectedFileContent << std::endl;
 			
 			std::cout << "====================" << std::endl;
 		}
