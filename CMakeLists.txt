@@ -49,7 +49,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src/animation)
 
 configure_file(${CONFIG_HPP_IN} ${CONFIG_HPP})
 
-add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp)
+add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp src/checker/initMaps.cpp)
 
 target_sources(${PROJECT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/checker/Checker.cpp
