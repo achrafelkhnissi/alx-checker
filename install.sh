@@ -83,9 +83,9 @@ fi
 
 echo ; echo "${CYAN}${BOLD}${UNDERLINE}INSTALLING ALX CHECKER.. ${END}" ; echo
 
-# check if the script is run as root
-if [ "$EUID" -ne 0 ]; then
-  print_error "Please run as root"
+# check if betty is installed
+if ! command -v betty &>/dev/null && [ "$EUID" -ne 0 ]; then
+  print_error "Please run as root in order to install Betty"
   exit 1
 fi
 
