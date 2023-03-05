@@ -94,7 +94,7 @@ print_info "Cloning the project..."
 git clone https://github.com/achrafelkhnissi/alx-checker.git > "${ALX_CHECKER_DIR}"
 
 # Check if the project is cloned
-if [ ! -d ~/.alx-checker ]; then
+if [ ! -d "${ALX_CHECKER_DIR}" ]; then
   print_error "Failed to clone the project"
   exit 1
 fi
