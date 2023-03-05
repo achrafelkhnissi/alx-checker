@@ -79,7 +79,7 @@ This project is authored and maintained by:
 - [x] Add update functionality to the checker
 - [ ] Make the script installable with `apt-get` and `brew` (check checkinstall) - [guide](https://packaging.ubuntu.com/html/)
 - [ ] Reform the code to c++11 instead of c++17
-- [ ] Make the output more colorful and beautiful
+- [x] Make the output more colorful and beautiful
 - [ ] Add a progress bar
 - [ ] For each project add 2 directories one for `test_files` and the other for `expected_output`
 - [ ] Install `libc6-dev-i386` for 32-bit compilation in 0x00 task 6
