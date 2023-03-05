@@ -91,7 +91,7 @@ fi
 
 # clone the project
 print_info "Cloning the project..."
-git clone https://github.com/achrafelkhnissi/alx-checker.git > "${ALX_CHECKER_DIR}"
+git clone https://github.com/achrafelkhnissi/alx-checker.git "${ALX_CHECKER_DIR}"
 
 # Check if the project is cloned
 if [ ! -d "${ALX_CHECKER_DIR}" ]; then
