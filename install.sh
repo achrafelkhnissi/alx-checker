@@ -89,6 +89,12 @@ if ! command -v betty &>/dev/null && [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+# check if cmake is installed
+if ! command -v cmake &>/dev/null; then
+  print_error "Please install cmake"
+  exit 1
+fi
+
 # clone the project
 print_info "Cloning the project..."
 git clone https://github.com/achrafelkhnissi/alx-checker.git "${ALX_CHECKER_DIR}"
