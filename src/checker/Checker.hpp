@@ -32,7 +32,7 @@ namespace fs = std::filesystem;
 #define KO termcolor::red << std::setw(20) << std::left << "KO" << termcolor::reset
 #define FAILED termcolor::red << std::setw(20) << std::left << "FAILED" << termcolor::reset
 #define SUCCESS termcolor::green << std::setw(20) << std::left << "SUCCESS" << termcolor::reset
-#define NP termcolor::bright_grey << std::setw(20) << std::left << "NOT PRESENT" << termcolor::reset
+#define NP termcolor::bright_grey << std::setw(20) << std::left << "N/A" << termcolor::reset
 
 namespace alx {
 
@@ -74,7 +74,6 @@ namespace alx {
 		std::map<std::string, bool(*)(void)> _taskProjectMap;
 
     public:
-        Checker();
 		Checker(int ac, char** av);
 
         ~Checker();
@@ -85,8 +84,6 @@ namespace alx {
 
         void checkArgs(int argc, char *argv[]);
 
-        void check() const;
-
 		void _update() const;
 
         bool directoryExists(const std::string &path) const;
@@ -94,8 +91,6 @@ namespace alx {
         void downloadTests(void) const;
 
         void checkProject();
-
-        void checkReadme() const;
 
 		void _readDirectory(const std::string& directoryPath, files_t& files) const;
 		void _printTestFiles() const;
@@ -112,19 +107,9 @@ namespace alx {
 
 		std::string _getMainFile(const std::string &file) const;
 
-		std::string _getCorrectOutput(const std::string &file) const;
-
-		int diff(const std::string &correctOutput, const std::string &output);
-
-		int compile(const std::string &file, const std::string &output);
-
 		int createDirectory(const std::string &path);
 
 		std::string _getCurrentDirectory() const;
-
-		bool _is0x00(const std::string &file) const;
-
-		void initTaskMap();
 
 		bool _checkScript(const std::string &file) const;
 
@@ -149,6 +134,10 @@ namespace alx {
 		void init0x06();
 
 		void init0x07();
+
+		void printFileContent(const std::string &fileName);
+
+		void clean() const; // todo: clean project from object files and executables
 	}; /* class Checker */
 
 } /* namespace alx */

@@ -24,7 +24,6 @@ namespace alx {
 
 	Checker::Checker(int ac, char** av) : _cout(), _installer() {
 
-
 		/* Get the current working directory and the project name */
 		_projectPath = getenv("PWD");
 		_project = _getBasename(_projectPath);
@@ -38,17 +37,12 @@ namespace alx {
 		else
 			_cout.info("No dependencies to install.");
 
-		// TODO: Check dependencies and install them if needed
 		checkArgs(ac, av);
 
 		// After checking the arguments, we can display the banner.
 		banner();
 
 		initProjectMap();
-
-		// TODO: Initialize the funciton pointers
-		// initialize a map for each project and each map contains a map of the unique tasks
-		std::cout << "Project: " << _project << std::endl;
 		_projectMap.at(_project)();
 	} /* Checker Constructor */
 
@@ -62,7 +56,6 @@ namespace alx {
         std::cout << "  -h, --help\t\t\tShow this help message and exit" << std::endl;
         std::cout << "  -v, --version\t\t\tShow program's version number and exit" << std::endl;
         std::cout << "  -f, --file\t\t\tSpecify the file to check" << std::endl;
-        std::cout << "  -o, --output\t\t\tSpecify the log file" << std::endl;
         exit(EXIT_SUCCESS);
     }
 
@@ -148,20 +141,22 @@ namespace alx {
 				sleep(1);
 			}
 			if (fileName == "README.md") {
-				// TODO: add a variable to hold a value true if README.md is found
 				if (fileName.empty())
 					throw std::runtime_error("README.md file is empty");
 				readmeFound = true;
 			}
 		} /* for */
-
-		if (!readmeFound)
-			throw std::runtime_error("README.md file not found");
+		std::cout << termcolor::italic << termcolor::yellow <<
+		std::setw(20) << std::left << "README.md" << termcolor::reset;
+		std::cout << NP << NP << NP << NP;
+		if (!readmeFound || fs::is_empty(_projectPath + "/README.md"))
+			std::cout << termcolor::red << "FAILED" << termcolor::reset << std::endl;
+		else
+			std::cout << termcolor::green << "PASSED" << termcolor::reset << std::endl;
 
 	} /* checkProject */
 
     void Checker::_readDirectory(const std::string& directoryPath, files_t& files) const {
-
         DIR *dir;
         struct dirent *entry;
 
@@ -196,7 +191,6 @@ namespace alx {
 
 	void Checker::downloadTests() const {
 
-//		std::string url = _checkerRepository + "/" + _project.string();
 		std::string cmd = "svn export " + _testFilesUrl;
 
 		// check if the directory exists
@@ -258,13 +252,25 @@ namespace alx {
 			setenv("CFILE", "main.c", 1);
 			bool status = _taskProjectMap.at(fileName)(); // error while using [] instead of at()
 			status ? std::cout << SUCCESS << std::endl : std::cout << FAILED << std::endl;
+
+
+			if (_flag != FILE)
+				return ;
+
+			std::cout << "========== OUTPUT ==========" << std::endl;
+			std::string cmd = "cat test_output/" + fileName + ".out";
+			status = system(cmd.c_str());
+			if (status != 0) {
+				throw std::runtime_error(strerror(errno));
+			}
+			std::cout << "============================" << std::endl;
 			return ;
 		}
 
 		// Check the file using betty
 		std::string cmd = "betty " + fileName + " > /dev/null 2>&1";
-		int status = system(cmd.c_str());
-		!status ? std::cout << OK : std::cout << KO;
+		int betty = system(cmd.c_str());
+		!betty ? std::cout << OK : std::cout << KO;
 
 		if (fileName.empty()) {
 			throw std::runtime_error("Project file is empty.");
@@ -288,70 +294,40 @@ namespace alx {
 
 		// Compile the file
 		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " test_files/_putchar.c " + main + " -o " + "bin/" + executable;
-		status = system(command.c_str());
-		if (status == -1) {
-			std::cout << KO;
-		} else {
-			std::cout << OK;
-		}
+		int compile = system(command.c_str());
+		compile == -1 ? std::cout << KO : std::cout << OK;
 
 		// Execute the compiled file and save the output in a file
 		_output = (_flag == OUTPUT) ? _output : "test_output/" + executable + ".out";
 		std::string redirect = (fileName == "101-quote.c") ? " 2> " : " > "; // because 101-quote.c prints to stderr
 		command = "bin/" + executable + redirect + _output;
-		status = system(command.c_str());
-		if (status == -1) {
-			std::cout << KO;
-		} else
-			std::cout << OK;
+		int execute = system(command.c_str());
+		if (fileName == "101-quote.c") execute = 0; // because 101-quote.c prints to stderr
+		execute == -1 ? std::cout << KO : std::cout << OK;
 
 		// Compare the output with the expected output
 		std::string expectedOutput = "expected_output/" + executable + ".out";
 		command = "diff test_output/" + executable + ".out " + expectedOutput;
-		status = system(command.c_str());
-		if (status == -1) {
-			std::cout << KO;
-		} else {
-			std::cout << OK;
-		}
+		int diff = system(command.c_str());
+		diff == -1 ? std::cout << KO : std::cout << OK;
 
-		// todo: print success only if all the previous checks are ok
-		if (status == 0) {
+		if (betty == 0 && compile == 0 && execute == 0 && diff == 0)
 			std::cout << SUCCESS << std::endl;
-		} else {
+		else
 			std::cout << FAILED << std::endl;
-		}
 
 		if (_flag == FILE) {
-
-			// todo: duplicated code here
 
 			std::cout << std::endl;
 			std::cout << "\n================================================  OUTPUT  ================================================\n" << std::endl;
 
 			std::cout << termcolor::underline << termcolor::bold
 					  << termcolor::bright_white <<  "Your output" << termcolor::reset << std::endl;
-			std::ifstream file(_output);
-			if (!file.is_open()) {
-				throw std::runtime_error("Failed to open <" + _output + "> file");
-			}
-
-			std::string fileContent((std::istreambuf_iterator<char>(file)),
-									std::istreambuf_iterator<char>());
-
-			std::cout << fileContent << std::endl;
+			printFileContent(_output);
 
 			std::cout << termcolor::underline << termcolor::bold
 					  << termcolor::bright_white <<  "Expected output" << termcolor::reset << std::endl;
-			std::ifstream expectedFile(expectedOutput);
-			if (!expectedFile.is_open()) {
-				throw std::runtime_error("Failed to open <" + expectedOutput + "> file");
-			}
-
-			std::string expectedFileContent((std::istreambuf_iterator<char>(expectedFile)),
-											std::istreambuf_iterator<char>());
-
-			std::cout << expectedFileContent << std::endl;
+			printFileContent(expectedOutput);
 
 			std::cout << "==========================================================================================================" << std::endl;
 		}

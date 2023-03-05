@@ -15,20 +15,6 @@ namespace alx
 		return 0;
 	}
 
-	int Checker::compile(const std::string& file, const std::string& output)
-	{
-		std::string command = "gcc -I . " + _CFLAGS + " " + file + " -o " + output;
-		std::cout << "Compile command: " << command << std::endl;
-		return system(command.c_str());
-	}
-
-	int Checker::diff(const std::string& correctOutput, const std::string& output)
-	{
-		std::string diffCommand = "diff -u " + correctOutput + " " + output;
-		std::cout << "Diff command: " << diffCommand << std::endl;
-		return system(diffCommand.c_str());
-	}
-
 	std::string Checker::_getBasename(const std::string& path) const {
 		size_t pos = path.find_last_of("/\\");
 		if (pos != std::string::npos) {
@@ -48,13 +34,7 @@ namespace alx
 
 	bool Checker::directoryExists(const std::string &path) const {
         struct stat info{};
-        if (stat(path.c_str(), &info) != 0) {
-            return false;
-        } else if (info.st_mode & S_IFDIR) {
-            return true;
-        } else {
-            return false;
-        }
+		return stat(path.c_str(), &info) == 0 && (info.st_mode & S_IFDIR);
     } /* directoryExists */
 
 	std::string Checker::_getMainFile(const std::string& file) const {
@@ -86,7 +66,6 @@ namespace alx
 		std::ifstream f(file);
 		std::string line;
 		int count = 0;
-
 
 		const std::string specialChars = "&&||;";
 		bool shebang = true;
@@ -122,21 +101,46 @@ namespace alx
 		if (fileContent.at(fileContent.size() - 1) != '\n')
 			endsWithNewLine = false;
 
+		// Create a directory name test_output if it doesn't exist
+		std::string testOutputDir = "test_output/";
+		if (!fs::exists(testOutputDir) && fs::is_directory(testOutputDir))
+			fs::create_directory(testOutputDir);
 
-//		std::string result = (newLineCount == 2) ? "OK" : "KO";
-//		std::cout << "Contains 2 lines\t: " << ((newLineCount == 2) ? "OK" : "KO") << std::endl;
-//
-//
-//		result = (shebang) ? "OK" : "KO";
-//		std::cout << "Contains a Shebang\t: " << result << std::endl;
-//
-//		result = (endsWithNewLine) ? "OK" : "KO";
-//		std::cout << "Ends with a newline\t: " << result << std::endl;
-//
-//		result = (hasSpecialChars) ? "KO" : "OK";
-//		std::cout << "Has forbidden character\t: " << result << std::endl;
-//
+		// create a file with the same name but with .out extension
+		std::string outFileName = file + ".out";
+		std::ofstream out(testOutputDir + outFileName);
+		out << "\nTest output for: " << file << std::endl << std::endl;
+		out << std::setw(30) << std::left << "- newLineCount = 2?: " << (newLineCount == 2 ? ": [OK]" : ": [KO]") << std::endl;
+		out << std::setw(30) << std::left << "- shebang = #!/bin/bash?: " << (shebang ? ": [OK]" : ": [KO]") << std::endl;
+		out << std::setw(30) << std::left << "- endsWithNewLine = true?: " << (endsWithNewLine ? ": [OK]" : ": [KO]") << std::endl;
+		out << std::setw(30) << std::left << "- hasSpecialChars = false?: " << (!hasSpecialChars ? ": [OK]" : ": [KO]") << std::endl;
+		out << std::endl;
+		if (newLineCount == 2 && shebang && endsWithNewLine && !hasSpecialChars)
+			out << "Result: PASSED" << std::endl;
+		else {
+			out << "Result: FAILED" << std::endl << std::endl;
+			out << "Please check the following:" << std::endl;
+			out << "1. The file has a #!/bin/bash in the first line" << std::endl;
+			out << "2. The file has no special characters (&&, ||, ;)" << std::endl;
+			out << "3. The file ends with a new line" << std::endl;
+			out << "4. The file has 2 new lines" << std::endl;
+			out << std::endl;
+		}
+		out.close();
+
 		return (newLineCount == 2 && shebang && endsWithNewLine && !hasSpecialChars);
+	} /* _checkScript */
+
+	void Checker::printFileContent(const std::string& fileName) {
+		std::ifstream file(fileName);
+		if (!file.is_open()) {
+			throw std::runtime_error("Failed to open <" + fileName + "> file");
+		}
+
+		std::string fileContent((std::istreambuf_iterator<char>(file)),
+								std::istreambuf_iterator<char>());
+
+		std::cout << fileContent << std::endl;
 	}
 
 } /* alx namespace */
