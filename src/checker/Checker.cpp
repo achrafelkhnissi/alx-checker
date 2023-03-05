@@ -22,28 +22,6 @@ namespace alx {
 
 	} /*banner */
 
-    Checker::Checker() : _cout(), _installer() {
-
-		_sudo = (_isRunningAsRoot()) ? "sudo " : "";
-
-		/* Get the current working directory and the project name */
-		_projectPath = getenv("PWD");
-		_project = _getBasename(_projectPath);
-
-		std::string parent_dir = getParentDirectory(_projectPath);
-		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
-
-//		_projectPath = fs::current_path();
-//		_project = _projectPath.filename();
-//		_testFilesUrl += _project.string() + "/test_files";
-
-		_installer.checkDependencies();
-		if (!_installer.getDependencies().empty())
-			_installer.installDependencies();
-		else
-			_cout.info("No dependencies to install.");
-    }
-
 	Checker::Checker(int ac, char** av) : _cout(), _installer() {
 
 
@@ -54,160 +32,29 @@ namespace alx {
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
 
+		_installer.checkDependencies();
+		if (!_installer.getDependencies().empty())
+			_installer.installDependencies();
+		else
+			_cout.info("No dependencies to install.");
+
 		// TODO: Check dependencies and install them if needed
 		checkArgs(ac, av);
 
 		// After checking the arguments, we can display the banner.
 		banner();
 
+		initProjectMap();
+
 		// TODO: Initialize the funciton pointers
 		// initialize a map for each project and each map contains a map of the unique tasks
-		initTaskMap();
-
+		std::cout << "Project: " << _project << std::endl;
+		_projectMap.at(_project)();
 	} /* Checker Constructor */
-
-	void Checker::initProjectMap() {
-		_projectMap["0x00-hello_world"]["0-preprocessor"] = []() {
-			std::string cmd = "./0-preprocessor";
-
-			std::cout << NP;
-
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			// check if a file named c exists
-			int exist = fs::exists("c");
-			exist ? std::cout << OK : std::cout << KO;
-
-			return !status && exist;
-		};
-
-		_projectMap["0x01-variables_if_else_while"];
-		_projectMap["0x02-functions_nested_loops"];
-		_projectMap["0x03-debugging"];
-		_projectMap["0x04-more_functions_nested_loops"];
-		_projectMap["0x05-pointers_arrays_strings"];
-		_projectMap["0x06-pointers_arrays_strings"];
-	}
-
-	void Checker::initTaskMap() {
-		_taskMap["0-preprocessor"] = []() {
-
-			std::string cmd = "./0-preprocessor";
-
-			std::cout << NP;
-
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			// check if a file named c exists
-			int exist = fs::exists("c");
-			exist ? std::cout << OK : std::cout << KO;
-
-			return !status && exist;
-		};
-
-		_taskMap["1-compiler"] = []() {
-
-			std::string cmd = "./1-compiler";
-
-			std::cout << NP;
-
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			// Check if file ends with .o
-			std::string obj = getenv("CFILE");
-
-			// repleace .c with .o
-			obj = obj.substr(0, obj.find_last_of('.')) + ".o";
-
-//			std::cout << "`.o` file created\t: ";
-			int exist = fs::exists(obj);
-			exist ? std::cout << OK : std::cout << KO;
-
-			return !status && exist;
-		};
-
-		_taskMap["2-assembler"] = []() {
-
-			std::string cmd = "./2-assembler";
-
-			std::cout << NP;
-
-//			std::cout << "Execution\t\t: ";
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			// Check if file ends with .o
-			std::string s = getenv("CFILE");
-
-			// repleace .c with .o
-			s = s.substr(0, s.find_last_of('.')) + ".s";
-
-//			std::cout << "`.s` file created\t: ";
-			int exist = fs::exists(s);
-			exist ? std::cout << OK : std::cout << KO;
-
-			return !status && exist;
-		};
-
-		_taskMap["3-name"] = []() {
-
-			std::string cmd = "./3-name";
-			std::cout << NP;
-
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			int exist = fs::exists("cisfun");
-			exist ? std::cout << OK : std::cout << KO;
-
-			return !status && exist;
-		};
-
-		_taskMap["100-intel"] = []() {
-
-			std::string cmd = "./100-intel";
-
-			std::cout << NP;
-
-			int status = system(cmd.c_str());
-			!status ? std::cout << OK : std::cout << KO;
-
-			// Check if file ends with .o
-			std::string obj = getenv("CFILE");
-
-			// repleace .c with .o
-			obj = obj.substr(0, obj.find_last_of('.')) + ".s";
-
-			int exist = fs::exists(obj);
-
-			std::ifstream file(obj);
-			std::string line;
-			bool found = false;
-
-			while (std::getline(file, line)) {
-				if (line.find("intel") != std::string::npos) {
-					found = true;
-					break;
-				}
-			}
-
-			found && exist ? std::cout << OK : std::cout << KO;
-
-			return !status && found && exist;
-		};
-
-	}
 
     Checker::~Checker() {
 		footer();
     }
-
-	bool Checker::_is0x00(const std::string& file) const {
-		return _taskMap.find(file) != _taskMap.end();
-	}
 
     void Checker::usage() const {
         std::cout << "Usage: alx-checker [options] [file]" << std::endl;
@@ -409,23 +256,15 @@ namespace alx {
 
 			// Set env CFILE=main.c
 			setenv("CFILE", "main.c", 1);
-			bool status = _taskMap.at(fileName)(); // error while using [] instead of at()
-			if (status) {
-				std::cout << SUCCESS << std::endl;
-			} else {
-				std::cout << FAILED << std::endl;
-			}
+			bool status = _taskProjectMap.at(fileName)(); // error while using [] instead of at()
+			status ? std::cout << SUCCESS << std::endl : std::cout << FAILED << std::endl;
 			return ;
 		}
 
 		// Check the file using betty
 		std::string cmd = "betty " + fileName + " > /dev/null 2>&1";
 		int status = system(cmd.c_str());
-		if (status != 0) {
-			std::cout << KO;
-		} else {
-			std::cout << OK;
-		}
+		!status ? std::cout << OK : std::cout << KO;
 
 		if (fileName.empty()) {
 			throw std::runtime_error("Project file is empty.");
