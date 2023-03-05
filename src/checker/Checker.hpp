@@ -69,8 +69,9 @@ namespace alx {
 
 		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
 
-		std::map<std::string, std::map<std::string, bool(*)(void)> > _projectMap;
-		std::map<std::string, bool(*)(void)> _taskMap;
+//		std::map<std::string, void(Checker::*)()> _projectMap;
+		std::map<std::string, std::function<void()>> _projectMap;
+		std::map<std::string, bool(*)(void)> _taskProjectMap;
 
     public:
         Checker();
@@ -132,6 +133,22 @@ namespace alx {
 		void footer() const;
 
 		void initProjectMap();
+
+		void init0x00();
+
+		void init0x01();
+
+		void init0x02();
+
+		void init0x03();
+
+		void init0x04();
+
+		void init0x05();
+
+		void init0x06();
+
+		void init0x07();
 	}; /* class Checker */
 
 } /* namespace alx */
