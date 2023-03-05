@@ -81,5 +81,62 @@ namespace alx
 		return {buff};
 	}
 
+	bool Checker::_checkScript(const std::string& file) const {
+
+		std::ifstream f(file);
+		std::string line;
+		int count = 0;
+
+
+		const std::string specialChars = "&&||;";
+		bool shebang = true;
+		bool endsWithNewLine = true;
+		bool hasSpecialChars = false;
+
+		while (std::getline(f, line)) {
+
+			// check if the file has a shebang
+			if (count == 0 && line != "#!/bin/bash")
+				shebang = false;
+
+			// check if the file has special characters
+			if (count == 1 && line.find_first_of(specialChars) != std::string::npos)
+				hasSpecialChars = true;
+
+			count++;
+		}
+		f.close();
+
+		std::ifstream f2(file);
+		std::string fileContent;
+		char c;
+		int newLineCount = 0;
+		while (f2.get(c)) {
+			if (c == '\n')
+				newLineCount++;
+			fileContent += c;
+		}
+		f2.close();
+
+		// std::cout << "newLineCount: " << newLineCount << std::endl;
+		if (fileContent.at(fileContent.size() - 1) != '\n')
+			endsWithNewLine = false;
+
+
+//		std::string result = (newLineCount == 2) ? "OK" : "KO";
+//		std::cout << "Contains 2 lines\t: " << ((newLineCount == 2) ? "OK" : "KO") << std::endl;
+//
+//
+//		result = (shebang) ? "OK" : "KO";
+//		std::cout << "Contains a Shebang\t: " << result << std::endl;
+//
+//		result = (endsWithNewLine) ? "OK" : "KO";
+//		std::cout << "Ends with a newline\t: " << result << std::endl;
+//
+//		result = (hasSpecialChars) ? "KO" : "OK";
+//		std::cout << "Has forbidden character\t: " << result << std::endl;
+//
+		return (newLineCount == 2 && shebang && endsWithNewLine && !hasSpecialChars);
+	}
 
 } /* alx namespace */

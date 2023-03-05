@@ -23,7 +23,7 @@ namespace alx {
         _isFtStudent = isFtStudent();
         _packageManager = _isMacos ? "brew" : "apt-get";
 
-		std::string command = "which " + _packageManager;
+		std::string command = "which " + _packageManager + " > /dev/null 2>&1";
 		int status = system(command.c_str());
 		if (status != 0) {
 			if (_isMacos) {
@@ -33,7 +33,7 @@ namespace alx {
 				// TODO: install apt-get
 			}
 		} else {
-			std::cout << _packageManager <<  " already installed!" << std::endl;
+			// std::cout << _packageManager <<  " already installed!" << std::endl;
 		}
 
         _dependencies = {

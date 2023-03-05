@@ -21,13 +21,18 @@
 #include <map>                        // std::map
 #include <dirent.h>                // opendir, readdir, closedir
 #include <cctype>                // std::tolower
-#include <ctype.h>                // tolower
 
 #include "Printer.hpp"
 #include "Installer.hpp"
 #include "config.hpp"
 
 namespace fs = std::filesystem;
+
+#define OK termcolor::green << std::setw(20) << std::left << "OK" << termcolor::reset
+#define KO termcolor::red << std::setw(20) << std::left << "KO" << termcolor::reset
+#define FAILED termcolor::red << std::setw(20) << std::left << "FAILED" << termcolor::reset
+#define SUCCESS termcolor::green << std::setw(20) << std::left << "SUCCESS" << termcolor::reset
+#define NP termcolor::bright_grey << std::setw(20) << std::left << "NOT PRESENT" << termcolor::reset
 
 namespace alx {
 
@@ -63,6 +68,9 @@ namespace alx {
 		files_t _projectFiles;
 
 		std::string _CFLAGS = "-Wall -Wextra -Werror -pedantic -std=c99";
+
+		std::map<std::string, std::map<std::string, bool(*)(void)> > _projectMap;
+		std::map<std::string, bool(*)(void)> _taskMap;
 
     public:
         Checker();
@@ -101,8 +109,6 @@ namespace alx {
 
 		std::string getParentDirectory(const std::string &path);
 
-        void _readDirectory(const std::string& directoryPath, files_t& files) const;
-
 		std::string _getMainFile(const std::string &file) const;
 
 		std::string _getCorrectOutput(const std::string &file) const;
@@ -115,6 +121,17 @@ namespace alx {
 
 		std::string _getCurrentDirectory() const;
 
+		bool _is0x00(const std::string &file) const;
+
+		void initTaskMap();
+
+		bool _checkScript(const std::string &file) const;
+
+		std::string _upperCase(const std::string &str) const;
+
+		void footer() const;
+
+		void initProjectMap();
 	}; /* class Checker */
 
 } /* namespace alx */

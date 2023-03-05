@@ -16,11 +16,10 @@
 int main(int ac, char **av) {
 
     try {
-		std::cout << "ALX_CHECKER_VERSION: " << ALX_CHECKER_VERSION << std::endl;
 
-		alx::Checker checker(--ac, ++av);
+      alx::Checker checker(--ac, ++av);
 
-		checker.checkProject();
+      checker.checkProject();
 
     } catch (const std::exception &e) {
         std::cerr << "[" << RED << "ERROR" << END << "]: " << e.what() << std::endl;
