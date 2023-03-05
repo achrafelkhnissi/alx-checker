@@ -83,3 +83,5 @@ This project is authored and maintained by:
 - [ ] Add a progress bar
 - [ ] For each project add 2 directories one for `test_files` and the other for `expected_output`
 - [ ] Install `libc6-dev-i386` for 32-bit compilation in 0x00 task 6
+- [ ] Docker file to run the checker in a container (check [Link](https://www.ibm.com/docs/en/cloud-private/3.1.1?topic=pyci-specifying-default-docker-storage-directory-by-using-bind-mount) [Link](https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169) [Link](https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory))
+  - Try `sudo dockerd --data-root /my/docker/data`
