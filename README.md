@@ -34,7 +34,7 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 
 <p align="center">  
 <img src ="./img/alx-checker.png">
-</p> -->
+</p>
 
 ## Requirements
 
