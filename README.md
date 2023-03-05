@@ -30,6 +30,12 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 
 <!-- ## Installation -->
 
+## Pre-release First Look
+
+<p align="center">  
+<img src ="./img/alx-checker.png">
+</p> -->
+
 ## Requirements
 
 - Clang 5.0 and later
