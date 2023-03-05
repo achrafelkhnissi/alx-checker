@@ -28,7 +28,6 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 
 ---
 
-<!-- ## Installation -->
 
 ## Pre-release First Look
 
@@ -36,19 +35,34 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 <img src ="./img/alx-checker.png">
 </p>
 
+## Installation
+
+To install the alx-checker tool, simply copy the following command and paste it into your terminal:
+
+```shell
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/achrafelkhnissi/alx-checker/main/install.sh)"
+```
+
+This command will download and run the [install.sh](./install.sh) script from this GitHub repository, which will install all necessary dependencies and configure the tool for use.
+
+- `sudo` is used to install the tool in the system directory, so that it can be used by any user on the system.
+  - If you do not have `sudo` installed, you can install it by running `apt-get install sudo` in your terminal.
+  - Note: sudo is needed in order to install Betty, the ALX coding style checker.
+  - If you already have `Betty` installed on your system you can remove the `sudo` command from the above command.
+- `sh` is used to run the script.
+  - The `-c` option specifies that the following argument should be treated as a command to execute.
+- `curl` is used to download the script from GitHub.
+  - If you do not have `curl` installed, you can install it by running `apt-get install curl` in your terminal.
+  - If you don't want to install `curl` you can download the script manually and run it.
+  - The `-fsSL` options are used to download the script without displaying any progress bar
+    - `-f` - Fail silently (no output at all) on server errors.
+    - `-s` - Silent mode. Don't show progress meter or error messages.
+    - `-S` - Show error. With -s, make curl show errors when they occur.
+    - `-L` - If the server reports that the requested page has moved to a different location (indicated with a Location: header and a 3XX response code), this option will make curl redo the request on the new place.
+
 ## Requirements
 
 - Clang 5.0 and later
-
-## Usage
-- Clone the repository: `git clone https://github.com/achrafelkhnissi/low-level-programming-checkers.git`
-- Copy your project to where your project's checker is located
-    - Example: `cp -r /path/to/0x03-debugging /path/to/0x03-checker`
-- Execute the following commands:
-    - `make betty`: Checks for betty coding style errors of all files
-    - `make [task number]`: Checks for one task if it has the correct output
-    - `make check-all`: Checks for all tasks at the same time
-    - `make clean`: Deletes generated files
 
 ## Author
 This project is authored and maintained by:
