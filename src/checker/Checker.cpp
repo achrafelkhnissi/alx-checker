@@ -127,7 +127,7 @@ namespace alx {
 		          << _upperCase("\nproject: " + _project) << termcolor::reset << std::endl << std::endl;
 
 		std::cout << termcolor::bold << termcolor::bright_blue << termcolor::underline;
-		std::cout << std::setw(20) << std::left << "TASKS"
+		std::cout << std::setw(25) << std::left << "TASKS"
 		          << std::setw(20) << std::left << "BETTY"
 				  << std::setw(20) << std::left << "COMPILATION"
 				  << std::setw(20) << std::left << "EXECUTION"
@@ -153,7 +153,7 @@ namespace alx {
 			}
 		} /* for */
 		std::cout << termcolor::italic << termcolor::yellow <<
-		std::setw(20) << std::left << "README.md" << termcolor::reset;
+		std::setw(25) << std::left << "README.md" << termcolor::reset;
 		std::cout << NP << NP << NP << NP;
 		if (!readmeFound || fs::is_empty(_projectPath + "/README.md"))
 			std::cout << termcolor::red << "FAILED" << termcolor::reset << std::endl;
@@ -243,7 +243,7 @@ namespace alx {
 		 */
 
 		std::cout << termcolor::italic << termcolor::yellow <<
-		std::setw(20) << std::left << fileName << termcolor::reset;
+		std::setw(25) << std::left << fileName << termcolor::reset;
 
 		// TODO: handle the case when the file is not a .c file
 		if (fileName.find(".c") == std::string::npos) {
@@ -252,7 +252,11 @@ namespace alx {
 			if (!_checkScript(fileName))
 				std::cout << KO;
 
-			std::cout << OK;
+			// todo: put all special case filenames in a vector
+			if (fileName == "101-crackme_password")
+				std::cout << NP;
+			else
+				std::cout << OK;
 
 			// Set env CFILE=main.c
 			setenv("CFILE", "main.c", 1);
@@ -260,7 +264,8 @@ namespace alx {
 			status ? std::cout << SUCCESS << std::endl : std::cout << FAILED << std::endl;
 
 
-			if (_flag != FILE)
+			// todo: put all special case filenames in a vector
+			if (_flag != FILE || fileName == "101-crackme_password")
 				return ;
 
 			std::cout << "========== OUTPUT ==========" << std::endl;
