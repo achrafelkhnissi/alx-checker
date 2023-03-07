@@ -53,27 +53,27 @@ function print_usage() {
 }
 
 function print_version() {
-  echo "$SCRIPT_NAME 1.0"
+  echo -e "$SCRIPT_NAME 1.0"
 }
 
 function print_error() {
-  echo "${RED}ERROR: $1 ${END}"
+  echo -r "[${RED}ERROR${END}]: $1"
 }
 
 function print_warning() {
-  echo "${YELLOW}WARNING: $1 ${END}"
+  echo -e "[${YELLOW}WARNING${END}]: $1"
 }
 
 function print_info() {
-  echo "${PURPLE}INFO: $1 ${END}"
+  echo -e "[${PURPLE}INFO${END}]: $1"
 }
 
 function print_success() {
-  echo "${GREEN}SUCCESS: $1 ${END}"
+  echo -e "[${GREEN}SUCCESS${END}]: $1"
 }
 
 function print_debug() {
-  echo "${BLUE}DEBUG: $1 ${END}"
+  echo -e "[${BLUE}DEBUG${END}]: $1"
 }
 
 # check if the project is installed
@@ -82,7 +82,7 @@ if command -v alx-checker &>/dev/null; then
   exit 1
 fi
 
-echo ; echo "${CYAN}${BOLD}${UNDERLINE}INSTALLING ALX CHECKER.. ${END}" ; echo
+echo ; echo -e "${CYAN}${BOLD}${UNDERLINE}INSTALLING ALX CHECKER.. ${END}" ; echo
 
 # check if betty is installed
 if ! command -v betty &>/dev/null && [ "$EUID" -ne 0 ]; then
@@ -139,3 +139,6 @@ if ! cmake --build ~/.alx-checker/build ; then
 fi
 
 print_success "The project is installed successfully"
+
+# exit with success
+exit 0
