@@ -390,16 +390,18 @@ namespace alx {
 				_error(MSG("Failed to change the current directory"), 0);
 			}
 
+			_cout.info("Pulling the latest changes...\n");
 			// pull the latest changes
 			status = system("git pull");
 			if (status != 0) {
 
+				_cout.error("Failed to pull the latest changes\n");
 				status = chdir(_projectPath.c_str());
 				if (status != 0) {
 					_error(MSG("Failed to change the current directory"), 0);
 				}
 
-				std::cout << "Removing ~/.alx-checker..." << std::endl;
+				_cout.info("Removing ~/.alx-checker...\n");
 				std::string rmCommand =  _sudo + "rm -rf " + alxPath_;
 				status = system(rmCommand.c_str());
 				if (status != 0) {
@@ -407,21 +409,33 @@ namespace alx {
 				}
 
 				// clone the repository
+				_cout.info("Cloning alx-checker...\n");
 				status = system(cloneCommand.c_str());
 				if (status != 0) {
 					_error(MSG("Failed to clone the repository"), 0);
 				}
 
-				// change the current directory to the cloned repository
-				status = chdir(alxPath_.c_str());
-				if (status != 0) {
-					_error(MSG("Failed to change the current directory"), 0);
-				}
 
 			}
+		} else {
+			_cout.info("~/.alx-checker does not exist\n");
+			_cout.info("Cloning alx-checker...\n");
+			// clone the repository
+			status = system(cloneCommand.c_str());
+			if (status != 0) {
+				_error(MSG("Failed to clone the repository"), 0);
+			}
+
+		}
+
+		// change the current directory to the cloned repository
+		status = chdir(alxPath_.c_str());
+		if (status != 0) {
+			_error(MSG("Failed to change the current directory"), 0);
 		}
 
 		// build the project
+		_cout.info("\nBuilding alx-checker...\n");
 		status = system(cmakeCommand.c_str());
 		if (status != 0) {
 			_error(MSG("Failed to build the project"), 0);
@@ -429,6 +443,7 @@ namespace alx {
 
 
 		// check if the alx-checker/bin directory is in the PATH
+		_cout.info("\nChecking if the alx-checker is in the PATH...\n");
 		std::string path = getenv("PATH");
 		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
 		if (path.find(alxPath) == std::string::npos) {
@@ -440,6 +455,7 @@ namespace alx {
 			std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
 
 			// add the executable to the PATH
+			_cout.info("Adding the alx-checker to the PATH...\n");
 			std::string exportCommand = "echo \"export PATH=$PATH:" + alxPath + "\" >> " + shellrc;
 			status = system(exportCommand.c_str());
 			if (status != 0) {
@@ -448,12 +464,13 @@ namespace alx {
 		}
 
 		// Check if the alx-checker is installed
+		_cout.info("\nChecking if the alx-checker is installed...\n");
 		status = system("which alx-checker");
 		if (status != 0) {
 			_error(MSG("Failed to update alx-checker"), 0);
 		}
 
-		std::cout << "alx-checker updated successfully!" << std::endl;
+		_cout.success("\nalx-checker has been updated successfully\n");
 
 	} /* update */
 
