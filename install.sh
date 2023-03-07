@@ -119,11 +119,19 @@ fi
 print_info "Adding project bin to the PATH..."
 # shellcheck disable=SC2046
 echo "export PATH=\$PATH:~/.alx-checker/bin" >>~/.$(basename ${SHELL})rc
+source "${HOME}.$(basename ${SHELL})rc"
 
 # build the project with cmake
 print_info "Building the project..."
 if ! cmake -S ~/.alx-checker -B ~/.alx-checker/build; then
   print_error "Failed to build the project"
+  exit 1
+fi
+
+# install the project
+print_info "Installing the project..."
+if ! cmake --build ~/.alx-checker/build ; then
+  print_error "Failed to install the project"
   exit 1
 fi
 
