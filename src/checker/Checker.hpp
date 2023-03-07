@@ -26,6 +26,8 @@
 #include "Installer.hpp"
 #include "config.hpp"
 
+#define MSG(msg) (std::string(fs::path(__FILE__).filename()) + ":" + std::to_string(__LINE__) + ": " + msg)
+
 namespace fs = std::filesystem;
 
 #define OK termcolor::green << std::setw(20) << std::left << "OK" << termcolor::reset
@@ -138,6 +140,8 @@ namespace alx {
 		void printFileContent(const std::string &fileName);
 
 		void clean() const; // todo: clean project from object files and executables
+
+		void _error(const std::string &msg, int err) const;
 	}; /* class Checker */
 
 } /* namespace alx */

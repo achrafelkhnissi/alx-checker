@@ -149,9 +149,29 @@ namespace alx {
 			case 0x00:
 				_projectMap["0x00-hello_world"] = [this] { init0x00(); };
 				break;
+			case 0x01:
+				_projectMap["0x01-variables_if_else_while"] = [this] { init0x01(); };
+				break;
+			case 0x02:
+				_projectMap["0x02-functions_nested_loops"] = [this] { init0x02(); };
+				break;
+			case 0x03:
+				_projectMap["0x03-debugging"] = [this] { init0x03(); };
+				break;
+			case 0x04:
+				_projectMap["0x04-more_functions_nested_loops"] = [this] { init0x04(); };
+				break;
+			case 0x05:
+				_projectMap["0x05-pointers_arrays_strings"] = [this] { init0x05(); };
+				break;
+			case 0x06:
+				_projectMap["0x06-pointers_arrays_strings"] = [this] { init0x06(); };
+				break;
 			case 0x07:
 				_projectMap["0x07-pointers_arrays_strings"] = [this] { init0x07(); };
 				break;
+			default:
+				_error(MSG(_project + "/ is not a valid alx project name!"), 0);
 		}
 
 
@@ -167,11 +187,11 @@ namespace alx {
 
 	}
 
-	// void Checker::init0x01() {}
-	// void Checker::init0x02() {}
-	// void Checker::init0x03() {}
-	// void Checker::init0x04() {}
-	// void Checker::init0x05() {}
-	// void Checker::init0x06() {}
+	 void Checker::init0x01() {}
+	 void Checker::init0x02() {}
+	 void Checker::init0x03() {}
+	 void Checker::init0x04() {}
+	 void Checker::init0x05() {}
+	 void Checker::init0x06() {}
 
 } /* alx */

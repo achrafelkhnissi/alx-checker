@@ -65,8 +65,8 @@ namespace alx {
 	// TODO: Handle multiple flags
     void Checker::checkArgs(int argc, char *argv[]) {
         if (argc > 2) {
+			_error(MSG("Too many arguments"), 0);
             usage();
-            throw std::invalid_argument("Too many arguments.");
         }
 
         for (int i = 0; i < argc; i++) {
@@ -88,16 +88,16 @@ namespace alx {
                     _file.assign(argv[i + 1]);
                     i++;
                 } else
-                    throw std::invalid_argument("-f or --file option requires one argument.");
+					_error(MSG("-f or --file option requires one argument."), 0);
             } else if (strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "--output") == 0) {
                 if (i + 1 < argc) {
 					_flag = OUTPUT;
 					_output.assign(argv[i + 1]);
                     i++;
                 } else
-                    throw std::invalid_argument("-o or --output option requires one argument.");
+                    _error(MSG("-o or --output option requires one argument."), 0);
             } else
-                throw std::invalid_argument("Unknown option " + std::string(argv[i]));
+                _error("Unknown option " + std::string(argv[i]), 0);
         }
 
 //        if (file.empty())
@@ -148,7 +148,7 @@ namespace alx {
 			}
 			if (fileName == "README.md") {
 				if (fileName.empty())
-					throw std::runtime_error("README.md file is empty");
+					_error(MSG("README.md file is empty"), 0);
 				readmeFound = true;
 			}
 		} /* for */
@@ -167,7 +167,7 @@ namespace alx {
         struct dirent *entry;
 
         if (!(dir = opendir(directoryPath.c_str()))) {
-            throw std::runtime_error("Failed to open <" + directoryPath + "> directory");
+			_error(MSG("Failed to open <" + directoryPath + "> directory"), 0);
         }
 
         while ((entry = readdir(dir)) != nullptr) {
@@ -182,7 +182,7 @@ namespace alx {
 
                 std::ifstream file(filePath);
 				if (!file.is_open()) {
-					throw std::runtime_error("Failed to open <" + filePath + "> file");
+					_error(MSG("Failed to open <" + filePath + "> file"), 0);
 				}
 
                 std::string fileContent((std::istreambuf_iterator<char>(file)),
@@ -200,15 +200,13 @@ namespace alx {
 		std::string cmd = "svn export " + _testFilesUrl;
 
 		// check if the directory exists
-		if (directoryExists("test_files")) {
-			_cout.print("Directory <tests> already exists.", RED);
-			_cout.print("Please remove it before downloading the tests.", RED);
-			exit(EXIT_FAILURE);
-		}
+		if (directoryExists("test_files"))
+			_error(MSG("Directory <test_files> already exists.\n"
+					   "Please remove it before downloading the tests"), 0);
 
 		int status = system(cmd.c_str());
 		if (status != 0) {
-			throw std::runtime_error("Failed to download tests."); // TODO: change the name of the directory ?
+			_error(MSG("Failed to download tests"), 0);
 		} else {
 			_cout.print("Tests downloaded successfully.", GREEN);
 		}
@@ -271,9 +269,8 @@ namespace alx {
 			std::cout << "========== OUTPUT ==========" << std::endl;
 			std::string cmd = "cat test_output/" + fileName + ".out";
 			status = system(cmd.c_str());
-			if (status != 0) {
-				throw std::runtime_error(strerror(errno));
-			}
+			if (status != 0)
+				_error(MSG("Failed to print output file"), 1);
 			std::cout << "============================" << std::endl;
 			return ;
 		}
@@ -284,7 +281,7 @@ namespace alx {
 		!betty ? std::cout << OK : std::cout << KO;
 
 		if (fileName.empty()) {
-			throw std::runtime_error("Project file is empty.");
+			_error(MSG("Project file is empty"), 0);
 		}
 
 		// Create a bin/ directory if it doesn't exist
@@ -365,33 +362,33 @@ namespace alx {
 		if (directoryExists("~/.alx-checker")) {
 			status = system("rm -rf ~/.alx-checker");
 			if (status != 0) {
-				throw std::runtime_error("Failed to remove ~/.alx-checker");
+				_error(MSG("Failed to remove ~/.alx-checker"), 0);
 			}
 		}
 
 		// clone the repository
 		status = system(cloneCommand.c_str());
 		if (status != 0) {
-			throw std::runtime_error(strerror(errno));
+			_error(MSG("Failed to clone the repository"), 0);
 		}
 
 		// change the current directory to the cloned repository
 		status = chdir("~/.alx-checker");
 		if (status != 0) {
-			throw std::runtime_error(strerror(errno));
+			_error(MSG("Failed to change the current directory"), 0);
 		}
 
 		// build the project
 		status = system(cmakeCommand.c_str());
 		if (status != 0) {
-			throw std::runtime_error(strerror(errno));
+			_error(MSG("Failed to build the project"), 0);
 		}
 
 		// add the executable to the PATH
 		std::string path = getenv("PATH");
 		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
 		if (setenv("PATH", (alxPath + ":" + path).c_str(), 1)) {
-			throw std::runtime_error(strerror(errno));
+			_error(MSG("Failed to add alx-checker to the PATH"), 0);
 		}
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
@@ -406,6 +403,11 @@ namespace alx {
 				  << termcolor::yellow << "@suprivada" << termcolor::reset
 				  << " on Twitter." << std::endl;
 		std::cout << std::endl;
+	}
+
+	void Checker::_error(const std::string &msg, int err) const {
+		std::string errorMsg = msg + (!err ? "." : (std::string(" | ") + strerror(errno)));
+		throw std::runtime_error(errorMsg);
 	}
 
 } /* namespace alx */

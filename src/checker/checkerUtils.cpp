@@ -137,7 +137,7 @@ namespace alx
 	void Checker::printFileContent(const std::string& fileName) {
 		std::ifstream file(fileName);
 		if (!file.is_open()) {
-			throw std::runtime_error("Failed to open <" + fileName + "> file");
+			_error(MSG("Could not open file: " + fileName), 0);
 		}
 
 		std::string fileContent((std::istreambuf_iterator<char>(file)),
