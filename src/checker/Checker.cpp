@@ -418,7 +418,7 @@ namespace alx {
 
 			}
 		} else {
-			_cout.info("~/.alx-checker does not exist\n");
+			_cout.info("~/.alx-checker does not exist.");
 			_cout.info("Cloning alx-checker...\n");
 			// clone the repository
 			status = system(cloneCommand.c_str());
@@ -435,7 +435,8 @@ namespace alx {
 		}
 
 		// build the project
-		_cout.info("\nBuilding alx-checker...\n");
+		std::cout << std::endl;
+		_cout.info("Building alx-checker...\n");
 		status = system(cmakeCommand.c_str());
 		if (status != 0) {
 			_error(MSG("Failed to build the project"), 0);
@@ -443,7 +444,8 @@ namespace alx {
 
 
 		// check if the alx-checker/bin directory is in the PATH
-		_cout.info("\nChecking if the alx-checker is in the PATH...\n");
+		std::cout << std::endl;
+		_cout.info("Checking if the alx-checker is in the PATH...\n");
 		std::string path = getenv("PATH");
 		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
 		if (path.find(alxPath) == std::string::npos) {
@@ -464,7 +466,7 @@ namespace alx {
 		}
 
 		// Check if the alx-checker is installed
-		_cout.info("\nChecking if the alx-checker is installed...\n");
+		_cout.info("Checking if the alx-checker is installed...\n");
 		status = system("which alx-checker");
 		if (status != 0) {
 			_error(MSG("Failed to update alx-checker"), 0);
