@@ -375,34 +375,50 @@ namespace alx {
 
 		std::string cloneCommand = "git clone https://github.com/achrafelkhnissi/alx-checker.git ~/.alx-checker";
 		std::string cmakeCommand = "cmake -B build && cmake --build build";
+		std::string alxPath_ = std::string(getenv("HOME")) + "/.alx-checker";
 
 		// TODO: check if the program is running as root
 
+		_cout.info("Updating alx-checker...\n");
 
-		std::cout << "Updating alx-checker..." << std::endl;
-
-
-		std::string alxPath_ = std::string(getenv("HOME")) + "/.alx-checker";
 		// check if the directory exists
 		if (directoryExists(alxPath_)) {
-			std::cout << "Removing ~/.alx-checker..." << std::endl;
-			std::string rmCommand =  _sudo + "rm -rf " + alxPath_;
-			status = system(rmCommand.c_str());
+
+			// change the current directory to the cloned repository
+			status = chdir(alxPath_.c_str());
 			if (status != 0) {
-				_error(MSG("Failed to remove ~/.alx-checker"), 0);
+				_error(MSG("Failed to change the current directory"), 0);
 			}
-		}
 
-		// clone the repository
-		status = system(cloneCommand.c_str());
-		if (status != 0) {
-			_error(MSG("Failed to clone the repository"), 0);
-		}
+			// pull the latest changes
+			status = system("git pull");
+			if (status != 0) {
 
-		// change the current directory to the cloned repository
-		status = chdir(alxPath_.c_str());
-		if (status != 0) {
-			_error(MSG("Failed to change the current directory"), 0);
+				status = chdir(_projectPath.c_str());
+				if (status != 0) {
+					_error(MSG("Failed to change the current directory"), 0);
+				}
+
+				std::cout << "Removing ~/.alx-checker..." << std::endl;
+				std::string rmCommand =  _sudo + "rm -rf " + alxPath_;
+				status = system(rmCommand.c_str());
+				if (status != 0) {
+					_error(MSG("Failed to remove ~/.alx-checker"), 0);
+				}
+
+				// clone the repository
+				status = system(cloneCommand.c_str());
+				if (status != 0) {
+					_error(MSG("Failed to clone the repository"), 0);
+				}
+
+				// change the current directory to the cloned repository
+				status = chdir(alxPath_.c_str());
+				if (status != 0) {
+					_error(MSG("Failed to change the current directory"), 0);
+				}
+
+			}
 		}
 
 		// build the project
@@ -411,33 +427,31 @@ namespace alx {
 			_error(MSG("Failed to build the project"), 0);
 		}
 
-		// add the executable to the PATH
+
+		// check if the alx-checker/bin directory is in the PATH
 		std::string path = getenv("PATH");
 		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
-		std::string shell = _getBasename(getenv("SHELL"));
+		if (path.find(alxPath) == std::string::npos) {
 
-		if (setenv("PATH", (alxPath + ":" + path).c_str(), 1)) {
-			_error(MSG("Failed to add alx-checker to the PATH"), 0);
+			// get the shell
+			std::string shell = getenv("SHELL");
+
+			// get the shellrc
+			std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
+
+			// add the executable to the PATH
+			std::string exportCommand = "echo \"export PATH=$PATH:" + alxPath + "\" >> " + shellrc;
+			status = system(exportCommand.c_str());
+			if (status != 0) {
+				_error(MSG("Failed to add the executable to the PATH"), 0);
+			}
 		}
 
-		std::string exportCommand = "echo \"export PATH=" + alxPath + ":$PATH" + "\" >> ~/." + shell + "rc";
-		status = system(exportCommand.c_str());
+		// Check if the alx-checker is installed
+		status = system("which alx-checker");
 		if (status != 0) {
-			_error(MSG("Failed to add alx-checker to the PATH"), 0);
+			_error(MSG("Failed to update alx-checker"), 0);
 		}
-
-		std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
-		std::string sourceCommand = shell + "\"source " + shellrc + "\"";
-		status = system(sourceCommand.c_str());
-		if (status != 0) {
-			_error(MSG("Failed to add alx-checker to the PATH"), 0);
-		}
-
-//		std::string cpCommand = _sudo + " cp " + alxPath_ + "/bin/alx-checker /usr/local/bin/";
-//		status = system(cpCommand.c_str());
-//		if (status != 0) {
-//			_error(MSG("Failed to move alx-checker to /usr/local/bin"), 0);
-//		}
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
