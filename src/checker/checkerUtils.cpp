@@ -63,6 +63,9 @@ namespace alx
 
 	bool Checker::_checkScript(const std::string& file) const {
 
+		if (file == "101-crackme_password" || file == "102-crackme" || file == "103-keygen_me")
+			return true;
+
 		std::ifstream f(file);
 		std::string line;
 		int count = 0;
