@@ -4,6 +4,7 @@
 
 #include "Checker.hpp"
 #include <functional>
+#include <sstream>
 
 namespace alx {
 
@@ -16,10 +17,12 @@ namespace alx {
 			file >> password;
 			file.close();
 
+			std::cout << NP << NP;
+
 			// check if the password is correct
 			bool correct = password == "abc123";
 
-			std::cout << NP << NP << NP;
+			correct ? std::cout << OK : std::cout << KO;
 
 			return correct;
 		};
@@ -135,22 +138,40 @@ namespace alx {
 		 * Then I used = std::bind(&Checker::init0x00, this); and it worked!
 		 * But I found a better way to do it using lambda functions.
 		 */
-		_projectMap["0x00-hello_world"] = [this] { init0x00(); }; // works
-		_projectMap["0x01-variables_if_else_while"] = [this] { init0x01(); };
-		_projectMap["0x02-functions_nested_loops"] = [this] { init0x02(); };
-		_projectMap["0x03-debugging"] = [this] { init0x03(); };
-		_projectMap["0x04-more_functions_nested_loops"] = [this] { init0x04(); };
-		_projectMap["0x05-pointers_arrays_strings"] = [this] { init0x05(); };
-		_projectMap["0x06-pointers_arrays_strings"] = [this] { init0x06(); };
-		_projectMap["0x07-pointers_arrays_strings"] = [this] { init0x07(); };
+
+		// get project prefix number
+		int projectNumber_;
+		std::istringstream iss(_project);
+		iss >> std::hex >> projectNumber_;
+
+
+		switch (projectNumber_) {
+			case 0x00:
+				_projectMap["0x00-hello_world"] = [this] { init0x00(); };
+				break;
+			case 0x07:
+				_projectMap["0x07-pointers_arrays_strings"] = [this] { init0x07(); };
+				break;
+		}
+
+
+		// todo: find why this doesn't work
+		// _projectMap["0x00-hello_world"] = [this] { init0x00(); }; // works
+		// _projectMap["0x01-variables_if_else_while"] = [this] { init0x01(); };
+		// _projectMap["0x02-functions_nested_loops"] = [this] { init0x02(); };
+		// _projectMap["0x03-debugging"] = [this] { init0x03(); };
+		// _projectMap["0x04-more_functions_nested_loops"] = [this] { init0x04(); };
+		// _projectMap["0x05-pointers_arrays_strings"] = [this] { init0x05(); };
+		// _projectMap["0x06-pointers_arrays_strings"] = [this] { init0x06(); };
+		// _projectMap["0x07-pointers_arrays_strings"] = [this] { init0x07(); };
 
 	}
 
-	void Checker::init0x01() {}
-	void Checker::init0x02() {}
-	void Checker::init0x03() {}
-	void Checker::init0x04() {}
-	void Checker::init0x05() {}
-	void Checker::init0x06() {}
+	// void Checker::init0x01() {}
+	// void Checker::init0x02() {}
+	// void Checker::init0x03() {}
+	// void Checker::init0x04() {}
+	// void Checker::init0x05() {}
+	// void Checker::init0x06() {}
 
 } /* alx */
