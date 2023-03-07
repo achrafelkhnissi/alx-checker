@@ -40,7 +40,6 @@ namespace alx {
 			// repleace .c with .o
 			obj = obj.substr(0, obj.find_last_of('.')) + ".o";
 
-//			std::cout << "`.o` file created\t: ";
 			int exist = fs::exists(obj);
 			exist ? std::cout << OK : std::cout << KO;
 
@@ -122,11 +121,11 @@ namespace alx {
 			return true;
 		};
 	}
-	 void Checker::init0x02() { std::cout << "init0x02" << std::endl; }
-	 void Checker::init0x03() { std::cout << "init0x03" << std::endl; }
-	 void Checker::init0x04() { std::cout << "init0x04" << std::endl; }
-	 void Checker::init0x05() { std::cout << "init0x05" << std::endl; }
-	 void Checker::init0x06() { std::cout << "init0x06" << std::endl; }
+	 void Checker::init0x02() { }
+	 void Checker::init0x03() { }
+	 void Checker::init0x04() { }
+	 void Checker::init0x05() { }
+	 void Checker::init0x06() { }
 
 	void Checker::init0x07() {
 
