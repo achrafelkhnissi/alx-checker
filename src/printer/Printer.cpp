@@ -5,6 +5,7 @@
  */
 
 #include "Printer.hpp"
+#include <iomanip>
 
 namespace alx {
 
@@ -85,8 +86,8 @@ namespace alx {
      * @param text : text to print
      */
     void Printer::info(const std::string &text) const {
-        std::cout << "[ " << BLUE << "INFO" << END << " ]: ";
-        std::cout << text;
+		std::string info = "[ " BLUE "INFO" END " ]: " + text;
+        std::cout << std::setw(70) << std::left << info;
     }
 
 	void Printer::yellow(const std::string &text) const {
