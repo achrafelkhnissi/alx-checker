@@ -31,13 +31,14 @@ namespace alx {
 		std::string parent_dir = getParentDirectory(_projectPath);
 		_testFilesUrl += parent_dir + "/trunk/" + _project + "/test_files";
 
+		checkArgs(ac, av);
+
 		_installer.checkDependencies();
 		if (!_installer.getDependencies().empty())
 			_installer.installDependencies();
 		else
 			_cout.info("No dependencies to install.");
 
-		checkArgs(ac, av);
 
 		// After checking the arguments, we can display the banner.
 		banner();
@@ -69,13 +70,16 @@ namespace alx {
         for (int i = 0; i < argc; i++) {
 			if (strcmp(argv[i], "--update") == 0) {
 				_update();
+				exit(EXIT_SUCCESS);
 			}
 			if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--all") == 0) {
 				_flag = ALL; // it's not necessary
 			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
                 usage();
+				exit(EXIT_SUCCESS);
             } else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
                 printVersion();
+				exit(EXIT_SUCCESS);
             } else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) {
 				_flag = FILE;
                 if (i + 1 < argc) {
