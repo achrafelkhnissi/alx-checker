@@ -309,7 +309,8 @@ namespace alx {
 		std::string executable = fileName.substr(0, fileName.find_last_of('.'));
 
 		// Compile the file
-		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " test_files/_putchar.c " + main + " -o " + "bin/" + executable;
+		std::string dependencies = getTaskFilesDependencies();
+		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + dependencies + main + " -o " + "bin/" + executable;
 		int compile = system(command.c_str());
 		compile == -1 ? std::cout << KO : std::cout << OK;
 
@@ -350,6 +351,22 @@ namespace alx {
 
 	} /* _checkProjectFile */
 
+	std::string Checker::getTaskFilesDependencies() const {
+
+		std::string dependencies = "";
+		std::string testFilesPath = _projectPath + "/test_files/";
+
+		for (const auto& file : fs::directory_iterator(testFilesPath)) {
+			std::string fileName = file.path().filename().string();
+
+			// check if the filename contains the string main
+			if (fileName.find("main") != std::string::npos) {
+				dependencies += testFilesPath + fileName + " ";
+			}
+		} /* for */
+
+		return dependencies;
+	}
 
 	// todo: fix update
 	void Checker::_update() const {

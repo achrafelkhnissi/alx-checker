@@ -142,6 +142,8 @@ namespace alx {
 		void clean() const; // todo: clean project from object files and executables
 
 		void _error(const std::string &msg, int err) const;
+
+		std::string getTaskFilesDependencies() const;
 	}; /* class Checker */
 
 } /* namespace alx */
