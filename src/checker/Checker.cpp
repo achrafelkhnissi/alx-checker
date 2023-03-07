@@ -311,6 +311,7 @@ namespace alx {
 		// Compile the file
 		std::string dependencies = getTaskFilesDependencies();
 		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + dependencies + main + " -o " + "bin/" + executable;
+		std::cout << command << std::endl;
 		int compile = system(command.c_str());
 		compile == -1 ? std::cout << KO : std::cout << OK;
 
