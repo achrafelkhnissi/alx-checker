@@ -311,7 +311,6 @@ namespace alx {
 		// Compile the file
 		std::string dependencies = getTaskFilesDependencies();
 		std::string command = "gcc -I . " + _CFLAGS + " " + fileName + " " + dependencies + main + " -o " + "bin/" + executable;
-		std::cout << command << std::endl;
 		int compile = system(command.c_str());
 		compile == -1 ? std::cout << KO : std::cout << OK;
 
@@ -361,7 +360,7 @@ namespace alx {
 			std::string fileName = file.path().filename().string();
 
 			// check if the filename contains the string main
-			if (fileName.find("main") != std::string::npos) {
+			if (fileName.find("main") == std::string::npos) {
 				dependencies += testFilesPath + fileName + " ";
 			}
 		} /* for */
