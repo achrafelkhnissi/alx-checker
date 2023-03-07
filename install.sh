@@ -18,6 +18,7 @@ declare -x SCRIPT_ARGS_ARRAY_COUNT="${#SCRIPT_ARGS_ARRAY[@]}"
 declare -x SCRIPT_ARGS_ARRAY_FIRST="${SCRIPT_ARGS_ARRAY[0]}"
 
 declare -x ALX_CHECKER_DIR="$HOME/.alx-checker"
+declare -x SHELLRC_FILE="${HOME}/.$(basename "${SHELL}")rc"
 
 declare -x YELLOW="\033[1;93m"
 declare -x PURPLE="\033[0;95m"
@@ -116,10 +117,12 @@ else
 fi
 
 # add project bin to the PATH
-print_info "Adding project bin to the PATH..."
 # shellcheck disable=SC2046
-echo "export PATH=\$PATH:~/.alx-checker/bin" >>~/.$(basename ${SHELL})rc
-source "${HOME}.$(basename ${SHELL})rc"
+if ! grep -q "export PATH=\$PATH:~/.alx-checker/bin" "${SHELLRC_FILE}"; then
+  print_info "Adding project bin to the PATH..."
+  echo "export PATH=\$PATH:~/.alx-checker/bin" >> "${SHELLRC_FILE}"
+  source "${SHELLRC_FILE}"
+fi
 
 # build the project with cmake
 print_info "Building the project..."
