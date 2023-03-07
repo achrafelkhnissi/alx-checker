@@ -447,21 +447,32 @@ namespace alx {
 		std::cout << std::endl;
 		_cout.info("Checking if the alx-checker is in the PATH...\n");
 		std::string path = getenv("PATH");
-		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
-		if (path.find(alxPath) == std::string::npos) {
+		if (path.find(alxPath_) == std::string::npos) {
+
+			_error(MSG("The alx-checker is not in the PATH"), 0);
 
 			// get the shell
 			std::string shell = getenv("SHELL");
 
 			// get the shellrc
-			std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
+			std::string shellrc = std::string(getenv("HOME")) + "/." + _getBasename(shell) + "rc";
 
 			// add the executable to the PATH
 			_cout.info("Adding the alx-checker to the PATH...\n");
-			std::string exportCommand = "echo \"export PATH=$PATH:" + alxPath + "\" >> " + shellrc;
+			std::string alxBin = alxPath_ + "/bin";
+			std::string exportCommand = "echo \"export PATH=$PATH:" + alxBin + "\" >> " + shellrc;
+			std::cout << exportCommand << std::endl;
 			status = system(exportCommand.c_str());
 			if (status != 0) {
 				_error(MSG("Failed to add the executable to the PATH"), 0);
+			}
+
+			// updating the source
+			_cout.info("Updating the source...\n");
+			std::string sourceCommand = "source " + shellrc;
+			status = system(sourceCommand.c_str());
+			if (status != 0) {
+				_error(MSG("Failed to update the source"), 0);
 			}
 		}
 
