@@ -35,12 +35,16 @@ This repository contains a checker created for the ALX Low-Level Programming cou
 <img src ="./img/alx-checker.png">
 </p>
 
+>Note: N/A stands for Not Applicable and means that:
+>    - The requirement is not applicable to the task.
+>    - The output is random and can't be checked.
+
 ## Installation
 
 To install the alx-checker tool, simply copy the following command and paste it into your terminal:
 
 ```shell
-sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/achrafelkhnissi/alx-checker/main/install.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/achrafelkhnissi/alx-checker/main/install.sh)"
 ```
 
 This command will download and run the [install.sh](./install.sh) script from this GitHub repository, which will install all necessary dependencies and configure the tool for use.
@@ -49,7 +53,7 @@ This command will download and run the [install.sh](./install.sh) script from th
   - If you do not have `sudo` installed, you can install it by running `apt-get install sudo` in your terminal.
   - Note: sudo is needed in order to install Betty, the ALX coding style checker.
   - If you already have `Betty` installed on your system you can remove the `sudo` command from the above command.
-- `sh` is used to run the script.
+- `bash` is used to run the script.
   - The `-c` option specifies that the following argument should be treated as a command to execute.
 - `curl` is used to download the script from GitHub.
   - If you do not have `curl` installed, you can install it by running `apt-get install curl` in your terminal.
