@@ -106,3 +106,5 @@ This project is authored and maintained by:
   
 - [ ] Handle special files:
 	- 0x01-0/1 generates random output
+    - 0x03- add any file that doesn't have a main in its name to the the compiled list
+    - 0x05-101 find a way test 101-keygen.c
