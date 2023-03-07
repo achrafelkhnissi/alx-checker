@@ -427,7 +427,7 @@ namespace alx {
 		}
 
 		std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
-		std::string sourceCommand = "source " + shellrc;
+		std::string sourceCommand = shell + "\"source " + shellrc + "\"";
 		status = system(sourceCommand.c_str());
 		if (status != 0) {
 			_error(MSG("Failed to add alx-checker to the PATH"), 0);
