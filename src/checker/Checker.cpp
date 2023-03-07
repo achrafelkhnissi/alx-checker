@@ -374,13 +374,15 @@ namespace alx {
 
 		int status;
 
-		std::string cloneCommand = "git clone https://github.com/achrafelkhnissi/alx-checker.git ~/.alx-checker";
-		std::string cmakeCommand = "cmake -B build && cmake --build build";
+		std::string cloneCommand = "git clone https://github.com/achrafelkhnissi/alx-checker.git ~/.alx-checker > /dev/null 2>&1";
+		std::string cmakeCommand = "cmake -B build >/dev/null 2>&1 && cmake --build build > /dev/null 2>&1";
 		std::string alxPath_ = std::string(getenv("HOME")) + "/.alx-checker";
 
 		// TODO: check if the program is running as root
 
-		_cout.info("Updating alx-checker...\n");
+		std::cout << termcolor::yellow <<  std::endl;
+		std::cout << "============================================  UPDATE  ==============================================" << std::endl;
+		std::cout << termcolor::reset << std::endl;
 
 		// check if the directory exists
 		if (directoryExists(alxPath_)) {
@@ -391,42 +393,48 @@ namespace alx {
 				_error(MSG("Failed to change the current directory"), 0);
 			}
 
-			_cout.info("Pulling the latest changes...\n");
+			_cout.info("Pulling the latest changes... ");
 			// pull the latest changes
-			status = system("git pull");
+			status = system("git pull > /dev/null 2>&1");
 			if (status != 0) {
 
-				_cout.error("Failed to pull the latest changes\n");
+				std::cout << " [" << termcolor::red << "Failed" << termcolor::reset << "] " << std::endl;
+
+				std::string chdirCommand = "cd " + _projectPath + " > /dev/null 2>&1";
 				status = chdir(_projectPath.c_str());
 				if (status != 0) {
 					_error(MSG("Failed to change the current directory"), 0);
 				}
 
-				_cout.info("Removing ~/.alx-checker...\n");
-				std::string rmCommand =  _sudo + "rm -rf " + alxPath_;
+				_cout.info("Removing ~/.alx-checker...");
+				std::string rmCommand = _sudo + "rm -rf " + alxPath_ + " > /dev/null 2>&1";
 				status = system(rmCommand.c_str());
 				if (status != 0) {
 					_error(MSG("Failed to remove ~/.alx-checker"), 0);
 				}
+				std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] " << std::endl;
 
 				// clone the repository
-				_cout.info("Cloning alx-checker...\n");
+				_cout.info("Cloning alx-checker...");
 				status = system(cloneCommand.c_str());
 				if (status != 0) {
 					_error(MSG("Failed to clone the repository"), 0);
 				}
-
-
+				std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] " << std::endl;
+			} else {
+				std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] " << std::endl;
 			}
 		} else {
-			_cout.info("~/.alx-checker does not exist.");
-			_cout.info("Cloning alx-checker...\n");
+
+			_cout.warning("alx-checker is not installed on your system");
+
+			_cout.info("Cloning alx-checker...");
 			// clone the repository
 			status = system(cloneCommand.c_str());
 			if (status != 0) {
 				_error(MSG("Failed to clone the repository"), 0);
 			}
-
+			std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] "<< std::endl;
 		}
 
 		// change the current directory to the cloned repository
@@ -436,22 +444,20 @@ namespace alx {
 		}
 
 		// build the project
-		std::cout << std::endl;
-		_cout.info("Building alx-checker...\n");
+		_cout.info("Building alx-checker... ");
 		status = system(cmakeCommand.c_str());
 		if (status != 0) {
 			_error(MSG("Failed to build the project"), 0);
 		}
+		std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] "<< std::endl;
 
 
 		// check if the alx-checker/bin directory is in the PATH
-		std::cout << std::endl;
-		_cout.info("Checking if the alx-checker is in the PATH...\n");
+		_cout.info("Checking if the alx-checker is in the PATH...");
 		std::string path = getenv("PATH");
 		if (path.find(alxPath_) == std::string::npos) {
 
-			_error(MSG("The alx-checker is not in the PATH"), 0);
-
+			std::cout << " [" << termcolor::red << "Not found" << termcolor::reset << "] "<< std::endl;
 			// get the shell
 			std::string shell = getenv("SHELL");
 
@@ -459,32 +465,44 @@ namespace alx {
 			std::string shellrc = std::string(getenv("HOME")) + "/." + _getBasename(shell) + "rc";
 
 			// add the executable to the PATH
-			_cout.info("Adding the alx-checker to the PATH...\n");
+			_cout.info("Adding the alx-checker to the PATH...");
 			std::string alxBin = alxPath_ + "/bin";
-			std::string exportCommand = "echo \"export PATH=$PATH:" + alxBin + "\" >> " + shellrc;
+			std::string exportCommand = "echo \"export PATH=$PATH:" + alxBin + "\" >> " + shellrc + " > /dev/null 2>&1";
 			std::cout << exportCommand << std::endl;
 			status = system(exportCommand.c_str());
 			if (status != 0) {
 				_error(MSG("Failed to add the executable to the PATH"), 0);
 			}
+			std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] "<< std::endl;
 
 			// updating the source
-			_cout.info("Updating the source...\n");
+			_cout.info("Updating the source...");
 			std::string sourceCommand = "source " + shellrc;
 			status = system(sourceCommand.c_str());
 			if (status != 0) {
 				_error(MSG("Failed to update the source"), 0);
 			}
+			std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] "<< std::endl;
+		} else {
+			std::cout << " [" << termcolor::green << "Found" << termcolor::reset << "] "<< std::endl;
 		}
 
+
 		// Check if the alx-checker is installed
-		_cout.info("Checking if the alx-checker is installed...\n");
-		status = system("which alx-checker");
+		_cout.info("Checking if the alx-checker is installed... ");
+		status = system("which alx-checker > /dev/null 2>&1");
 		if (status != 0) {
 			_error(MSG("Failed to update alx-checker"), 0);
 		}
+		std::cout << " [" << termcolor::green << "Done" << termcolor::reset << "] "<< std::endl;
 
-		_cout.success("\nalx-checker has been updated successfully\n");
+		std::cout << std::endl;
+		std::cout << termcolor::green << termcolor::bold
+		 << "ALX-CHECKER IS UPDATED SUCCESSFULLY!" << termcolor::reset << std::endl;
+
+		std::cout << termcolor::yellow <<  std::endl;
+		std::cout << "====================================================================================================" << std::endl;
+		std::cout << termcolor::reset << std::endl;
 
 	} /* update */
 
