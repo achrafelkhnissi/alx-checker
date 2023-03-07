@@ -33,7 +33,7 @@ namespace fs = std::filesystem;
 #define OK termcolor::green << std::setw(20) << std::left << "OK" << termcolor::reset
 #define KO termcolor::red << std::setw(20) << std::left << "KO" << termcolor::reset
 #define FAILED termcolor::red << std::setw(20) << std::left << "FAILED" << termcolor::reset
-#define SUCCESS termcolor::green << std::setw(20) << std::left << "SUCCESS" << termcolor::reset
+#define SUCCESS termcolor::green << std::setw(20) << std::left << "PASSED" << termcolor::reset
 #define NP termcolor::bright_grey << std::setw(20) << std::left << "N/A" << termcolor::reset
 
 namespace alx {
