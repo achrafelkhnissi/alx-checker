@@ -26,6 +26,9 @@ namespace alx {
 	}
 
     bool Installer::checkDependency(const std::string &dependency) const {
+		if (dependency == "subversion") // TODO: find a better way to check for svn
+			return system("which svn > /dev/null 2>&1") == 0;
+
         std::string command = "which " + dependency + " > /dev/null 2>&1";
         return system(command.c_str()) == 0;
     }
