@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR) # was 3.22 previously
 
 project(alx-checker
         VERSION 0.1.0
