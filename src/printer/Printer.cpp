@@ -86,7 +86,7 @@ namespace alx {
      */
     void Printer::info(const std::string &text) const {
         std::cout << "[ " << BLUE << "INFO" << END << " ]: ";
-        std::cout << text << std::endl;
+        std::cout << text;
     }
 
 	void Printer::yellow(const std::string &text) const {
