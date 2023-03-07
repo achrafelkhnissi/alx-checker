@@ -275,6 +275,14 @@ namespace alx {
 			return ;
 		}
 
+		// handle special case files
+		try {
+			bool status = _taskProjectMap.at(fileName)();
+			status ? std::cout << NP << std::endl : std::cout << FAILED << std::endl;
+//			status ? std::cout << SUCCESS << std::endl : std::cout << FAILED << std::endl;
+			return ;
+		} catch (const std::out_of_range& e) {}
+
 		// Check the file using betty
 		std::string cmd = "betty " + fileName + " > /dev/null 2>&1";
 		int betty = system(cmd.c_str());
