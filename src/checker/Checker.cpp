@@ -39,6 +39,8 @@ namespace alx {
 		else
 			_cout.info("No dependencies to install.");
 
+		// todo; when a file requested, check if it exists
+		// todo: when a checking a directory, check if its a project directory
 
 		// After checking the arguments, we can display the banner.
 		banner();
