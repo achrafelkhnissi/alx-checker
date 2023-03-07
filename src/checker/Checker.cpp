@@ -59,6 +59,7 @@ namespace alx {
         std::cout << "  -h, --help\t\t\tShow this help message and exit" << std::endl;
         std::cout << "  -v, --version\t\t\tShow program's version number and exit" << std::endl;
         std::cout << "  -f, --file\t\t\tSpecify the file to check" << std::endl;
+		std::cout << "  -u, --update\t\t\tUpdate the checker" << std::endl;
         exit(EXIT_SUCCESS);
     }
 
@@ -70,7 +71,7 @@ namespace alx {
         }
 
         for (int i = 0; i < argc; i++) {
-			if (strcmp(argv[i], "--update") == 0) {
+			if (strcmp(argv[i], "-u") == 0 || strcmp(argv[i], "--update") == 0) {
 				_update();
 				exit(EXIT_SUCCESS);
 			}
