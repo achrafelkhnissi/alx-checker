@@ -360,15 +360,17 @@ namespace alx {
 		std::string cmakeCommand = "cmake -B build && cmake --build build";
 
 		// TODO: check if the program is running as root
-		std::string moveCommand = _sudo + "mv bin/alx-checker /usr/local/bin";
 
 
 		std::cout << "Updating alx-checker..." << std::endl;
 
 
+		std::string alxPath_ = std::string(getenv("HOME")) + "/.alx-checker";
 		// check if the directory exists
-		if (directoryExists("~/.alx-checker")) {
-			status = system("rm -rf ~/.alx-checker");
+		if (directoryExists(alxPath_)) {
+			std::cout << "Removing ~/.alx-checker..." << std::endl;
+			std::string rmCommand =  _sudo + "rm -rf " + alxPath_;
+			status = system(rmCommand.c_str());
 			if (status != 0) {
 				_error(MSG("Failed to remove ~/.alx-checker"), 0);
 			}
@@ -381,7 +383,7 @@ namespace alx {
 		}
 
 		// change the current directory to the cloned repository
-		status = chdir("~/.alx-checker");
+		status = chdir(alxPath_.c_str());
 		if (status != 0) {
 			_error(MSG("Failed to change the current directory"), 0);
 		}
@@ -395,9 +397,30 @@ namespace alx {
 		// add the executable to the PATH
 		std::string path = getenv("PATH");
 		std::string alxPath = std::string(getenv("HOME")) + "/.alx-checker/bin";
+		std::string shell = _getBasename(getenv("SHELL"));
+
 		if (setenv("PATH", (alxPath + ":" + path).c_str(), 1)) {
 			_error(MSG("Failed to add alx-checker to the PATH"), 0);
 		}
+
+		std::string exportCommand = "echo \"export PATH=" + alxPath + ":$PATH" + "\" >> ~/." + shell + "rc";
+		status = system(exportCommand.c_str());
+		if (status != 0) {
+			_error(MSG("Failed to add alx-checker to the PATH"), 0);
+		}
+
+		std::string shellrc = std::string(getenv("HOME")) + "/." + shell + "rc";
+		std::string sourceCommand = "source " + shellrc;
+		status = system(sourceCommand.c_str());
+		if (status != 0) {
+			_error(MSG("Failed to add alx-checker to the PATH"), 0);
+		}
+
+//		std::string cpCommand = _sudo + " cp " + alxPath_ + "/bin/alx-checker /usr/local/bin/";
+//		status = system(cpCommand.c_str());
+//		if (status != 0) {
+//			_error(MSG("Failed to move alx-checker to /usr/local/bin"), 0);
+//		}
 
 		std::cout << "alx-checker updated successfully!" << std::endl;
 
