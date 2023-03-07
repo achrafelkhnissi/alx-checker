@@ -37,8 +37,8 @@ namespace alx {
 		}
 
         _dependencies = {
-                "svn",
-                "betty",
+			_isLinux ? "subversion" : "svn",
+			"betty",
         };
     } /* End of constructor */
 
