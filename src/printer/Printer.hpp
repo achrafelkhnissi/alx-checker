@@ -8,6 +8,38 @@
 #ifndef ALX_CHECKER_PRINT_HPP
 #define ALX_CHECKER_PRINT_HPP
 
+enum color {
+	black = 30,
+	red,
+	green,
+	yellow,
+	blue,
+	magenta,
+	cyan,
+	white,
+	grey
+};
+
+enum background {
+	b_black = 40,
+	b_red,
+	b_green,
+	b_yellow,
+	b_blue,
+	b_magenta,
+	b_cyan,
+	b_white,
+	b_grey
+};
+
+enum style {
+	bold = 1,
+	underline = 4,
+	blink = 5,
+	reverse = 7,
+	concealed = 8
+};
+
 /* Text Styles */
 #define END "\033[0m"
 #define BOLD "\033[1m"
@@ -81,6 +113,8 @@ namespace alx {
 		void red(const std::string& text) const;
 		void green(const std::string& text) const;
 		void cyan(const std::string& text) const;
+
+		void print(const std::string& text, enum color, enum background, enum style) const;
     };
 }
 
