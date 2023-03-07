@@ -11,15 +11,15 @@
 namespace alx {
 
     void Installer::checkDependencies() const {
-        _cout.info("Checking dependencies...\n");
+        _cout.info("Checking dependencies...");
 		auto it = _dependencies.begin();
 		while (it != _dependencies.end()) {
 			if (checkDependency(*it)) {
-				_cout.print("\t-Dependency `" + *it + "` is installed.\n", GREEN);
+				_cout.print("\t-Dependency `" + *it + "` is installed.", GREEN);
 				it = _dependencies.erase(it);
 				it = _dependencies.begin();
 			} else {
-				_cout.print("\t-Dependency `" + *it + "` is not installed.\n", RED);
+				_cout.print("\t-Dependency `" + *it + "` is not installed.", RED);
 				++it;
 			}
 		}
