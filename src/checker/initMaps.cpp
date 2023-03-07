@@ -152,6 +152,5 @@ namespace alx {
 	void Checker::init0x04() {}
 	void Checker::init0x05() {}
 	void Checker::init0x06() {}
-	void Checker::init0x07() {}
 
 } /* alx */
