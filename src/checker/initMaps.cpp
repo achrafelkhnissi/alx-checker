@@ -7,6 +7,24 @@
 
 namespace alx {
 
+	void Checker::init0x07() {
+		_taskProjectMap["101-crackme_password"] = []() {
+
+			// read the password from the file
+			std::ifstream file("101-crackme_password");
+			std::string password;
+			file >> password;
+			file.close();
+
+			// check if the password is correct
+			bool correct = password == "abc123";
+
+			std::cout << NP << NP << NP;
+
+			return correct;
+		};
+	}
+
 	void Checker::init0x00() {
 		_taskProjectMap["0-preprocessor"] = []() {
 			std::string cmd = "./0-preprocessor";
@@ -106,6 +124,7 @@ namespace alx {
 
 			return !status && found && exist;
 		};
+
 	}
 
 	void Checker::initProjectMap() {

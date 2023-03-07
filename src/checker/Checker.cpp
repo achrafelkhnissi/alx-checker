@@ -340,7 +340,9 @@ namespace alx {
 
 	} /* _checkProjectFile */
 
-		void Checker::_update() const {
+
+	// todo: fix update
+	void Checker::_update() const {
 
 		int status;
 
