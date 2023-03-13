@@ -88,8 +88,8 @@ This command will download and run the [install.sh](./install.sh) script from th
         <img alt="Twitter Profile" src="https://img.shields.io/badge/-Twitter-0072b1?style=flat&logo=Twitter&logoColor=white&link=https://www.linkedin.com/in/achrafelkhnissi/&color=1DA1F2" />
     </a>
     <span> * </span>
-    <a href="https://www.linkedin.com/in/achrafelkhnissi/">
-        <img alt="Discord Profile" src="https://img.shields.io/badge/-Discord-0072b1?style=flat&logo=Discord&logoColor=white&link=https://www.linkedin.com/in/achrafelkhnissi/&color=7289da" />
+    <a href="https://discord.gg/8xs8Akxz4u/">
+        <img alt="Discord Profile" src="https://img.shields.io/badge/-Discord-0072b1?style=flat&logo=Discord&logoColor=white&link=https://discord.gg/8xs8Akxz4u/&color=7289da" />
     </a>
     
 ---
