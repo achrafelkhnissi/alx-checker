@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-	ALX CHECKER COMMING SOON!
+	ALX CHECKER (DROPPED)!
 </h1>
 
 <!-- 
